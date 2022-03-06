@@ -19,11 +19,13 @@
       </view>
     </view> 
 
-    <view class="statement-list"><div>Picked: {{ pickedId }}</div>
+    <view class="statement-list">
+      <div>The Picked is: {{ pickedId }}</div>
         <repeat v-for="item in list" v-bind:key="index" index="index" item="item">
           <view class="cell">
             <input class="statement-list-radio"  type="radio" id="{{item.credit}}" :value="item.id"   v-model="pickedId" />
             <text> {{index}} {{ item.credit }}次搜索     ¥{{ item.price }}</text>
+            <p></p>
           </view>
         </repeat>   
 
@@ -38,8 +40,6 @@
     </view> 
 
     <view class="pay-container"  v-on:click="handlePay1">
-       
-
     <!-- <view class="pay-container" @tap="handlePay"> -->
       <view class="pay">
             <!-- <text class="icon-open-new icon"></text> -->
@@ -58,6 +58,8 @@ import wxRequest from "@/utils/wxRequest";
 import Session from "@/utils/session";
 import Tip from "@/utils/tip";
 import Store from "./utils/request.js";
+import _ from "lodash";
+
 export default {
   components: {},
 
@@ -102,7 +104,6 @@ export default {
 
   computed: {},
 
-
   methods: {
     greet: async function(event) {
       Tip.loading(null, this);
@@ -118,7 +119,7 @@ export default {
         // this.$apply();
       }
       Tip.loaded(this);
-    }, 
+    },
 
     redirect_url(id) {
       wx.navigateTo({
@@ -147,7 +148,7 @@ export default {
 
       const storeProd = new Store({});
       await storeProd.orders(1, 1);
-      
+
       const data = await wxRequest.Post("topics/1/orders/", {
         pricing_id: this.currentid
       });
@@ -180,61 +181,108 @@ export default {
       Tip.loaded();
     },
 
-handlePay1(){
+    async handlePay1() {
       console.log("handlePay1");
-  
-  let that = this;
-  if (typeof WeixinJSBridge == "undefined") {
-      console.log("handlePay1");
-    if (document.addEventListener) {
-         console.log("2");
-      document.addEventListener(
-          "WeixinJSBridgeReady",
-          that.onBridgeReady,
-          false
-      );
-    } else if (document.attachEvent) {
-         console.log("3");
-      document.attachEvent("WeixinJSBridgeReady", that.onBridgeReady);
-      document.attachEvent("onWeixinJSBridgeReady",that. onBridgeReady);
-    }
-  } else {
-    this.onBridgeReady();
-  }
-},
-onBridgeReady() {
-  let that = this;
+      let that = this;
+      if (typeof WeixinJSBridge == "undefined") {
+        console.log("WeixinJSBridge undefined");
+        if (document.addEventListener) {
+          console.log("2");
+          document.addEventListener(
+            "WeixinJSBridgeReady",
+            that.onBridgeReady,
+            false
+          );
+        } else if (document.attachEvent) {
+          console.log("3");
+          document.attachEvent("WeixinJSBridgeReady", that.onBridgeReady);
+          document.attachEvent("onWeixinJSBridgeReady", that.onBridgeReady);
+        }
+      } else {
+        console.log("WeixinJSBridge is defined");
+        this.onBridgeReady();
+      }
 
-         console.log("3");
-  let params = {
-    // ... 支付相关参数，商品名称价格等等
-  }
-  // 调用获取支付签名接口
-  getPaySign(params).then(({data})=>{
-    let {appid:appId,timeStamp,nonce_str:nonceStr,packageStr,signType,sign:paySign} = data;
+     },
+   onBridgeReady() {
+      let that = this;
 
-    WeixinJSBridge.invoke(
+      console.log("4");
+      const storeProd = new Store({});
+     storeProd.orders(1).then( data => {
+ if (!_.isEmpty(data)) {
+        if (data["status"] === "ok") {
+          let {
+            appId = "wx1f692d7b9b57066d",
+            timeStamp,
+            nonceStr,
+            packageStr,
+            paySign
+          } = data;
+          const signType = "MD5";
+
+          console.log('nonceStr', nonceStr);
+          // nonceStr = "hqEqDxfoEpAeIh4J";
+          // packageStr = "prepay_id=wx061248388601002553a63d85314bb90000";
+          // paySign = "12E4095A399375A6999C79986FA86A13";
+          // timeStamp = "1646542118";
+          WeixinJSBridge.invoke(
+            "getBrandWCPayRequest",
+            {
+              appId, // 微信的appid
+              timeStamp, //时间戳
+              nonceStr, //随机串
+              package: packageStr, // 订单号
+              signType, //微信签名方式：
+              paySign //微信签名
+            },
+            function(res) {
+          console.log('res', res);
+              if (res.err_msg == "get_brand_wcpay_request:ok") {
+                // 使用以上方式判断前端返回,微信团队郑重提示：
+                //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+               console.log("支付成功");
+              } else {
+                console.log("支付失败，请重新支付");
+              }
+            }
+          );
+        }
+      }
+     })
+     
+/*
+      let appId = "wx1f692d7b9b57066d";
+      const signType = "MD5";
+      let nonceStr = "hqEqDxfoEpAeIh4J";
+      let packageStr = "prepay_id=wx061248388601002553a63d85314bb90000";
+      let paySign = "12E4095A399375A6999C79986FA86A13";
+      let timeStamp = "1646542118";
+
+      WeixinJSBridge.invoke(
         "getBrandWCPayRequest",
         {
           appId, // 微信的appid
           timeStamp, //时间戳
           nonceStr, //随机串
-          package: packageStr,  // 订单号
+          package: packageStr, // 订单号
           signType, //微信签名方式：
           paySign //微信签名
         },
         function(res) {
+          console.log('res', res);
           if (res.err_msg == "get_brand_wcpay_request:ok") {
             // 使用以上方式判断前端返回,微信团队郑重提示：
             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-            that.$toast("支付成功")
+          
+            
           } else {
-            that.$toast("支付失败，请重新支付");
+          
           }
         }
-    );
-  })
-},
+      );*/
+      
+    },
     imageLoad(e) {
       //console.log('imageLoad-------', e)
       //单位rpx

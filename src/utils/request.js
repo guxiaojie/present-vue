@@ -98,17 +98,18 @@ class Store {
         this.handleAxiosError(error);
 
     }
-    async orders(storyId, pricing_id) {
+    async orders(pricing_id) {
         try {
-            const { data, statusCode, msg } = await this.axios.post(`topics/${storyId}/orders/`, { pricing_id });
+            const { data, statusCode, msg } = await this.axios.post(`topics/${this.storyId}/orders/`, { pricing_id });
             console.log('response data', data)
-            var success = false
-            if (statusCode === 200 || statusCode === 201 || statusCode === 204) {
-              success = true
-            }
-            if (!success) {
-                console.log('response msg', msg)
-            }
+            // var success = false
+            // if (statusCode === 200 || statusCode === 201 || statusCode === 204) {
+            //   success = true
+            // }
+            // if (!success) {
+            //     console.log('response msg', msg)
+            // }
+            return data
           } catch (error) {
             console.log('response mserrorerrorg', error)
             if (axios.isAxiosError(error)) {
@@ -117,8 +118,6 @@ class Store {
               this.handleUnexpectedError(error);
             }
           }
-       
-        
     }
 
 }
