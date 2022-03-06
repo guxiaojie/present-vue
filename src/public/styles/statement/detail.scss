@@ -1,0 +1,147 @@
+@import '.././_variable.scss';
+
+page {
+  background: white;
+  height: 100%;
+}
+.container {
+  padding: 24rpx;
+  background: #fff;
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2rpx dashed #999;
+    padding: 16rpx 40rpx;
+    > view {
+      display: flex;
+      align-items: center;
+    }
+    .icon {
+      width: 60rpx;
+      height: 60rpx;
+    }
+  }
+  
+  .column {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 22rpx 0 0 0;
+    padding: 22rpx 40rpx;
+    color: #999;
+    font-size: 12px;
+    > view {
+      display: flex;
+      flex: 2;
+      align-items: center;
+      text {
+        margin-left: 8rpx;  
+      }
+    }
+    > text {
+      flex: 3;
+      text-align: right;
+    }
+    .icon {
+      width: 30rpx;
+      height: 30rpx;
+    }
+  }
+
+  .statement-files {
+    color: #999;
+    font-size: 14px;
+    .image-list {
+      .image-item {
+        width: 80px;
+        height: 80px;
+        display: inline-block;
+        margin: 8px;
+      }
+      image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+}
+
+.btn-save {
+    margin:12px;
+    button {
+      color: $secondaryText;
+      background-color: $themeColor;
+    }
+  }
+
+.button-column {
+  position: fixed;
+  bottom: 0rpx;
+  width: 100%;
+  height: 145rpx;
+  font-size: 32rpx;
+  background: white;
+  justify-content: space-between;
+  display: fixed;
+  > text {
+    font-weight: bolder;
+   }
+}
+.selected-category {
+    background-color: $themeColor;
+    color: $secondaryText;
+    border-radius: 4px;
+    padding: 28rpx 122rpx;
+    margin: 5rpx 0rpx;
+    left: 22rpx; 
+    position: fixed;
+}
+
+.text-category {
+    background-color: #f6b44c;
+    color: white;
+    font-weight: bolder;
+    border-radius: 4px;
+    padding: 28rpx 122rpx; 
+    margin: 5rpx 0rpx;
+    right: 30rpx; 
+    position: fixed;
+}
+
+.button-groups {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: #fff;
+  width: 100%;
+  height: 150rpx;
+  line-height: 100rpx;
+  display: flex;
+
+  > view {
+    font-weight: bolder;
+    background-color: $themeColor;
+    color: $secondaryText;
+    border-radius: 4px;
+    padding: 28rpx 40rpx;
+    left: 22rpx;
+    right: 22rpx;  
+    bottom: 22rpx;
+    height: 80rpx;
+    position: fixed;
+    flex: 1;
+    font-size: 28rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .delete-button {
+    border-right: 1px solid #f8f8f8;
+  }
+  .icon {
+    width: 35rpx;
+    height: 35rpx;
+    margin-right: 8rpx;
+  }
+}

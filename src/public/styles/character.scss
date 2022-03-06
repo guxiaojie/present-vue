@@ -1,0 +1,74 @@
+@import './_variable.scss';
+page, .container{
+  height: 100%;
+}
+.container {
+  > view {
+    width: 100%;
+    display: block;
+    background-color:white;
+  }
+
+  > .img {
+    width: 100%;
+    //border: 1px solid black;
+    background-color:transparent;
+    margin-right: 1em;
+    display:flex;                    //flex布局
+    justify-content: center;         //水平轴线居中
+    > image {
+      width: 90%;
+    }
+  }
+}
+
+.header {
+  > .column {
+    //height: 80rpx;
+    line-height: 60rpx;
+    padding:0 44rpx;
+    border-bottom: 0px solid #efefef;
+    font-size: 28rpx;
+    background:transparent;
+    display: flex;
+    justify-content: space-between;
+    > text {
+      min-width:100rpx;  
+    }
+  } 
+}
+
+.statement-list-radio {
+  display: flex;
+  align-items: center;
+  flex: 1;
+ margin-top: 142rpx;
+}
+
+.cell {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid $borderColor;
+  margin-left: 40px;
+}
+
+.middle {
+   background-color: #abc88b;
+  color: white;
+  // border-radius: 4px;
+  text-align: center;
+
+  font-size: 32rpx;
+  font-weight: bolder;
+  padding: 5rpx 15rpx;
+
+  display: block;
+  width: 240rpx;    
+  height: 80rpx;
+  line-height: 80rpx;
+  padding: 5rpx 15rpx;
+  
+  
+}
+ 

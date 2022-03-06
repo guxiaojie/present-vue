@@ -1,0 +1,184 @@
+@darkPrimaryColor: #1976D2;
+@primaryColor: #2196F3;
+@primaryText: #212121;
+@secondaryText: #757575;
+@divideText: #BDBDBD;
+@expendColor: green;
+@incomeColor: red;
+@transferColor: #fef188;
+ 
+
+.theme-color-red {
+	color: @primaryColor;
+}
+.zan-btn {
+  line-height:40px;
+  height:40px;
+}
+
+.zan-loadmore--nodata {
+	margin:auto !important;
+}
+
+.ljt-btn {
+	line-height:40px;
+	height:40px;
+	color: white;
+	position:relative;
+	background-color:@primaryColor;
+	padding-left:15px;
+	padding-right:15px;
+	border-radius:2px;
+	font-size:16px;
+	line-height:40px;
+	height:40px;
+	box-sizing:border-box;
+	text-decoration:none;
+	text-align:center;
+	vertical-align:middle;
+}
+
+.ljt-btn:after, button::after {
+	border: 0;
+}
+
+.btn-shadow {
+  box-shadow:4rpx 8rpx 12rpx #ccc;
+}
+.pull-right {
+	float:right;
+}
+.pull-left {
+	float:left;
+}
+.overflow-hide {
+	overflow:hidden;
+}
+.income {
+	color: @incomeColor;
+}
+.expend, .repayment {
+	color: @expendColor;
+}
+.transfer {
+	color: @transferColor;
+}
+.income-border {
+	border-bottom: 1px solid @incomeColor;
+}
+.expend-border {
+	border-bottom: 1px solid @expendColor;
+}
+.surplus {
+	color: black;
+}
+.surplus-border {
+	border-bottom: 1px solid black;
+}
+.orange {
+	color: orange;
+}
+.blue {
+	color: blue;
+}
+.col999 {
+	color: #999;
+}
+.text-grey {
+	color: @secondaryText;
+}
+.fs12 {
+	font-size:24rpx;
+}
+.fs13 {
+	font-size:26rpx;
+}
+.fs14 {
+	font-size:28rpx;
+}
+.fs16 {
+	font-size:32rpx;
+}
+.fs18 {
+	font-size:36rpx;
+}
+.fs19 {
+	font-size:38rpx;
+}
+.fs20 {
+	font-size:40rpx;
+}
+.fs21 {
+	font-size:42rpx;
+}
+.fs24 {
+	font-size:48rpx;
+}
+.fs32 {
+	font-size:64rpx;
+}
+.ljt-icon {
+	width:50rpx;
+	height:50rpx;
+}
+
+
+/* radio未选中时样式 */
+radio .wx-radio-input{
+	border: none;
+	border-radius: 50%;/* 圆角 */
+	width: 40rpx;
+	height: 40rpx;
+	background-image: url('https://assets.storiesmatter.cn/radio.png');
+	background-size:contain; 
+  }
+  /* radio未选中时样式 */
+  radio .wx-radio-input.wx-radio-input-checked{
+	border: none;
+	background:transparent;
+	background-image: url('https://assets.storiesmatter.cn/radioselected.png');
+	background-size:contain; 
+  }
+  /* radio选中时样式 √ */ 
+  radio .wx-radio-input.wx-radio-input-checked::before{
+	border: none;
+	border-radius: 50%;/* 圆角 */
+	width: 0rpx; /* 选中后对勾大小，不要超过背景的尺寸 */
+	height: 0rpx; /* 选中后对勾大小，不要超过背景的尺寸 */
+	line-height: 40rpx;
+	text-align: center;
+	font-size:30rpx; /* 对勾大小 30rpx */
+	 
+	transform:translate(-50%, -50%) scale(1);
+	-webkit-transform:translate(-50%, -50%) scale(1);
+  }
+
+  .choose_character {
+	margin: 50rpx auto;
+	> .column {
+	  line-height: 60rpx;
+	  padding:0 44rpx;
+	  margin-bottom: 0rpx;
+	  border-bottom: 0px solid #00efef;
+	  font-size: 28rpx;
+	  //background:red;  
+	  display: flex;
+	  justify-content: center;
+	  > text {
+		min-width:100rpx;  
+	  }
+	} 
+	 > .img {
+	  width: 100%;
+	  height: 5rpx;
+	  margin-top: -2rpx;
+	  //border: 1px solid black;
+	  //background-color:transparent;
+	  margin-right: 1em;
+	  display:flex;                    //flex布局
+	  justify-content: center;         //水平轴线居中
+	  > image {
+		width: 40%;
+	  }
+	 }
+  }

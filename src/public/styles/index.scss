@@ -1,0 +1,329 @@
+@import './_variable.scss';
+page, .container{
+  height: 100%;
+}
+.container {
+  > view {
+    width: 100%;
+    display: block;
+  }
+}
+
+.dotline {
+  width: 100%; 
+  // background: #ff00ff;
+  padding-bottom: 20rpx;
+  > image {
+    width: 100%;
+  }
+}
+
+.header {
+	//position:relative;
+	color: $primaryText;
+  //background: #ff00ff;
+  .level-1 {
+    margin-top: 10rpx;
+    height: 100rpx;
+    line-height: 100rpx;
+    font-size:34rpx;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    // border-bottom: 1px solid #efefef;
+  }
+  
+  .userinfo {
+    width: 100%;
+    //padding:50rpx 0rpx;
+    //border-bottom: 1rpx solid $borderColor;
+    padding:18rpx 0;
+    color: $primaryText;
+    width: 100%;
+    //background: #efef11;
+    display: flex;
+    align-items: center;
+    //flex: 1; 
+    .icon {
+      margin-left: 40rpx;
+      align-items: center;
+      background-image: url('https://assets.storiesmatter.cn/avatarbg.png');
+      background-size: contain;
+      background-position-y: center;
+      background-repeat: no-repeat;
+      width: 160rpx;
+      height: 160rpx;
+      line-height: 160rpx;
+      //background: #0000ef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      image {
+        width: 120rpx;
+        height: 120rpx;
+      }
+    }
+    .st-title {
+      margin-right: 40rpx; 
+      width: 70%;
+      align-items: center;
+      background-image: url('https://assets.storiesmatter.cn/profile-right-bg.png');
+      background-size: contain;
+      background-position-y: center;
+      background-repeat: no-repeat;
+      height: 160rpx;
+      line-height: 160rpx;
+      //background: #ef00ef;
+      > view { 
+        margin-left:  60rpx;
+        height: 40rpx;
+        line-height: 40rpx;
+      }
+      .title {
+        //padding: 0 50rpx 0rpx 0rpx;
+        margin-top:  40rpx;
+        font-size: 32rpx;
+      }
+      .time {
+       // padding: 0 80rpx 0rpx 0rpx;
+        font-size: 32rpx;
+      }
+    }
+  }
+
+  .userinfobtns {
+    padding-left: 40rpx;
+    padding-right: 40rpx;
+    padding-top: 20rpx;
+    
+    > .column {
+      height: 98rpx;
+      line-height: 98rpx;
+      //border-bottom: 1px solid #efefef;
+      font-size: 32rpx;
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      > .btn {
+        height: 80rpx;
+        line-height: 80rpx;
+        padding:0rpx 22rpx;
+        background-image: url('https://assets.storiesmatter.cn/btn.png');
+        background-size: contain;
+        background-position-y: center;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        > image {
+          width: 36rpx;
+          height: 36rpx;
+        }
+        > text {
+          padding-left: 10rpx;
+        }
+      }
+    }
+  }
+}
+
+.searchcell {
+  border-bottom: 0px solid #efefef;
+  > .recordcell {
+    display: flex;
+    align-items: center;
+    height: 60rpx;
+    line-height: 60rpx;
+    padding:0rpx 40rpx;
+    font-size:32rpx;
+    > .subtitle {
+      font-size:27rpx;
+      position: absolute;
+      right: 40rpx;
+    }
+  }
+  .searchbar {
+    padding:0rpx 42rpx;
+   //background: #ef00ef;
+    align-items: center; 
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+   
+  .search-btn { 
+    margin-top: 10rpx;
+    //background: #ef0000;
+    /* 搜索框小图标 */
+    > image { 
+      width: 60rpx;
+      height: 60rpx;
+    }
+  }
+  
+  .search {
+    width: 90%;  
+    //border:1rpx solid whitesmoke;
+    background-image: url('https://assets.storiesmatter.cn/searchbar-bg.png');
+    background-size: contain;
+    background-position-y: center;
+    background-repeat: no-repeat;
+  }
+  }
+  /* 搜索框提示文字样式 */
+  .search input
+  {
+    font-size:27rpx;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    padding-left:30rpx; 
+    padding: 30rpx;
+  }
+  > .paycell {
+    //padding:0rpx 40rpx;
+    background: transparent;
+    height: 120rpx;
+    line-height: 120rpx;
+    //border-bottom: 1px solid #efefef;
+    font-size: 32rpx;
+    display: flex;
+    justify-content: space-between;
+    > .title {
+      display: flex;
+      align-items: center;
+      margin-left: 40rpx;
+      > text {
+        padding-right: 10rpx;
+      }
+      > image {
+        width: 40rpx;
+        height: 40rpx;
+      }
+    }
+    > .topup {
+      color: white;
+      height: 80rpx;
+      line-height: 80rpx;
+      padding:0rpx 50rpx;
+      margin-right: 40rpx;
+      margin-top: 26rpx;
+      display: flex;
+      align-items: center;
+      background-image: url('https://assets.storiesmatter.cn/pay-green-bg.png');
+        background-size: contain;
+        background-position-y: center;
+        background-repeat: no-repeat;
+        // background-color: #abc88b;
+        // border-radius:5px;
+        // -moz-border-radius: 5px;
+        // -webkit-border-radius: 5px;
+      > image {
+        width: 40rpx;
+        height: 40rpx;
+      }
+      > text {
+        padding-left: 10rpx;
+      }
+    }
+  }
+} 
+
+
+.longline {
+  padding-left: 40rpx;
+  padding-right: 40rpx;
+  > image {
+    width: 100%;
+  }
+}
+
+.fragment-content {
+	position:relative;
+  //margin-top: 36rpx;
+  .title {
+    height: 120rpx;
+    line-height: 120rpx;
+    font-size:32rpx;
+    display: flex;
+    justify-content: center;
+    //border-bottom: 1px solid #efefef;
+  }
+}
+
+//容器
+.container-box{
+  // width: 90%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 0 40rpx;
+  //background: #0000ef;
+}
+  
+//项目成员  
+.item-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 1%;
+  width: 48%;
+  height: 80rpx;
+  //background: #ef00ef;
+  > text {
+    align-items: center;
+    font-size: 32rpx;
+  }
+}
+ 
+.fragment {
+  background-image:url("https://assets.storiesmatter.cn/frag-bg.png");
+  background-size: contain;
+  background-position-y: center;
+  background-position-x: center;
+  background-repeat: no-repeat;
+  //background: #0000ef;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.discovered {
+  background-image:url("https://assets.storiesmatter.cn/frag-discv-bg.png");
+
+}
+
+/* 授权 开启故意事务所*/
+.authorise {
+  position: fixed;
+  top: 0rpx;
+  bottom:0rpx;
+  left:0rpx;
+  text-align: center;
+  background: rgba(1, 1, 1, 0.5);
+  z-index: 10;
+  image {
+    width:400rpx;
+    height:500rpx;
+   margin: 20rpx;
+  }
+  button {
+    font-size: 32rpx;
+   width:70%;
+   top: 10rpx;
+   bottom: 100rpx;
+   background: #4fae71;
+   color: white;
+  }
+  .authorise-bottom {
+    position: fixed;
+    width: 100%;
+    bottom:0rpx;
+    height:700rpx;
+    background: white;
+  }
+}
+
+

@@ -1,0 +1,403 @@
+@import './_variable.scss';
+page, .container{
+  height: 100%;
+}
+.container {
+  > view {
+    width: 100%;
+    display: block;
+    background-color:transparent;
+  }
+
+  .userinfobtns {
+    padding:0rpx 0rpx;
+    width: 90%;
+    margin: 0 auto;
+    height: 120rpx;
+    line-height: 120rpx;
+    > .column {
+      height: 120rpx;
+      line-height: 120rpx;
+      //border-top: 1px solid #efefef;
+      border-bottom: 1px solid #efefef;
+      font-size: 28rpx;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      > .btn {
+        max-height: 80rpx;
+        height: 80rpx;
+        line-height: 80rpx;
+        padding:0rpx 20rpx;
+        background-image: url('https://assets.storiesmatter.cn/btn.png');
+        background-size: 100% 80rpx;
+        background-position-y: center;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        > image {
+          width: 36rpx;
+          height: 36rpx;
+        }
+        > text {
+          max-height: 80rpx;
+          height: 80rpx;
+          //padding: 0rpx 20rpx;
+          //background: #efef00;
+          min-width: 120rpx;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+  .fragment-img {
+    width: 100%;
+    //border: 1px solid black;
+    background-color:transparent;
+    margin: 0 auto;
+   // display:flex;                    //flex布局
+   // justify-content: center;         //水平轴线居中
+    > text {
+      font-size: 24rpx;
+      float: right;
+      margin: 20rpx;
+      min-width: 220rpx;
+    }
+  }
+  .message {
+    display: flex;
+    margin: 0 auto;
+    font-size: 28rpx;
+    padding: 40rpx;
+  }
+}
+.playBtn{
+  width: 120rpx;
+  height: 120rpx;
+  display: flex;
+  margin: 0 auto;
+}
+.sliderCont{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80rpx 0rpx 0rpx 0rpx;
+  color:$primaryText;
+  //background-color: #ff00ff;
+  font-size: 12px;
+
+  .time {
+    //padding:0rpx 0rpx;
+    //width: 90%;
+    margin: 0 auto;
+    height: 20rpx;
+    line-height: 20rpx;
+    > .column {
+      height: 20rpx;
+      line-height: 20rpx;
+      //border-bottom: 1px solid #efefef;
+      font-size: 32rpx;
+      //background: gray;
+      display: flex;
+      justify-content: space-between;
+      > .btn {
+        height: 80rpx;
+        line-height: 80rpx;
+        padding:0rpx 22rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        > image {
+          width: 36rpx;
+          height: 36rpx;
+        }
+        > text {
+          padding-left: 10rpx;
+        }
+      }
+    }
+  }
+
+  
+}
+.sliderCont text{
+    z-index: 99;
+}
+slider{
+  // display: flex;
+  margin: 0 auto;
+  width: 82%;
+  //background-color: #ff00ff;
+  //width: 100%;
+}
+
+/* pages/course/nowPlay/nowPlay.wxss */
+
+.container1{
+  width: 100%;
+  height: 100%;
+}
+.cd{
+  width: 600rpx;
+  height: 600rpx;
+  border-radius: 50%;
+  margin: 0 auto;
+  margin-top: 20%;
+  position: relative;
+  bottom: 50rpx;
+}
+.cd_b{
+  width: 100%;
+  height: 100%; 
+}
+.cd.active{
+  animation: cd 20s linear infinite forwards;
+}
+.cd_g{
+  width: 360rpx;
+  height: 260rpx;
+  position: absolute;
+  left:10%;
+  top: 4%;
+  z-index: 10;
+  transform-origin:0 0;
+  animation: cga 0.5s linear forwards;
+}
+.cd_g.active{
+  animation: cg 0.5s linear forwards;
+}
+.webPic{
+  width: 300rpx;
+  height: 300rpx;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -150rpx;
+  margin-left: -150rpx;
+  z-index: 10;
+}
+
+.name{
+  display: flex;
+  flex-direction: column;
+  margin-left: 4%;
+  color: $primaryText;
+  font-size: 14px;
+  margin-top: -20rpx;
+}
+.musicNa{
+  margin-top: 5rpx;
+  font-size: 13px;
+}
+@keyframes cd{
+  to{
+      transform: rotate(360deg)
+  }
+}
+@keyframes cg{
+  from{
+      transform: rotate(0deg)
+  }
+  to{
+      transform: rotate(-18deg)
+  }
+}
+@keyframes cga{
+  from{
+      transform: rotate(-18deg)
+  }
+  to{
+      transform: rotate(0deg)
+  }
+}
+
+ 
+.bg{
+width:100%;
+height: 100%;
+padding-bottom: 0;
+margin-bottom: 0;
+}
+.abc{
+display: flex;
+justify-content: center;
+}
+.title {
+  width: 70%;
+  line-height: 80rpx;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 44rpx;
+  font-weight:500;
+  color: $primaryText;
+  position: absolute;
+  top: 50rpx;
+}
+
+.player .normal-player .middle {
+  position: fixed;
+  width: 100%;
+  top: 160rpx;
+  bottom: 300rpx;
+  white-space: nowrap;
+  font-size: 0;
+}
+.player .normal-player .middle .middle-l {
+  display: inline-block;
+  vertical-align: top;
+  position: relative;
+  width: 100%;
+  height: 0!important;
+  padding-top: 80%!important;
+}
+.player .normal-player .middle .middle-l .cd-wrapper {
+  position: absolute;
+  left: 15%;
+  top: 0;
+  width: 70%;
+  height: 90%;
+}
+.player .normal-player .middle .middle-l .cd-wrapper .play {
+  -webkit-animation-play-state: running !important;
+  animation-play-state: running !important;
+}
+.player .normal-player .middle .middle-l .cd-wrapper .pause {
+  -webkit-animation-play-state: paused!important;
+  animation-play-state: paused!important;
+}
+.player .normal-player .middle .middle-l .cd-wrapper .cd {
+width: 100%;
+height: 100%;
+border: 10rpx solid rgba(255,255,255,0.1);
+border-radius: 50%;
+  -webkit-animation: rotate 20s linear infinite;
+  animation: rotate 20s linear infinite;
+}
+.player .normal-player .middle .middle-l .cd-wrapper .cd .image {
+  position: absolute;
+  left: 0rpx;
+  top: 0rpx;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+@keyframes rotate{
+  0% {
+      transform: rotate(0)
+  }
+  100% {
+      transform: rotate(360deg)
+  }
+}
+
+
+> .paycell {
+  //padding:0rpx 40rpx;
+  background: transparent;
+  height: 120rpx;
+  line-height: 120rpx;
+  //border-bottom: 1px solid #efefef;
+  font-size: 32rpx;
+  display: flex;
+  justify-content: space-between;
+  > .title {
+    display: flex;
+    align-items: center;
+    margin-left: 40rpx;
+    > text {
+      padding-right: 10rpx;
+    }
+    > image {
+      width: 40rpx;
+      height: 40rpx;
+    }
+  }
+  > .topup {
+    color: white;
+    height: 80rpx;
+    line-height: 80rpx;
+    padding:0rpx 50rpx;
+    margin-right: 40rpx;
+    margin-top: 26rpx;
+    display: flex;
+    align-items: center;
+    background-image: url('https://assets.storiesmatter.cn/pay-green-bg.png');
+      background-size: contain;
+      background-position-y: center;
+      background-repeat: no-repeat;
+      // background-color: #abc88b;
+      // border-radius:5px;
+      // -moz-border-radius: 5px;
+      // -webkit-border-radius: 5px;
+    > image {
+      width: 40rpx;
+      height: 40rpx;
+    }
+    > text {
+      padding-left: 10rpx;
+    }
+  }
+}
+
+.bottom {
+  padding:0rpx 0rpx;
+  width: 100%;
+  margin: 0 auto;
+  height: 120rpx;
+  line-height: 120rpx;
+  position: absolute;
+   
+  //bottom: 200rpx;
+  > .column {
+    margin: 40rpx;
+    margin-top: 40rpx;
+    height: 120rpx;
+    line-height: 120rpx;
+    font-size: 28rpx;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    > .btn {
+      max-height: 80rpx;
+      height: 80rpx;
+      line-height: 80rpx;
+      padding:0rpx 20rpx;
+      background-image: url('https://assets.storiesmatter.cn/pay-green-bg.png');
+      background-size: 100% 80rpx;
+      background-position-y: center;
+      background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      > image {
+        width: 36rpx;
+        height: 36rpx;
+      }
+      > text {
+        margin: 20rpx;
+        color: white;
+        max-height: 80rpx;
+        height: 80rpx;
+        min-width: 120rpx;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    > .btn1 { 
+      background-image: url('https://assets.storiesmatter.cn/nomore.png'); 
+    }
+  }
+}
