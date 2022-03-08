@@ -4,18 +4,16 @@ import Character from '@/components/Character.vue'
 
 <template>
   <main>
-     <view class="container"> 
-  
-
+     <view class="container">
 
     <view class="choose_character">
       <view class="column">
         <text class="title">选择你的身份</text>
       </view>
       <view class="img">
-        <image src="https://assets.storiesmatter.cn/shortline.png" mode="widthFix"></image> 
+        <image src="https://assets.storiesmatter.cn/shortline.png" mode="widthFix"></image>
       </view>
-    </view> 
+    </view>
     <view class="statement-list">
 
         <!-- <repeat  wx:for="{{list}}" wx:key="index" index="index" item="item"> -->
@@ -23,65 +21,64 @@ import Character from '@/components/Character.vue'
 
            <view class="cell">
             <!-- <radio value="{{index}}" checked="{{index == checked}}" class="statement-list-radio"></radio>  -->
-            <Character 
-              :statement.sync="item"
+            <Character
+            :statement.sync="item"
               @submit.user="submit"
             />
           </view>
-        </view>   
-    
+        </view>
+
     </view>
    </view>
 
     <view style="height:30rpx">  </view>
-     <!-- <view > 
+     <!-- <view >
          <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="middle" >开始调查</button>
      </view> -->
- 
 
-<view style="width:100%; height:120rpx;   display:flex; justify-content:center; align-items:center;">
+    <view style="width:100%; height:120rpx;   display:flex; justify-content:center; align-items:center;">
           <view  style="width:320rpx; height:120rpx;   display:flex; justify-content:center; align-items:center;" class="btn"  @tap="handleInquiry">
             <text  style="font-size:40rpx; color:white;  " >开始调查</text>
           </view>
-    </view>  
+    </view>
 
     <view class="choose_character">
       <view class="column">
         <text style="font-size:24rpx; color:#757575; margin-top:-30rpx;">*探员身份一旦确定，不可更改</text>
       </view>
-    </view> 
+    </view>
 
     <view style="height:50rpx">  </view>
-  
+
   </main>
 </template>
 <script>
 // import wepy from 'wepy';
-import wxRequest from "@/utils/wxRequest";
-import Session from "@/utils/session";
-import Tip from "@/utils/tip";
-import Store from "../utils/request.js";
-import _ from "lodash";
+import wxRequest from '@/utils/wxRequest'
+import Session from '@/utils/session'
+import Tip from '@/utils/tip'
+import Store from '../utils/request.js'
+import _ from 'lodash'
 
 export default {
   components: {},
 
-  data() {
+  data () {
     return {
-      list: [{id:1, name:"b", text:"t", brief_text:'brief_text1'}, {id:2, name:"c", brief_text:'brief_text2'}, {id:3, name:"d", brief_text:'brief_text3'}],
+      list: [{ id: 1, name: 'b', text: 't', brief_text: 'brief_text1' }, { id: 2, name: 'c', brief_text: 'brief_text2' }, { id: 3, name: 'd', brief_text: 'brief_text3' }]
     }
   },
- 
-  async mounted() {
+
+  async mounted () {
     const storeProd = new Store({})
     const res = await storeProd.roles()
-    console.log('--',res)
-    console.log('--',res.results)
+    console.log('--', res)
+    console.log('--', res.results)
     this.list = res.results
   },
 
   methods: {
-    submit: function(key, value) {
+    submit: function (key, value) {
       console.log('---sumit in parent', key, value)
     }
   }

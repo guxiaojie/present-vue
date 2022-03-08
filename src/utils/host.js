@@ -3,7 +3,7 @@ const env = 2
 
 let host = ''
 if (env === 0) {
-  host = 'http://storiesmatter.cn:12344'//http://10.165.97.37:12344'
+  host = 'http://storiesmatter.cn:12344'// http://10.165.97.37:12344'
 } else if (env == 1) {
   host = ''
 } else if (env == 2) {
@@ -16,7 +16,7 @@ if (env === 0) {
 //   check_openid: host + '/api/check_openid',
 //   env: env,
 //   mapKey: '',
- 
+
 // }
 
 export default {
@@ -24,5 +24,5 @@ export default {
   url: host + '/api',
   check_openid: host + '/api/check_openid',
   env: env,
-  mapKey: '',
-} 
+  mapKey: ''
+}

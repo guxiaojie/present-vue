@@ -1,14 +1,14 @@
 // import wepy from 'wepy'
 // import Host from '@/utils/host'
 // import Session from '@/utils/session'
-import axios from 'axios';
+import axios from 'axios'
 
 // 0 开发环境 1 测试环境 2 生产环境
 const env = 2
 
 let host = ''
 if (env === 0) {
-  host = 'http://storiesmatter.cn:12344'//http://10.165.97.37:12344'
+  host = 'http://storiesmatter.cn:12344'// http://10.165.97.37:12344'
 } else if (env == 1) {
   host = ''
 } else if (env == 2) {
@@ -16,36 +16,35 @@ if (env === 0) {
 }
 
 // 登录重试次数
-let retryCount = 0
+const retryCount = 0
 
 const doRequest = async (url, method, params, options = {}, callback) => {
-  let cacheKey = ''
+  const cacheKey = ''
   // 是否可以命中缓存
   if (options.cacheKey) {
     // cacheKey = Session.key[options.cacheKey[0]][options.cacheKey[1]]
     const cache = getByCache(cacheKey)
     if (cache) return cache
   }
-  let pageRoutes = []
-  const pages = ''//getCurrentPages()
+  const pageRoutes = []
+  const pages = ''// getCurrentPages()
   if (pages.length > 0) {
-    for (let p of pages) {
+    for (const p of pages) {
       pageRoutes.push(p.route)
     }
   }
-  var access = ''
+  const access = ''
   // if (Session.get('access') !== null) {
   //   access = Session.get('access')
   //   access = 'Bearer ' + access
   // }
-  let header = {
+  const header = {
     'Content-Type': 'application/json',
     'X-WX-APP-ID': 'wx1f692d7b9b57066d',
     'X-WX-PAGES': pageRoutes.join(','),
-    'Authorization': access,
+    Authorization: access
   }
 
-  
   // let a = wepy.request({
   //   url: url,
   //   method: method,
@@ -75,15 +74,12 @@ const doRequest = async (url, method, params, options = {}, callback) => {
   //   }
   // })
 
-
   // return a;
 }
- 
- 
 
 // 获取缓存,默认缓存时长 1 天
 const getByCache = (cacheKey) => {
-  const cacheValue = ''//Session.get(cacheKey)
+  const cacheValue = ''// Session.get(cacheKey)
   const onday = 86400
   // console.log((new Date().getTime() - Number.parseInt(cacheValue.createTime))/1000)
   if (cacheValue === null) {
@@ -98,7 +94,7 @@ const getByCache = (cacheKey) => {
 const setByCache = (cacheKey, cacheVal) => {
   if (typeof cacheKey !== 'undefined') {
     if (Array.isArray(cacheVal) && cacheVal.length == 0) return false
-    let localTime = new Date().getTime()
+    const localTime = new Date().getTime()
     Session.set(cacheKey, {
       createTime: localTime,
       value: cacheVal
@@ -109,6 +105,3 @@ const setByCache = (cacheKey, cacheVal) => {
 export default {
   doRequest
 }
-
-
-

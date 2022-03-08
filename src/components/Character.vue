@@ -2,7 +2,7 @@
   <view class="charactercell" @click="statementEvent(statement.id )">
     <view class="information">
       <view class="icon">
-               <img :src=" statement.avatar "> 
+               <img :src=" statement.avatar ">
 
       </view>
       <view class="st-title">
@@ -20,16 +20,14 @@ export default {
   },
 
   methods: {
-    statementEvent: function(key, id) {
-      console.log("----------", key, id);
-      this.$emit("submit", key, id);
+    statementEvent: function (key, id) {
+      console.log('----------', key, id)
+      this.$emit('submit', key, id)
     }
   }
-};
+}
 </script>
 
- 
- 
 <style lang="scss">
 //@import '../_variable.scss';
 .charactercell {

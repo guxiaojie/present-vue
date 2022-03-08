@@ -1,17 +1,17 @@
-<script>
+<script setup>
 import {
-    RouterLink,
-    RouterView
+  RouterLink,
+  RouterView
 } from 'vue-router'
-import Store from '../utils/request.js';
+import Store from '../utils/request.js'
 import {
-    setRem
+  setRem
 } from '../utils/rem.js'
 </script>
 
 <script>
 export default {
-    data() {
+  data() {
         return {
             message: '客服微信请添加15711067100 &nbsp;&nbsp;&nbsp;&nbsp; ',
             book: '故意事务所 - 委托卷宗 7737368',
@@ -90,8 +90,8 @@ export default {
         const storeProd = new Store({})
         await storeProd.roles(1)
         await storeProd.home(1)
-        // await storeProd.login() 
-    }
+    // await storeProd.login()
+  }
 }
 </script>
 
@@ -103,7 +103,7 @@ export default {
         <text style="font-weight: bold;">一键复制账号</text>
     </i-notice-bar>
     <!-- <div class="wrapper">
-    
+
       <nav>
         <RouterLink to="/member">Member</RouterLink>
         <RouterLink to="/about">About</RouterLink>
