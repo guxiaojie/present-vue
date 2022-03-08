@@ -35,8 +35,8 @@ class Store {
     return response.data
   }
 
-  async home (storyId) {
-    const response = await this.axios.get(`topics/${storyId}/home/`)
+  async home () {
+    const response = await this.axios.get(`topics/${this.storyId}/home/`)
     console.log('response', response)
     return response.data
   }

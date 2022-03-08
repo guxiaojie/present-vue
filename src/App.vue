@@ -17,8 +17,8 @@ export default {
   },
   methods: {
     goToDashboard () {
-      if (false) {
-        this.$router.push('/about')
+      if (true) {
+        this.$router.push('/home')
       } else {
         this.$router.push('/character')
       }

@@ -37,7 +37,7 @@ import Character from '@/components/Character.vue'
      </view> -->
 
     <view style="width:100%; height:120rpx;   display:flex; justify-content:center; align-items:center;">
-          <view  style="width:320rpx; height:120rpx;   display:flex; justify-content:center; align-items:center;" class="btn"  @tap="handleInquiry">
+          <view  style="width:320rpx; height:120rpx;   display:flex; justify-content:center; align-items:center;" class="btn"  @click="handleInquiry">
             <text  style="font-size:40rpx; color:white;  " >开始调查</text>
           </view>
     </view>
@@ -80,7 +80,25 @@ export default {
   methods: {
     submit: function (key, value) {
       console.log('---sumit in parent', key, value)
+    },
+    handleInquiry: function () {
+        this.$router.push('/home')
+
     }
   }
 }
 </script>
+
+<style lang="scss" src="@/public/styles/character.scss"></style>
+<style lang="scss">
+.btn {
+  background-image: url('https://assets.storiesmatter.cn/pay-green-bg.png');
+  background-size: contain;
+  background-position-y: center;
+  background-repeat: no-repeat;
+  > text {
+    display: flex;
+    align-items: center;
+  }
+}
+</style>
