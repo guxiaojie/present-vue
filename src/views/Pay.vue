@@ -20,7 +20,7 @@
     </view> 
 
     <view class="statement-list">
-      <div>  Picked : {{ pickedId }}</div>
+      <div> 1Picked : {{ pickedId }}</div>
         <repeat v-for="item in list" v-bind:key="index" index="index" item="item">
           <view class="cell">
             <input class="statement-list-radio"  type="radio" id="{{item.credit}}" :value="item.id"   v-model="pickedId" />
@@ -57,7 +57,7 @@
 import wxRequest from "@/utils/wxRequest";
 import Session from "@/utils/session";
 import Tip from "@/utils/tip";
-import Store from "./utils/request.js";
+import Store from "../utils/request.js";
 import _ from "lodash";
 
 export default {
@@ -211,11 +211,16 @@ export default {
 
       console.log("4");
 
-      let appId = "wx1f692d7b9b57066d";
-      let nonceStr = "hqEqDxfoEpAeIh4J";
-      let packageStr = "prepay_id=wx061248388601002553a63d85314bb90000";
-      let paySign = "12E4095A399375A6999C79986FA86A13";
-      let timeStamp = "1646542118";
+      const data = {status: 'ok', timeStamp: '1646561422', nonceStr: 'LAHJZegDLsrSeSCj', package: 'prepay_id=wx061810222880504829a99d9fb1c05d0000', paySign: '32B67F63F8EE7BB889DB3DBECEC22760'}
+      let {
+              appId = "wx1f692d7b9b57066d",
+              timeStamp,
+              nonceStr,
+              paySign
+            } = data;
+            
+      let packageStr = data["package"]
+
       const signType = "MD5";
       WeixinJSBridge.invoke(
         "getBrandWCPayRequest",
@@ -239,45 +244,45 @@ export default {
         }
       );
 
-      // const storeProd = new Store({});
-      // storeProd.orders(1).then(data => {
-      //   if (!_.isEmpty(data)) {
-      //     if (data["status"] === "ok") {
-      //       let {
-      //         appId = "wx1f692d7b9b57066d",
-      //         timeStamp,
-      //         nonceStr,
-      //         packageStr,
-      //         paySign
-      //       } = data;
-      //       const signType = "MD5";
+      const storeProd = new Store({});
+      storeProd.orders(1).then(data => {
+        if (!_.isEmpty(data)) {
+          if (data["status"] === "ok") {
+            let {
+              appId = "wx1f692d7b9b57066d",
+              timeStamp,
+              nonceStr,
+              packageStr,
+              paySign
+            } = data;
+            const signType = "MD5";
 
-      //       console.log("nonceStr", nonceStr);
+            console.log("nonceStr", nonceStr);
 
-      //       WeixinJSBridge.invoke(
-      //         "getBrandWCPayRequest",
-      //         {
-      //           appId, // 微信的appid
-      //           timeStamp, //时间戳
-      //           nonceStr, //随机串
-      //           package: packageStr, // 订单号
-      //           signType, //微信签名方式：
-      //           paySign //微信签名
-      //         },
-      //         function(res) {
-      //           console.log("res", res);
-      //           if (res.err_msg == "get_brand_wcpay_request:ok") {
-      //             // 使用以上方式判断前端返回,微信团队郑重提示：
-      //             //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-      //             console.log("支付成功");
-      //           } else {
-      //             console.log("支付失败，请重新支付");
-      //           }
-      //         }
-      //       );
-      //     }
-      //   }
-      // });
+            WeixinJSBridge.invoke(
+              "getBrandWCPayRequest",
+              {
+                appId, // 微信的appid
+                timeStamp, //时间戳
+                nonceStr, //随机串
+                package: packageStr, // 订单号
+                signType, //微信签名方式：
+                paySign //微信签名
+              },
+              function(res) {
+                console.log("res", res);
+                if (res.err_msg == "get_brand_wcpay_request:ok") {
+                  // 使用以上方式判断前端返回,微信团队郑重提示：
+                  //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+                  console.log("支付成功");
+                } else {
+                  console.log("支付失败，请重新支付");
+                }
+              }
+            );
+          }
+        }
+      });
     },
     imageLoad(e) {
       //console.log('imageLoad-------', e)

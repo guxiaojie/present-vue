@@ -30,9 +30,9 @@ class Store {
         this.axios.defaults.headers.common.Authorization = token;
     }
 
-    async roles(storyId) {
+    async roles() {
 
-        const response = await this.axios.get(`topics/${storyId}/roles/`);
+        const response = await this.axios.get(`topics/${this.storyId}/roles/`);
         console.log('response', response)
         return response.data;
     }

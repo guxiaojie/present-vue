@@ -44,6 +44,8 @@ const doRequest = async (url, method, params, options = {}, callback) => {
     'X-WX-PAGES': pageRoutes.join(','),
     'Authorization': access,
   }
+
+  
   // let a = wepy.request({
   //   url: url,
   //   method: method,

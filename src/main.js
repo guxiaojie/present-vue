@@ -4,7 +4,8 @@ import { createStore } from 'vuex'
 
 import { createApp } from 'vue'
 import App from './App.vue'
-import Character from './Character.vue'
+// import Character from './Pay.vue'
+import MemeberView from './views/CharacterView.vue'
 
 import router from './router'
 
@@ -34,8 +35,8 @@ const store = createStore({
       }
 })
   
-// const app = createApp(App)
-const app = createApp(Character)
+const app = createApp(App)
+// const app = createApp(Character)
 // app.use(VueToast);
 
 app.use(router)
