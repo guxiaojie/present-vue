@@ -8,6 +8,8 @@ import {
   setRem
 } from '../utils/rem.js'
 import _ from 'lodash'
+import Tip from '@/utils/tip'
+
 </script>
 
 <script>
@@ -82,7 +84,7 @@ export default {
                 search: "https://assets.storiesmatter.cn/search-button.png",
                 pay: "https://assets.storiesmatter.cn/icon-pay.png",
                 line: "https://assets.storiesmatter.cn/longline.png"
-            }
+            }, 
         }
     },
 
@@ -94,7 +96,7 @@ export default {
     },
 
     async mounted() {
-        
+ 
         const r = new Store({}) 
         const data = await r.home()
         if (!_.isEmpty(data)) {
@@ -115,19 +117,16 @@ export default {
      // await storeProd.login()
     },
   methods: {
-        handlePieceTap: function(fragmentId) {
+      handlePieceTap: function(fragmentId) {
             console.log('---item',   fragmentId)
-    //   let fragmentId = e.currentTarget.dataset.cid;
-      let currentPieceIndex = this.discoveredList.indexOf(fragmentId);
-      if (currentPieceIndex != undefined) {
-            console.log('---item',   fragmentId)
-        // wx.navigateTo({
-        //   url: `/pages/piece?id=${fragmentId}&discoveredList=${
-        //     this.discoveredList
-        //   }&index=${currentPieceIndex}`
-        // });
-        
-      }
+        let currentPieceIndex = this.discoveredList.indexOf(fragmentId);
+        if (currentPieceIndex != undefined) {
+            console.log('--- this.discoveredList', this.discoveredList)
+            this.$router.push({ path: '/piece',
+            query: { id: fragmentId,
+                      index: currentPieceIndex,
+                      discoveredList: this.discoveredList } })
+        }
     },
        handleUnlockedPieceTap: function(fragmentId, credit) {
             console.log('---fragmentId', fragmentId, credit)
@@ -136,65 +135,184 @@ export default {
       this.isUnlocakModalVisible = true;
       this.unlockCredit = credit;
     },
+  async requestSearch() {
+       console.log('---requestSearch'  )
+       
+    if (this.remain_credit <= 0) {
+      this.creditZero();
+      return;
+    }
+    if (this.inputValue.length == 0) {
+      this.$toast.open({
+        message: '请输入关键词',
+        type: 'info',
+        duration: 1000,
+        dismissible: true,
+        queue: false
+      })
+      // wx.showToast({
+      //   title: '请输入关键词',
+      //   icon: 'none',
+      //   duration: 2000
+      // });
+      // this.showKeyboard();
+      return;
+    }
+    if (this.inputValue.length > 7) {
+      this.$toast.open({
+        message: '关键词最长不超过7个字',
+        duration: 2000
+      });
+      // this.showKeyboard();
+      return;
+    }
+    var reg = new RegExp('[\u4E00-\u9FA5A-Za-z0-9]+$', 'g');
+    if (!reg.test(this.inputValue)) {
+      this.$toast.open({
+        message: '关键词都不含标点哦',
+        duration: 2000
+      });
+      // this.showKeyboard();
+      return;
+    }
+
+    if (this.searching == true) {
+      return;
+    }
+    this.searching = true;
+    Tip.loading('正在搜索...');
+    const parameter = {
+      q: this.inputValue
+    };
+    //e130 statuscode=200
+    //e100 statuscode=401
+    var me = this;
+    const data = await wxRequest.GetBasic(
+      'topics/1/fragments/',
+      parameter,
+      {},
+      function e(data) {
+        Tip.loaded();
+        let msg = null;
+        if (data.code == 'e120') {
+          me.creditZero();
+          me.focusSearchInput = false;
+          me.$apply();
+        } else if ((data.code = 'e110')) {
+          msg = '订单不存在';
+        } else if ((data.code = 'e100')) {
+          msg = '游戏主题不存在';
+        }
+        if (msg) {
+          wx.showToast({ title: msg, icon: 'none', duration: 3000 });
+        }
+      }
+    );
+
+    this.searching = false;
+    Tip.loaded();
+    if (data != undefined) {
+      if (data.code != undefined) {
+        //没有搜到 弹出键盘
+        this.focusSearchInput = true;
+        // //this.$apply();
+        this.focusSearchInput = false;
+
+        let msg;
+        if (data.code == 'e130') {
+          msg = '沒找到相关碎片，请重新搜索';
+          let searchedCount = Session.get('searchedCount');
+          if (searchedCount == undefined) {
+            searchedCount = 0;
+          }
+          searchedCount++;
+          Session.set('searchedCount', searchedCount);
+
+          if (searchedCount >= 5) {
+            msg = '卡住了？联系客服要个提示吧！';
+            Session.set('searchedCount', 0);
+          }
+        }
+        if (msg) {
+          wx.showToast({ title: msg, icon: 'none', duration: 3000 });
+        }
+        //搜索失败了，credit为0，数字不变
+        if (this.remain_credit == 0) {
+        } else {
+          this.remain_credit = this.remain_credit - 1;
+          //this.$apply();
+        }
+      } else {
+        Session.set('searchedCount', 0);
+
+        this.justFound = data.id;
+        //重新request home data - to update credit
+        this.getChanllengeList();
+      }
+    }
+
+    this.inputValue = '';
+    //this.$apply();
+  },
     greet: async function (event) {
     },
-      updateUI: function(res) {
-    this.my_role.name = res.my_role.name;
-    this.my_role.avatar = res.my_role.avatar;
-    let other_roles = res.other_roles;
-    let crew = '';
-    for (var i = other_roles.length - 1; i >= 0; i--) {
-      crew = crew + other_roles[i]['name'] + (i == 0 ? '' : '，');
-    }
-    this.my_role.crew = crew;
-    this.role_stats = res.role_stats;
-    this.remain_credit = res.remain_credit;
+    updateUI: function(res) {
+      this.my_role.name = res.my_role.name;
+      this.my_role.avatar = res.my_role.avatar;
+      let other_roles = res.other_roles;
+      let crew = '';
+      for (var i = other_roles.length - 1; i >= 0; i--) {
+        crew = crew + other_roles[i]['name'] + (i == 0 ? '' : '，');
+      }
+      this.my_role.crew = crew;
+      this.role_stats = res.role_stats;
+      this.remain_credit = res.remain_credit;
 
-    this.dataLoaded = true;
+      this.dataLoaded = true;
 
-    this.isAuthorised = true;
+      this.isAuthorised = true;
 
-    this.$apply();
+      //this.$apply();
 
-    //搜索成功，重新获取首页
-    if (this.justFound > 0) {
-      wx.showToast({ title: '成功找到碎片', icon: 'success', duration: 3000 });
-      var id = '#item' + this.justFound;
-      var query = wx.createSelectorQuery(); //创建节点查询器 query
-      query.select(id).boundingClientRect(); //这段代码的意思是选择Id=the-id的节点，获取节点位置信息的查询请求
-      query.selectViewport().scrollOffset(); //这段代码的意思是获取页面滑动位置的查询请求
-      query.exec(function(res) {
-        // res[0].top // #the-id节点的上边界坐标
-        // res[1].scrollTop // 显示区域的竖直滚动位置
-        var me = this;
-        let a = res[0].top + res[1].scrollTop - 200; // - me.windowHeight/4
-        wx.pageScrollTo({
-          scrollTop: a,
-          duration: 50
+      //搜索成功，重新获取首页
+      if (this.justFound > 0) {
+        wx.showToast({ title: '成功找到碎片', icon: 'success', duration: 3000 });
+        var id = '#item' + this.justFound;
+        var query = wx.createSelectorQuery(); //创建节点查询器 query
+        query.select(id).boundingClientRect(); //这段代码的意思是选择Id=the-id的节点，获取节点位置信息的查询请求
+        query.selectViewport().scrollOffset(); //这段代码的意思是获取页面滑动位置的查询请求
+        query.exec(function(res) {
+          // res[0].top // #the-id节点的上边界坐标
+          // res[1].scrollTop // 显示区域的竖直滚动位置
+          var me = this;
+          let a = res[0].top + res[1].scrollTop - 200; // - me.windowHeight/4
+          wx.pageScrollTo({
+            scrollTop: a,
+            duration: 50
+          });
         });
-      });
 
-      var animation = wx.createAnimation({
-        duration: 200,
-        timingFunction: 'ease',
-        delay: 300
-      });
-      animation
-        .opacity(0.8)
-        .scale(1.15)
-        .step()
-        .opacity(1)
-        .scale(1)
-        .step();
-      this.animate[this.justFound] = animation.export();
-      this.$apply();
+        var animation = wx.createAnimation({
+          duration: 200,
+          timingFunction: 'ease',
+          delay: 300
+        });
+        animation
+          .opacity(0.8)
+          .scale(1.15)
+          .step()
+          .opacity(1)
+          .scale(1)
+          .step();
+        this.animate[this.justFound] = animation.export();
+        //this.$apply();
 
-      this.animate[this.justFound] = '';
-      this.$apply();
+        this.animate[this.justFound] = '';
+        //this.$apply();
 
-      this.justFound = -1;
+        this.justFound = -1;
+      }
     }
-  }
   }
 
 
@@ -300,10 +418,12 @@ export default {
 
         <view class='searchbar'>
           <view class='search'>
-            <!-- <input type='text' placeholder='输入你想要的内容' confirm-type='search' value="{{inputValue}}" bindfocus="focusSearch" bindinput='inputBind' bindconfirm='query'  ></input> -->
+            <!-- <input type='text' placeholder='输入你想要的内容' confirm-type='search' value="{{inputValue}}"
+             bindfocus="focusSearch" bindinput='inputBind' bindconfirm='query'  ></input> -->
+             <input type="text" placeholder='输入你想要的内容' v-model="inputValue"/>
           </view>  
           <view class='search-btn'>
-            <img  :src='imgs.search' bindtap='query'>
+            <img  :src='imgs.search' @click='requestSearch()'>
           </view>  
         </view>  
 
@@ -351,5 +471,5 @@ export default {
 </template>
 
 <style lang="scss">
-@import '@/assets/index.scss';
+@import '@/public/styles/index.scss';
 </style>

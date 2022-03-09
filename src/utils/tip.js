@@ -3,9 +3,24 @@
  * 提示与加载工具类
  */
 export default class Tips {
-  constructor () {
+  constructor (config) {
     this.isLoading = false
+    this.that = config.that
   }
+
+  static form(title) {
+    return {
+      message: title,
+      type: 'info',
+      duration: 1000,
+      dismissible: false,
+      queue: false,
+      position: 'top',
+      // onClick: this.onClick,
+      // onDismiss: this.onDismiss
+    }
+  }
+
   /**
    * 弹出提示框
    */
@@ -52,14 +67,28 @@ export default class Tips {
   }
 
   static toast (title, icon = 'success') {
-    setTimeout(() => {
-      wx.showToast({
-        title: title,
-        icon: icon,
-        mask: true,
-        duration: 1000
-      })
-    }, 1000)
+    // setTimeout(() => {
+    //   wx.showToast({
+    //     title: title,
+    //     icon: icon,
+    //     mask: true,
+    //     duration: 1000
+    //   })
+    // }, 1000)
+
+    const form = {
+      message: title,
+      type: 'info',
+      duration: 1000,
+      dismissible: true,
+      queue: false,
+      position: 'top',
+      // onClick: this.onClick,
+      // onDismiss: this.onDismiss
+    }
+
+    that.$toast.open(form)
+
   }
 
   /**

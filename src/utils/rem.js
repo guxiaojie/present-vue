@@ -14,8 +14,8 @@ export function setRem () {
 }
 // 初始化
 setRem()
-// 改变窗口大小时重新设置 rem
-window.onresize = function () {
+  // 改变窗口大小时重新设置 rem
+  window.onresize = function () {
   setRem()
 }
 

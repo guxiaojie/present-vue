@@ -10,9 +10,7 @@ import MemeberView from './views/CharacterView.vue'
 import router from './router'
 
 import VueToast from 'vue-toast-notification'
-// Import one of the available themes
-// import 'vue-toast-notification/dist/theme-default.css';
-import 'vue-toast-notification/dist/theme-sugar.css'
+import 'vue-toast-notification/dist/theme-default.css'
 
 // Create a new store instance.
 const store = createStore({
@@ -37,13 +35,15 @@ const store = createStore({
 
 const app = createApp(App)
 // const app = createApp(Character)
-// app.use(VueToast);
-
+ 
 app.use(router)
 
 // Install the store instance as a plugin
 app.use(store)
-app.use(VueToast)
+app.use(VueToast, {
+  // One of the options
+  position: 'top'
+})
 
 app.mount('#app')
 

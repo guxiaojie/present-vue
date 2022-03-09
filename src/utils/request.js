@@ -41,8 +41,14 @@ class Store {
     return response.data
   }
 
-  async pricing () {
-    const response = await this.axios.get(`topics/${this.storyId}/pricing/`)
+  async fragments (f) {
+    const response = await this.axios.get(`fragments/${f}/`)
+    console.log('response', response)
+    return response.data
+  }
+
+  async home () {
+    const response = await this.axios.get(`topics/${this.storyId}/home/`)
     console.log('response', response)
     return response.data
   }

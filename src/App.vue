@@ -30,7 +30,4 @@ export default {
 <template>
   <RouterView />
 </template>
-<style lang="scss">
-@import '@/assets/index.scss';
-
-</style>
+ 
