@@ -16,16 +16,16 @@ import Tip from '@/utils/tip'
 export default {
   data() {
         return {
-            message: '客服微信请添加15711067100 &nbsp;&nbsp;&nbsp;&nbsp; ',
-            book: '故意事务所 - 委托卷宗 7737368',
-            payTitle: '',
+            message: '客服微信请添加15711067100',
+            book: '故意事务所探员系统',
+            payTitle: '购买次数',
             emptyTitle: '',
-            role_stats: [{role: '...'}],
+            role_stats: [ ],
             my_role: {
                 id: '4',
                 name: '',
                 crew: '',
-                icon_path: 'https://assets.storiesmatter.cn/profile1.png',
+                icon_path: '',
                 avatar: ''
             },
             buttons: [{
@@ -67,8 +67,6 @@ export default {
             windowHeight: 750,
             discoveredList: [],
             onboard: false,
-
-            pictures: ['https://assets.storiesmatter.cn/intromodal.png'],
             imageSize: {},
             px2rpx: 2,
             windowWidth: 375,
@@ -83,7 +81,8 @@ export default {
                 dot: "https://assets.storiesmatter.cn/dotline.png",
                 search: "https://assets.storiesmatter.cn/search-button.png",
                 pay: "https://assets.storiesmatter.cn/icon-pay.png",
-                line: "https://assets.storiesmatter.cn/longline.png"
+                line: "https://assets.storiesmatter.cn/longline.png",
+                intromodal: 'https://assets.storiesmatter.cn/intromodal.png'
             }, 
         }
     },
@@ -254,8 +253,6 @@ export default {
     this.inputValue = '';
     //this.$apply();
   },
-    greet: async function (event) {
-    },
     updateUI: function(res) {
       this.my_role.name = res.my_role.name;
       this.my_role.avatar = res.my_role.avatar;
@@ -312,7 +309,23 @@ export default {
 
         this.justFound = -1;
       }
-    }
+    },
+
+    handleHelp: function (index) {
+    },
+
+    handleTopup: function (index) {
+    },
+
+    copy: function (index) {
+      this.$copyText('15711067100').then(function (e) {
+          alert('Copied')
+          console.log(e)
+        }, function (e) {
+          alert('Can not copy')
+          console.log(e)
+        })
+    },
   }
 
 
@@ -324,12 +337,13 @@ export default {
     <view v-if=" !isAuthorised ">
        <empty :title.sync="emptyTitle"></empty>
     </view>
-<!-- 
-    <i-notice-bar icon="systemprompt"  bindtap='copy'> 
-        <text decode="{{message}}" >{{ message }}</text>
-        <text style="font-weight: bold;" >一键复制账号</text>
-    </i-notice-bar>
 
+    <view class="systemprompt"  @click='copy'> 
+        <text decode="{{message}}" >{{ message }}</text>
+        <span>&nbsp;&nbsp;&nbsp; </span> 
+        <text class="copy" >一键复制账号</text>
+    </view>
+<!-- 
     <i-modal title="玩前必读" visible="{{ visible1 }}" bind:ok="handleClose1"  show-cancel="{{ false }}" >
      <view style="margin-left: 40rpx; margin-right: 40rpx; text-align: left">
        <view>1. 请先阅读【组员情况】，【委托信息】，【医院地图】再开始搜索，避免浪费搜索次数哦~</view>
@@ -340,8 +354,7 @@ export default {
     <i-modal title="" visible="{{ isIntroVisible }}" bind:ok="handleIntroOk"  show-cancel="{{false}}">
      <view style=" ">
        <view class="wrap" style=" ">
-       <img wx:for="{{pictures}}" wx:key="unique" src="{{item}}" data-index="{{index}}" 
-      src="{{pictures[index]}}"  style="width:{{imageSize[index].width}}rpx; height:{{imageSize[index].height}}rpx;  " 
+       <img :src="imgs.intromodal"  style="width:{{imageSize[index].width}}rpx; height:{{imageSize[index].height}}rpx;  " 
       data-index="{{index}}"  mode="scaleToFill"  bindload="imageLoad"> 
      </view> 
       </view>
@@ -354,30 +367,31 @@ export default {
     </i-modal>-->
 
     <view class="header">
-      <view class="level-1" @tap="gotoBooks">
+      <view class="level-1">
            <text>{{ book }} </text>
       </view>
       
        <view class="userinfobtns" v-if=" dataLoaded ">
         <view class="column" > 
-          <view class="btn crew"  @tap="handleHelp(0)">
+          <view class="btn crew"  @click="handleHelp(0)">
              <img :src="imgs.help">
-             <text class="btn" >{{ buttons[0].title }}</text>
+             <text class="btn1" >{{ buttons[0].title }}</text>
           </view>
-          <view class="btn hospital" @tap="handleHelp(1)">
+          <view class="btn hospital" @click="handleHelp(1)">
              <img :src="imgs.eye">
-             <text class="btn" >{{ buttons[1].title }}</text>
+             <text class="btn1" >{{ buttons[1].title }}</text>
           </view>
-          <view class="btn delegate" @tap="handleHelp(2)">
+          <view class="btn delegate" @click="handleHelp(2)">
              <img :src="imgs.tick">
-             <text class="btn" >{{ buttons[2].title }}</text>
+             <text class="btn1" >{{ buttons[2].title }}</text>
           </view>
         </view>  
       </view>
 
       <view class="dotline" v-if=" dataLoaded ">
-            <img src="https://assets.storiesmatter.cn/dotline.png" mode="widthFix"> 
+            <img :src="imgs.dot" > 
       </view>
+
       <view class="userinfo"  v-if=" dataLoaded ">
             <view class="icon">
               <img :src=" my_role.avatar ">
@@ -387,32 +401,16 @@ export default {
                 <view class="time">组员：{{ my_role.crew }} </view>
             </view>
       </view>
-      <view class="userinfobtns" v-if=" dataLoaded ">
-        <view class="column" > 
-          <view class="btn crew"  @tap="myCrew">
-             <img :src="imgs.crew">
-             <text class="btn" >组员情况</text>
-          </view>
-          <view class="btn hospital" @tap="gotoMap">
-             <img :src="imgs.hospital"> 
-               <text class="btn" >医院地图</text>
-          </view>
-          <view class="btn delegate" @tap="handleHelp(3)">
-             <img :src="imgs.delegate"> 
-               <text class="btn" >{{ buttons[3].title }}</text>
-          </view>
-        </view>  
-      </view>
+        
       <view class="dotline" v-if=" dataLoaded ">
-            <img :src="imgs.dot" mode="widthFix"> 
+            <img :src="imgs.dot" > 
       </view>
     </view>
 
     <view class="searchcell" id="searchit" v-if=" dataLoaded ">
         <view class="recordcell" >
-            
-           <view class="title">
-            <text class="btn">调查记录</text>
+           <view class="title1">
+            <text class="btn1">调查记录</text>
           </view>
         </view>
 
@@ -420,7 +418,7 @@ export default {
           <view class='search'>
             <!-- <input type='text' placeholder='输入你想要的内容' confirm-type='search' value="{{inputValue}}"
              bindfocus="focusSearch" bindinput='inputBind' bindconfirm='query'  ></input> -->
-             <input type="text" placeholder='输入你想要的内容' v-model="inputValue"/>
+             <input class='search-input' type="text" placeholder='输入你想要的内容' v-model="inputValue"/>
           </view>  
           <view class='search-btn'>
             <img  :src='imgs.search' @click='requestSearch()'>
@@ -429,11 +427,11 @@ export default {
 
         <view class="paycell" > 
           <view class="title">
-            <text class="btn">搜索剩余次数：{{ remain_credit }}</text>
+            <text class="btn1">搜索剩余次数：{{ remain_credit }}</text>
           </view>
-          <view class="topup" @tap="handleTopup">
+          <view class="topup" @click="handleTopup">
             <img :src="imgs.pay"> 
-            <text class="btn">{{payTitle}}</text>
+            <text class="btn1">{{payTitle}}</text>
           </view>
         </view>  
 
@@ -444,25 +442,26 @@ export default {
 
 
     <view  class="fragment-content" v-for="item in role_stats" id="fragmentContent"  wx:key="index" >
-      <view class="title">
+      <view class="fragment-title">
          <text> {{ item.role }}</text>
       </view>
       <view class="container-box">
-        <view v-for="item in item.fragments"  wx:key="index" class="item-box" id="item{{item.id}}">
-        <block v-if="item.has_discovered==true ">
-               <text  animation="{{animate[item.id]}}" class='fragment discovered'  @click="handlePieceTap(item.id)"  data-cid="item.id">{{ item.display_label }}</text>  
-        </block>
-        <block v-else>
-          <text class='fragment'  @click="handleUnlockedPieceTap(item.id, item.credit_to_unlock)"  data-cid="{{item.id}}" data-credit="{{item.credit_to_unlock}}" >{{ item.display_label }}</text>
-        </block>
+        <view v-for="item in item.fragments" 
+        v-bind:class = "(item.has_discovered)?'item-box discovered':'item-box'"
+           id="item{{item.id}}" >
+          <block v-if="item.has_discovered==true ">
+            <text animation="{{animate[item.id]}}"  @click="handlePieceTap(item.id)"  data-cid="item.id">{{ item.display_label }}</text>  
+           </block>
+          <block v-else>
+            <text @click="handleUnlockedPieceTap(item.id, item.credit_to_unlock)"  data-cid="{{item.id}}" data-credit="{{item.credit_to_unlock}}" >{{ item.display_label }}</text>
+            </block>
         </view>
-
       </view> 
         <view class="longline">
             <img :src="imgs.line" mode="widthFix"> 
       </view>
     </view>
-   <view style="height:60rpx"></view>
+   <view style="height:60px"></view>
    
 
     

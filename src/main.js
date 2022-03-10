@@ -11,6 +11,7 @@ import router from './router'
 
 import VueToast from 'vue-toast-notification'
 import 'vue-toast-notification/dist/theme-default.css'
+import VueClipboard from 'vue-clipboard2'
 
 // Create a new store instance.
 const store = createStore({
@@ -44,6 +45,8 @@ app.use(VueToast, {
   // One of the options
   position: 'top'
 })
+
+app.use(VueClipboard)
 
 app.mount('#app')
 
