@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import CharacterView from '../views/CharacterView.vue'
 import HomeView from '../views/HomeView.vue'
-import Piece from '../views/PieceView.vue'
 import Map from '../views/MapView.vue'
+import Piece from '@/views/PieceView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

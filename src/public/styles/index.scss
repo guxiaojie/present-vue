@@ -106,19 +106,18 @@ page, .container{
         display: flex;
         justify-content: left;
       }
-      .title {
+      .first-line {
         width: 50%;
         margin-top: 30px;
         font-size: 32px;
       }
-      .time {
-        margin-top:  90px;
+      .time { 
         font-size: 32px;
       }
     }
   }
 
-  .userinfobtns {
+  .top-btns {
     padding-left: 40px;
     padding-right: 40px;
     padding-top: 20px;
@@ -232,7 +231,7 @@ page, .container{
     // justify-content: space-between;
     zoom: 1;
 
-    .title {
+    .paycell-title {
       // background-color:pink;
       // width: 200px;
       float: left;
@@ -330,7 +329,7 @@ page, .container{
     
     font-size: 32px;
   } 
-  
+
   .discovered {
     background-image:url("https://assets.storiesmatter.cn/frag-discv-bg.png");
   }

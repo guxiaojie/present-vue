@@ -1,39 +1,43 @@
 <template>
   <view class="container">
+    <view style="height:20px;"> </view>
+   
     <view class="choose_character">
       <view class="column">
-        <img style="width:40rpx; height:20rpx; margin-top:22rpx; margin-right:10rpx;" :src="imgs.eye">
-        <text class="title9">{{search_text}}</text>
+        <img style="width:40px; height:20px;" :src="imgs.eye">
+        <view style="width:20px;"> </view>
+        <text >{{search_text}}</text>
       </view>
-      <view class="img">
+      <view class="aimg">
         <img :src="imgs.shortLine" mode="widthFix">
       </view>
     </view> 
      
-      <view  class="userinfobtns">
-        <view class="column" > 
-          <view class="btn">
-             <text >{{display_id}}</text>
-          </view>
-          <view class="btn">
-               <text   >{{role}}</text>
-          </view>
-          <view class="btn" >
-               <text  >{{comment}}</text>
-          </view>
-        </view>  
-      </view>
+    <view  class="userinfobtns">
+      <view class="column" > 
+        <view class="btn">
+            <text >{{display_id}}</text>
+        </view>
+        <view class="btn">
+              <text>{{role}}</text>
+        </view>
+        <view class="btn" >
+              <text>{{comment}}</text>
+        </view>
+      </view>  
+    </view>
 
     <view v-if=" content_type==2 " class="fragment-img"  @click="gotoMap">
-     <view class="wrap" style=" ">
-       <img :src="pictures[0]"  style="width:{{imageSize[index].width}}rpx; height:{{imageSize[index].height}}rpx;  " 
-        mode="scaleToFill"  @load="imageLoad">
+     <view class="wrap" >
+       <!-- <img :src="pictures[0]"  v-bind:style="`width: ${imgWidth}`"  mode="scaleToFill"  > -->
+      <img  :src="pictures[0]"  :style="{'width': imgWidth + 'px' }"  mode="scaleToFill">
      </view> 
-      <text> 点击图片可放大查看 </text>
-   </view>
+      <!-- <text> 点击图片可放大查看 </text> -->
+    </view>
 
     <view v-if=" content_type==3 " class="sliderCont">
-      <slider bindchange="slider1change" step="1" value="{{reCurTime}}" min="0" max="{{reEndTime}}" activeColor="grey"/>
+      <audio :src="playurl" controls='controls'  class="aaudio"></audio>
+      <!-- <slider bindchange="slider1change" step="1" value="{{reCurTime}}" min="0" max="{{reEndTime}}" activeColor="grey"/>
       <view class="time">
         <view class="column" > 
           <view class="btn crew">
@@ -44,12 +48,11 @@
           </view>
         </view>  
       </view>
-     <img :src="(isplay == false) ? imgs.play: imgs.pause " bindtap="audioPlay" class="playBtn">
-   </view> 
+     <img :src="(isplay == false) ? imgs.play: imgs.pause " bindtap="audioPlay" class="playBtn"> -->
+    </view> 
   
-      <text v-if=" content_type==1 " class="message">{{ text }}</text>
-
-    <view style="height:100rpx"></view>
+  <text v-if=" content_type==1 " class="message">{{ text }}</text>
+    <view style="height:100px"></view>
     <view class="bottom">
       <view class="column" > 
       <block v-if=" currentPieceIndex == 0 ">
@@ -73,33 +76,11 @@
         </view>
       </block>
       </view> 
-
-    <!-- ads -->
-    <view class="adContainer">
-    <view style="height: 20rpx; line-height: 20rpx"></view>
-      <ad unit-id="adunit-6e7430cb8237a8ee"></ad>
     </view>
-    </view>
-
-
-      <view style="height:100rpx"></view>
    </view>
 </template>
 
 <script>
-// import wepy from 'wepy';
-// import wxRequest from '@/utils/wxRequest';
-// import Session from '@/utils/session';
-// import Empty from '@/components/empty';
-// import StatementItem from '@/components/index/character_cell';
- 
-// import { asyncList } from '@/store/actions';
-// import Tip from '@/utils/tip';
-// import Util from '@/utils/util.js';
-// //国际化
-// import locales from '@/utils/locales';
-// import T from '@/utils/wxapp-i18n';
-// import { clearInterval } from 'timers';
 import _ from 'lodash';
 import Store from '../utils/request.js'
 
@@ -116,9 +97,8 @@ export default {
 
     pictures: [''],
     imageSize: {},
-    px2rpx: 2,
+    px2px: 2,
     windowWidth: 375,
-
     src: '',
     curTime: '00:00',
     endTime: '00:00',
@@ -139,50 +119,27 @@ export default {
       eye: "https://assets.storiesmatter.cn/eye.png",
       play: "https://assets.storiesmatter.cn/play1.png",
       pause: "https://assets.storiesmatter.cn/pause1.png"
-    }
+    },
+    imgWidth: 375,
   }},
 
   
   async mounted() {
-    console.log(this.$route.query)
-    if(!_.isEmpty(this.$route.query)) {
-      this.discoveredList = this.$route.query.discoveredList;
-      this.currentPieceIndex = this.$route.query.index;
-    }
-    this.gotoPiece();
+      console.log('imgWidth', this.imgWidth)
+
+      console.log(this.$route.query)
+      this.imgWidth = (document.documentElement.clientWidth || document.body.clientWidth) - 20
+      console.log('imgWidth', this.imgWidth)
+      if (!_.isEmpty(this.$route.query)) {
+          this.discoveredList = this.$route.query.discoveredList;
+          this.currentPieceIndex = this.$route.query.index;
+      }
+      this.gotoPiece();
   },
 
   methods: {
     gotoMap() {
-      wx.navigateTo({ url: `/pages/picture?img=${this.image}` });
-    },
-    imageLoad(e) {
-      console.log('imageLoad-------', e)
-      const htmlWidth = document.documentElement.clientWidth || document.body.clientWidth
-      //单位rpx
-      var originWidth = e.detail.width * this.px2rpx,
-        originHeight = e.detail.height * this.px2rpx,
-        ratio = originWidth / originHeight;
-      console.log('e.detail.width-------', e.detail.width)
-      var viewWidth = 750,
-        viewHeight; //设定一个初始宽度
-      //当它的宽度大于初始宽度时，实际效果跟mode=widthFix一致
-      if (originWidth >= viewWidth) {
-        //宽度等于viewWidth,只需要求出高度就能实现自适应
-        viewHeight = viewWidth / ratio;
-      } else {
-        //如果宽度小于初始值，这时就不要缩放了
-        viewWidth = originWidth;
-        viewHeight = originHeight;
-      }
-      var imageSize = this.imageSize;
-      imageSize[e.target.dataset.index] = {
-        width: viewWidth,
-        height: viewHeight
-      };
-      this.imageSize = imageSize;
-      // console.log('this.imageSize-------', this.imageSize)
-      this.$apply();
+
     },
     async requestFragment() {
       this.$toast.open({
@@ -235,6 +192,21 @@ export default {
         this.imageSize = [];
         this.requestFragment();
       }
+    },
+    previous() {
+      if (this.currentPieceIndex <= 0) {
+        return;
+      }
+      this.currentPieceIndex--;
+      this.gotoPiece();
+    },
+
+    next() {
+      if (parseInt(this.currentPieceIndex) + 1 >= this.discoveredList.length) {
+        return;
+      }
+      this.currentPieceIndex++;
+      this.gotoPiece();
     },
     onUnloadAudio(){
       clearInterval(this.timer);

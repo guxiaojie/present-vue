@@ -31,24 +31,24 @@ import Character from '@/components/Character.vue'
     </view>
    </view>
 
-    <view style="height:30rpx">  </view>
+    <view style="height:30px">  </view>
      <!-- <view >
          <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="middle" >开始调查</button>
      </view> -->
 
-    <view style="width:100%; height:120rpx;   display:flex; justify-content:center; align-items:center;">
-          <view  style="width:320rpx; height:120rpx;   display:flex; justify-content:center; align-items:center;" class="btn"  @click="handleInquiry">
-            <text  style="font-size:40rpx; color:white;  " >开始调查</text>
+    <view style="width:100%; height:120px;   display:flex; justify-content:center; align-items:center;">
+          <view  style="width:320px; height:120px;   display:flex; justify-content:center; align-items:center;" class="btn"  @click="handleInquiry">
+            <text  style="font-size:40px; color:white;  " >开始调查</text>
           </view>
     </view>
 
     <view class="choose_character">
       <view class="column">
-        <text style="font-size:24rpx; color:#757575; margin-top:-30rpx;">*探员身份一旦确定，不可更改</text>
+        <text style="font-size:24px; color:#757575; margin-top:-30px;">*探员身份一旦确定，不可更改</text>
       </view>
     </view>
 
-    <view style="height:50rpx">  </view>
+    <view style="height:50px">  </view>
 
   </main>
 </template>

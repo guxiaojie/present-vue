@@ -36,3 +36,34 @@ $linkColor: #537c8d;
 @function toRpx($number) {
   @return $number * 2;
 }
+
+
+.choose_character {
+	margin: 50px auto;
+	> .column {
+	  line-height: 60px;
+	  padding:0 44px;
+	  margin-bottom: 0px;
+	  border-bottom: 0px solid #00efef;
+	  font-size: 28px;
+	  //background:red;  
+	  display: flex;
+	  justify-content: center;
+	  > text {
+		min-width:100px;  
+	  }
+	} 
+	 > .aimg {
+	  width: 100%;
+	  height: 5px;
+	  margin-top: -2px;
+	  //border: 1px solid black;
+	  //background-color:transparent;
+	  margin-right: 1em;
+	  display:flex;                    //flex布局
+	  justify-content: center;         //水平轴线居中
+	  > image {
+		width: 40%;
+	  }
+	 }
+  }

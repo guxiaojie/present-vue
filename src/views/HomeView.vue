@@ -94,7 +94,7 @@ export default {
         },
     },
 
-    async mounted() {
+  async mounted() {
  
         const r = new Store({}) 
         const data = await r.home()
@@ -117,215 +117,240 @@ export default {
     },
   methods: {
       handlePieceTap: function(fragmentId) {
-            console.log('---item',   fragmentId)
-        let currentPieceIndex = this.discoveredList.indexOf(fragmentId);
-        if (currentPieceIndex != undefined) {
-            console.log('--- this.discoveredList', this.discoveredList)
-            this.$router.push({ path: '/piece',
-            query: { id: fragmentId,
+          console.log('---item', fragmentId)
+          let currentPieceIndex = this.discoveredList.indexOf(fragmentId);
+          if (currentPieceIndex != undefined) {
+              console.log('--- this.discoveredList', this.discoveredList)
+              this.$router.push({
+                  path: '/piece',
+                  query: {
+                      id: fragmentId,
                       index: currentPieceIndex,
-                      discoveredList: this.discoveredList } })
-        }
-    },
-       handleUnlockedPieceTap: function(fragmentId, credit) {
-            console.log('---fragmentId', fragmentId, credit)
-    //   let credit = e.currentTarget.dataset.credit;
-    //   this.unlockFragmentId = e.currentTarget.dataset.cid;
-      this.isUnlocakModalVisible = true;
-      this.unlockCredit = credit;
-    },
-  async requestSearch() {
-       console.log('---requestSearch'  )
-       
-    if (this.remain_credit <= 0) {
-      this.creditZero();
-      return;
-    }
-    if (this.inputValue.length == 0) {
-      this.$toast.open({
-        message: '请输入关键词',
-        type: 'info',
-        duration: 1000,
-        dismissible: true,
-        queue: false
-      })
-      // wx.showToast({
-      //   title: '请输入关键词',
-      //   icon: 'none',
-      //   duration: 2000
-      // });
-      // this.showKeyboard();
-      return;
-    }
-    if (this.inputValue.length > 7) {
-      this.$toast.open({
-        message: '关键词最长不超过7个字',
-        duration: 2000
-      });
-      // this.showKeyboard();
-      return;
-    }
-    var reg = new RegExp('[\u4E00-\u9FA5A-Za-z0-9]+$', 'g');
-    if (!reg.test(this.inputValue)) {
-      this.$toast.open({
-        message: '关键词都不含标点哦',
-        duration: 2000
-      });
-      // this.showKeyboard();
-      return;
-    }
-
-    if (this.searching == true) {
-      return;
-    }
-    this.searching = true;
-    Tip.loading('正在搜索...');
-    const parameter = {
-      q: this.inputValue
-    };
-    //e130 statuscode=200
-    //e100 statuscode=401
-    var me = this;
-    const data = await wxRequest.GetBasic(
-      'topics/1/fragments/',
-      parameter,
-      {},
-      function e(data) {
-        Tip.loaded();
-        let msg = null;
-        if (data.code == 'e120') {
-          me.creditZero();
-          me.focusSearchInput = false;
-          me.$apply();
-        } else if ((data.code = 'e110')) {
-          msg = '订单不存在';
-        } else if ((data.code = 'e100')) {
-          msg = '游戏主题不存在';
-        }
-        if (msg) {
-          wx.showToast({ title: msg, icon: 'none', duration: 3000 });
-        }
-      }
-    );
-
-    this.searching = false;
-    Tip.loaded();
-    if (data != undefined) {
-      if (data.code != undefined) {
-        //没有搜到 弹出键盘
-        this.focusSearchInput = true;
-        // //this.$apply();
-        this.focusSearchInput = false;
-
-        let msg;
-        if (data.code == 'e130') {
-          msg = '沒找到相关碎片，请重新搜索';
-          let searchedCount = Session.get('searchedCount');
-          if (searchedCount == undefined) {
-            searchedCount = 0;
+                      discoveredList: this.discoveredList
+                  }
+              })
           }
-          searchedCount++;
-          Session.set('searchedCount', searchedCount);
+      },
+      handleUnlockedPieceTap: function(fragmentId, credit) {
+          console.log('---fragmentId', fragmentId, credit)
+          //   let credit = e.currentTarget.dataset.credit;
+          //   this.unlockFragmentId = e.currentTarget.dataset.cid;
+          this.isUnlocakModalVisible = true;
+          this.unlockCredit = credit;
 
-          if (searchedCount >= 5) {
-            msg = '卡住了？联系客服要个提示吧！';
-            Session.set('searchedCount', 0);
+          this.$toast.open({
+                  message: `该记忆碎片尚未解锁，要消耗${this.unlockCredit}次搜索机会解锁吗？`,
+                  type: 'warning',
+                  duration: 0,
+                  dismissible: true,
+                  queue: false,
+                  onClick: this.onClick,
+                 onDismiss: this.onDismiss
+              })
+          
+
+      },
+      onClick: function() {
+        this.requestUnlockedPiece();
+      },
+      onDismiss: function() {
+        this.$toast.clear();
+      },
+        async requestUnlockedPiece() {
+          
+        },
+      async requestSearch() {
+          console.log('---requestSearch')
+
+          if (this.remain_credit <= 0) {
+              this.creditZero();
+              return;
           }
-        }
-        if (msg) {
-          wx.showToast({ title: msg, icon: 'none', duration: 3000 });
-        }
-        //搜索失败了，credit为0，数字不变
-        if (this.remain_credit == 0) {
-        } else {
-          this.remain_credit = this.remain_credit - 1;
-          //this.$apply();
-        }
-      } else {
-        Session.set('searchedCount', 0);
+          if (this.inputValue.length == 0) {
+              this.$toast.open({
+                  message: '请输入关键词',
+                  type: 'info',
+                  duration: 1000,
+                  dismissible: true,
+                  queue: false
+              })
+              // wx.showToast({
+              //   title: '请输入关键词',
+              //   icon: 'none',
+              //   duration: 2000
+              // });
+              // this.showKeyboard();
+              return;
+          }
+          if (this.inputValue.length > 7) {
+              this.$toast.open({
+                  message: '关键词最长不超过7个字',
+                  duration: 2000
+              });
+              // this.showKeyboard();
+              return;
+          }
+          var reg = new RegExp('[\u4E00-\u9FA5A-Za-z0-9]+$', 'g');
+          if (!reg.test(this.inputValue)) {
+              this.$toast.open({
+                  message: '关键词都不含标点哦',
+                  duration: 2000
+              });
+              // this.showKeyboard();
+              return;
+          }
 
-        this.justFound = data.id;
-        //重新request home data - to update credit
-        this.getChanllengeList();
-      }
-    }
-
-    this.inputValue = '';
-    //this.$apply();
-  },
-    updateUI: function(res) {
-      this.my_role.name = res.my_role.name;
-      this.my_role.avatar = res.my_role.avatar;
-      let other_roles = res.other_roles;
-      let crew = '';
-      for (var i = other_roles.length - 1; i >= 0; i--) {
-        crew = crew + other_roles[i]['name'] + (i == 0 ? '' : '，');
-      }
-      this.my_role.crew = crew;
-      this.role_stats = res.role_stats;
-      this.remain_credit = res.remain_credit;
-
-      this.dataLoaded = true;
-
-      this.isAuthorised = true;
-
-      //this.$apply();
-
-      //搜索成功，重新获取首页
-      if (this.justFound > 0) {
-        wx.showToast({ title: '成功找到碎片', icon: 'success', duration: 3000 });
-        var id = '#item' + this.justFound;
-        var query = wx.createSelectorQuery(); //创建节点查询器 query
-        query.select(id).boundingClientRect(); //这段代码的意思是选择Id=the-id的节点，获取节点位置信息的查询请求
-        query.selectViewport().scrollOffset(); //这段代码的意思是获取页面滑动位置的查询请求
-        query.exec(function(res) {
-          // res[0].top // #the-id节点的上边界坐标
-          // res[1].scrollTop // 显示区域的竖直滚动位置
+          if (this.searching == true) {
+              return;
+          }
+          this.searching = true;
+          Tip.loading('正在搜索...');
+          const parameter = {
+              q: this.inputValue
+          };
+          //e130 statuscode=200
+          //e100 statuscode=401
           var me = this;
-          let a = res[0].top + res[1].scrollTop - 200; // - me.windowHeight/4
-          wx.pageScrollTo({
-            scrollTop: a,
-            duration: 50
-          });
-        });
+          const data = await wxRequest.GetBasic(
+              'topics/1/fragments/',
+              parameter,
+              {},
+              function e(data) {
+                  Tip.loaded();
+                  let msg = null;
+                  if (data.code == 'e120') {
+                      me.creditZero();
+                      me.focusSearchInput = false;
+                      me.$apply();
+                  } else if ((data.code = 'e110')) {
+                      msg = '订单不存在';
+                  } else if ((data.code = 'e100')) {
+                      msg = '游戏主题不存在';
+                  }
+                  if (msg) {
+                      wx.showToast({ title: msg, icon: 'none', duration: 3000 });
+                  }
+              }
+          );
 
-        var animation = wx.createAnimation({
-          duration: 200,
-          timingFunction: 'ease',
-          delay: 300
-        });
-        animation
-          .opacity(0.8)
-          .scale(1.15)
-          .step()
-          .opacity(1)
-          .scale(1)
-          .step();
-        this.animate[this.justFound] = animation.export();
-        //this.$apply();
+          this.searching = false;
+          Tip.loaded();
+          if (data != undefined) {
+              if (data.code != undefined) {
+                  //没有搜到 弹出键盘
+                  this.focusSearchInput = true;
+                  // //this.$apply();
+                  this.focusSearchInput = false;
 
-        this.animate[this.justFound] = '';
-        //this.$apply();
+                  let msg;
+                  if (data.code == 'e130') {
+                      msg = '沒找到相关碎片，请重新搜索';
+                      let searchedCount = Session.get('searchedCount');
+                      if (searchedCount == undefined) {
+                          searchedCount = 0;
+                      }
+                      searchedCount++;
+                      Session.set('searchedCount', searchedCount);
 
-        this.justFound = -1;
-      }
-    },
+                      if (searchedCount >= 5) {
+                          msg = '卡住了？联系客服要个提示吧！';
+                          Session.set('searchedCount', 0);
+                      }
+                  }
+                  if (msg) {
+                      wx.showToast({ title: msg, icon: 'none', duration: 3000 });
+                  }
+                  //搜索失败了，credit为0，数字不变
+                  if (this.remain_credit == 0) {
+                  } else {
+                      this.remain_credit = this.remain_credit - 1;
+                      //this.$apply();
+                  }
+              } else {
+                  Session.set('searchedCount', 0);
 
-    handleHelp: function (index) {
-    },
+                  this.justFound = data.id;
+                  //重新request home data - to update credit
+                  this.getChanllengeList();
+              }
+          }
 
-    handleTopup: function (index) {
-    },
+          this.inputValue = '';
+          //this.$apply();
+      },
+      updateUI: function(res) {
+          this.my_role.name = res.my_role.name;
+          this.my_role.avatar = res.my_role.avatar;
+          let other_roles = res.other_roles;
+          let crew = '';
+          for (var i = other_roles.length - 1; i >= 0; i--) {
+              crew = crew + other_roles[i]['name'] + (i == 0 ? '' : '，');
+          }
+          this.my_role.crew = crew;
+          this.role_stats = res.role_stats;
+          this.remain_credit = res.remain_credit;
 
-    copy: function (index) {
-      this.$copyText('15711067100').then(function (e) {
-          alert('Copied')
-          console.log(e)
-        }, function (e) {
-          alert('Can not copy')
-          console.log(e)
-        })
-    },
+          this.dataLoaded = true;
+
+          this.isAuthorised = true;
+
+          //this.$apply();
+
+          //搜索成功，重新获取首页
+          if (this.justFound > 0) {
+              wx.showToast({ title: '成功找到碎片', icon: 'success', duration: 3000 });
+              var id = '#item' + this.justFound;
+              var query = wx.createSelectorQuery(); //创建节点查询器 query
+              query.select(id).boundingClientRect(); //这段代码的意思是选择Id=the-id的节点，获取节点位置信息的查询请求
+              query.selectViewport().scrollOffset(); //这段代码的意思是获取页面滑动位置的查询请求
+              query.exec(function (res) {
+                  // res[0].top // #the-id节点的上边界坐标
+                  // res[1].scrollTop // 显示区域的竖直滚动位置
+                  var me = this;
+                  let a = res[0].top + res[1].scrollTop - 200; // - me.windowHeight/4
+                  wx.pageScrollTo({
+                      scrollTop: a,
+                      duration: 50
+                  });
+              });
+
+              var animation = wx.createAnimation({
+                  duration: 200,
+                  timingFunction: 'ease',
+                  delay: 300
+              });
+              animation
+                  .opacity(0.8)
+                  .scale(1.15)
+                  .step()
+                  .opacity(1)
+                  .scale(1)
+                  .step();
+              this.animate[this.justFound] = animation.export();
+              //this.$apply();
+
+              this.animate[this.justFound] = '';
+              //this.$apply();
+
+              this.justFound = -1;
+          }
+      },
+
+      handleHelp: function (index) {
+      },
+
+      handleTopup: function (index) {
+      },
+
+      copy: function (index) {
+          this.$copyText('15711067100').then(function (e) {
+              alert('Copied')
+              console.log(e)
+          }, function (e) {
+              alert('Can not copy')
+              console.log(e)
+          })
+      },
   }
 
 
@@ -371,7 +396,7 @@ export default {
            <text>{{ book }} </text>
       </view>
       
-       <view class="userinfobtns" v-if=" dataLoaded ">
+       <view class="top-btns" v-if=" dataLoaded ">
         <view class="column" > 
           <view class="btn crew"  @click="handleHelp(0)">
              <img :src="imgs.help">
@@ -397,7 +422,7 @@ export default {
               <img :src=" my_role.avatar ">
             </view>
             <view class="st-title">
-                <view class="title">探员：{{ my_role.name }}</view>
+                <view class="first-line">探员：{{ my_role.name }}</view>
                 <view class="time">组员：{{ my_role.crew }} </view>
             </view>
       </view>
@@ -426,7 +451,7 @@ export default {
         </view>  
 
         <view class="paycell" > 
-          <view class="title">
+          <view class="paycell-title">
             <text class="btn1">搜索剩余次数：{{ remain_credit }}</text>
           </view>
           <view class="topup" @click="handleTopup">
@@ -446,8 +471,7 @@ export default {
          <text> {{ item.role }}</text>
       </view>
       <view class="container-box">
-        <view v-for="item in item.fragments" 
-        v-bind:class = "(item.has_discovered)?'item-box discovered':'item-box'"
+        <view v-for="item in item.fragments"  v-bind:class = "(item.has_discovered)?'item-box discovered':'item-box'"
            id="item{{item.id}}" >
           <block v-if="item.has_discovered==true ">
             <text animation="{{animate[item.id]}}"  @click="handlePieceTap(item.id)"  data-cid="item.id">{{ item.display_label }}</text>  
