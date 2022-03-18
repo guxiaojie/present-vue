@@ -1,50 +1,29 @@
 <template>
-
   <view class="container">
-
-     <div>
-    <article><!-- Your contents --></article>
-    <toast position="ne"></toast>
-  </div>
-
-    <!-- <web-view src="http://mp.weixin.qq.com/s?__biz=MzIwNTg1NzU0NA==&mid=100005047&idx=1&sn=cf1704d28aaf3a4e201781a10dedd5ff&chksm=172b22d0205cabc6d37e257413acae1afe2e7fbeed443ba591eb3423855a50e6d00b0d2bab17#rd"></web-view> -->
+    <view style="height:40px;"> </view>
 
     <view class="choose_character">
       <view class="column">
-        <text class="title">购买搜索次数</text>
+        <text class="title1">购买搜索次数</text>
       </view>
 
-      <view class="img">
-        <image src="https://assets.storiesmatter.cn/shortline.png" mode="widthFix"></image>
+      <view class="img-top-shortline">
+        <img :src="imgs.shortLine" mode="widthFix">
       </view>
     </view>
 
     <view class="statement-list">
-      <div> 1Picked : {{ pickedId }}</div>
-        <repeat v-for="item in list" v-bind:key="index" index="index" item="item">
-          <view class="cell">
-            <input class="statement-list-radio"  type="radio" id="{{item.credit}}" :value="item.id"   v-model="pickedId" />
-            <text> {{index}} {{ item.credit }}次搜索     ¥{{ item.price }}</text>
+        <view v-for="(item, index) in list" v-bind:key="index" index="index" item="item">
+          <view class="cell" v-on:click="handleRadio(index, item.id)">
+            <input class="cell-radio"  type="radio"  :value="item.id"   v-model="pickedId" />
+            <text class="cell-text">  {{ item.credit }}次搜索     ¥{{ item.price }}</text>
             <p></p>
           </view>
-        </repeat>
-
-     <!-- <RadioGroup bindchange="radioChange" >
-        <repeat v-for="item in list" v-bind:key="index" index="index" item="item">
-          <view class="cell"  @tap="handleRadio('id', '{{ index }}')">
-            <radio value="{{index}}" checked="{{index == checked}}" class="statement-list-radio"></radio>
-            <text>  {{ item.credit }}次搜索            ¥{{ item.price }}</text>
-          </view>
-        </repeat>
-     </RadioGroup>  -->
+        </view>
     </view>
 
-    <view class="pay-container"  v-on:click="handlePay1">
-    <!-- <view class="pay-container" @tap="handlePay"> -->
-      <view class="pay">
-            <!-- <text class="icon-open-new icon"></text> -->
-            <text class="svg-demo-text">微信支付</text>
-      </view>
+    <view class="pay"  v-on:click="handlePay1">
+         <text class="svg-demo-text">微信支付</text>
     </view>
 
   </view>
@@ -57,35 +36,24 @@ import Session from '@/utils/session'
 import Tip from '@/utils/tip'
 import Store from '../utils/request.js'
 import _ from 'lodash'
+import { message } from 'ant-design-vue';
 
 export default {
   components: {},
 
   data () {
     return {
-      pickedId: '',
-      //   data = {
+      pickedId: 1,
       list: [],
       currentid: '1',
       position: 'left',
-      checked: false,
       disabled: false,
-      pictures: ['https://assets.storiesmatter.cn/rewarded-video-ad.png'],
+      imgs:{shortLine: 'https://assets.storiesmatter.cn/shortline.png'},
       imageSize: {},
       px2rpx: 2,
       windowWidth: 375,
       videoAd: null, // 在页面中定义激励视频广告
-
-      form: {
-        message: 'This is a sample message',
-        type: 'info',
-        duration: 10000,
-        dismissible: true,
-        queue: false,
-        position: 'bottom-right'
-        // onClick: this.onClick,
-        // onDismiss: this.onDismiss,
-      }
+      inWechatBrowser: false,
     }
   },
 
@@ -94,8 +62,15 @@ export default {
   },
 
   mounted () {
-    // this.list = Session.get('pricing')
-    // this.$apply()
+      //window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
+        var ua = window.navigator.userAgent.toLowerCase();
+        //通过正则表达式匹配ua中是否含有MicroMessenger字符串
+        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+          this.inWechatBrowser = true;
+        } else{
+          this.inWechatBrowser = false;
+        }
+          // this.inWechatBrowser = true;
 
     this.greet()
   },
@@ -106,8 +81,8 @@ export default {
     greet: async function (event) {
       Tip.loading(null, this)
 
-      const storeProd = new Store({})
-      const data = await storeProd.pricing()
+      const api = new Store({})
+      const data = await api.pricing()
 
       if (data == undefined) {
         //  self.login()
@@ -126,22 +101,18 @@ export default {
     },
     handleFruitChange ({ detail = {} }) {
       this.current = detail.value
-      this.$apply()
     },
-    handleRadio (key, id) {
-      this.checked = id
-      const item = this.list[id]
-      this.currentid = item.id
-      this.$apply()
+    handleRadio(index, itemId) {
+      console.log('index', index, itemId)
+      this.currentid = itemId
+      this.pickedId = index + 1
     },
     radioChange ({ detail = {} }) {
       this.currentid = detail.value
-      this.$apply()
     },
     async handlePay () {
       console.log('sssss')
 
-      // this.$toast.open(this.form);
       Tip.loading(null, this)
 
       const storeProd = new Store({})
@@ -181,6 +152,10 @@ export default {
 
     async handlePay1 () {
       console.log('handlePay1')
+       if (!this.inWechatBrowser) { 
+          message.warning('请在微信里打开充值页面，或联系客服哦！')
+          return;
+        }
       const that = this
       if (typeof WeixinJSBridge === 'undefined') {
         console.log('WeixinJSBridge undefined')
@@ -207,8 +182,7 @@ export default {
     onBridgeReady () {
       const that = this
 
-      console.log('4')
-
+      /* testing
       const data = { status: 'ok', timeStamp: '1646561422', nonceStr: 'LAHJZegDLsrSeSCj', package: 'prepay_id=wx061810222880504829a99d9fb1c05d0000', paySign: '32B67F63F8EE7BB889DB3DBECEC22760' }
       const {
         appId = 'wx1f692d7b9b57066d',
@@ -241,19 +215,19 @@ export default {
           }
         }
       )
-
+      */
       const storeProd = new Store({})
-      storeProd.orders(1).then(data => {
+      storeProd.orders(this.currentid).then(data => {
         if (!_.isEmpty(data)) {
           if (data.status === 'ok') {
             const {
               appId = 'wx1f692d7b9b57066d',
               timeStamp,
               nonceStr,
-              packageStr,
               paySign
             } = data
             const signType = 'MD5'
+            const packageStr = data.package
 
             console.log('nonceStr', nonceStr)
 
@@ -306,7 +280,6 @@ export default {
       }
       this.imageSize = imageSize
       // console.log('this.imageSize-------', this.imageSize)
-      this.$apply()
     },
     gotoMap () {
       const mapurl = this.pictures[0] + '?' + Math.random() / 9999
@@ -351,7 +324,6 @@ export default {
     } else {
       this.list = data.results
       Session.set('pricing', data.results)
-      this.$apply()
     }
     Tip.loaded()
     // this.updateUI()

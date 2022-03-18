@@ -16,6 +16,12 @@ if (env === 0) {
 class Store {
   constructor (config) {
     this.storyId = 1
+
+    console.log('localStorage.storyId', localStorage.storyId)
+    if (!_.isEmpty(localStorage.storyId) && localStorage.storyId !== 'null') {
+      this.storyId = localStorage.storyId
+      console.log('localStorage.storyId', localStorage.storyId)
+    }
     this.config = config
     this.config.baseURL = host + '/api',
     this.token()
@@ -23,7 +29,9 @@ class Store {
 
   token () {
     // const token = generateToken(this.config.issuer, this.config.bid, this.config.kid, this.config.privateKey);
-    const token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ5MDc0MTEzLCJqdGkiOiJkZjI0MWY3NGUzMDA0NWQ5ODEyZTViZWQzYTk5NWIwYiIsInVzZXJfaWQiOjF9.BMA9VKU8ewI6V9Sr9DRTkZ3s3eJHQvSG72GvqhL-brA'
+    var token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ5MDc0MTEzLCJqdGkiOiJkZjI0MWY3NGUzMDA0NWQ5ODEyZTViZWQzYTk5NWIwYiIsInVzZXJfaWQiOjF9.BMA9VKU8ewI6V9Sr9DRTkZ3s3eJHQvSG72GvqhL-brA'
+    token = 'Bearer '
+    token += localStorage.token
 
     this.axios = axios.create({ baseURL: this.config.baseURL })
     this.axios.defaults.headers.common.Authorization = token
@@ -35,10 +43,29 @@ class Store {
     return response.data
   }
 
-  async home () {
-    const response = await this.axios.get(`topics/${this.storyId}/home/`)
-    console.log('response', response)
-    return response.data
+  async home() {
+    try {
+      const response = await this.axios.get(`topics/${this.storyId}/home/`)
+      console.log('response', response)
+      return response.data
+    } catch (error) {
+      console.log('home error: ' + error + error.response.data)
+      console.log(error.response.data); 
+      console.log('home error: ' , error instanceof Error)
+      return error
+    }
+  }
+
+  async initGame(role_id) {
+    try {
+      const response = await this.axios.post(`topics/${this.storyId}/init-game/`, {role_id})
+      console.log('initGame response', response)
+      return response.data
+    } catch (error) {
+      console.log('initGame error: ' , error)
+      console.log('initGame error: ' , error.response.data); 
+      return error
+    }
   }
 
   async fragments (f) {
@@ -47,11 +74,107 @@ class Store {
     return response.data
   }
 
-  async home () {
-    const response = await this.axios.get(`topics/${this.storyId}/home/`)
+  async search (q) {
+    try {
+     const response = await this.axios.get(`topics/${this.storyId}/fragments/?q=${q}`)
+     console.log('response', response)
+      return response.data
+    } catch (error) {
+      console.log('response mserrorerrorg', error)
+      return null
+    }
+  }
+
+  async unlock (unlockFragmentId) {
+    const response = await this.axios.post(`topics/${this.storyId}/fragments/${unlockFragmentId}/unlock/`)
     console.log('response', response)
     return response.data
   }
+
+  async pricing () {
+    const response = await this.axios.get(`topics/${this.storyId}/pricing/`)
+    console.log('response', response)
+    return response.data
+  }
+
+//   這个接獲取驗證碼
+  async getCode(phone_no) {
+    try {
+      const response = await this.axios.post(`phoneno-get-code/`, {phone_no})
+      console.log('response', response)
+      return response.data
+    } catch (error) {
+      console.log('response mserrorerrorg', error)
+      return null
+    }
+  }
+// 這一个接口用來登錄/注冊
+  async phonenoLogin(phone_no, user_input_code) {
+    try {
+    const response = await this.axios.post(`phoneno-login/`, {phone_no, user_input_code})
+      console.log('response', response)
+      //save token here  
+      localStorage.token = _.get(response.data, 'access')
+      localStorage.refresh = _.get(response.data, 'refresh')
+      return response.data
+    } catch (error) {
+      console.log('response mserrorerrorg', error)
+      console.log(error.response.data); 
+      const res = _.get(error.response.data, 'non_field_errors')
+      const res2 = _.get(error.response.data, 'user_input_code')
+      if (!_.isEmpty(res)) {
+        error.message = res[0]
+        return error
+      } else if ( !_.isEmpty(res2) ) {
+        error.message = res2[0]
+        return error
+      }
+      return error
+    }
+  }
+
+  async tokenVerify() {
+    try {
+    const response = await this.axios.post(`token/verify/`, { token: localStorage.token  })
+      console.log('verify token response', response)
+      return true
+    } catch (error) {
+      console.log('response mserrorerrorg', error)
+
+       // local refresh is null, login again to get token and refresh token
+       if (_.isEmpty(localStorage.refresh)) {
+        return false
+      } else {
+        // refresh token
+        // keep login
+         const api = new Store({})
+        const res = await api.tokenRefresh()
+        console.log('tokenRefresh', res)
+        return res
+       }
+      
+      
+    }
+  }
+
+  async tokenRefresh() {
+    try {
+      //用refresh换取新的access
+      const response = await this.axios.post(`token/refresh/`, { refresh: localStorage.refresh })
+      console.log('refresh response', response)
+
+      if (!_.isEmpty(response.data)) {
+        localStorage.token = _.get(response.data, 'access')
+        // get new token
+        return true
+      } 
+      return false
+    } catch (error) {
+      console.log('tokenRefresh', error)
+      return false
+    }
+  }
+
 
   async login () {
     const mokeuser = {

@@ -1,0 +1,118 @@
+@import './_variable.scss';
+
+page, .container{
+    height: 100%;
+}
+
+.searchcell {
+    border-bottom: 0px solid #efefef;
+    > .recordcell {
+      display: flex;
+      align-items: center;
+      height: 60px;
+      line-height: 60px;
+      padding:0px 40px;
+      font-size:32px;
+      > .subtitle {
+        font-size:27px;
+        position: absolute;
+        right: 40px;
+      }
+    }
+    .searchbar {
+      padding:0px  100px;
+    //  background: #ef00ef;
+      margin-top:10px;
+      align-items: center; 
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+     
+      .search-btn { 
+        margin-top: 10px;
+       
+        
+        background-image: url('https://assets.storiesmatter.cn/pay-green-bg.png');
+        background-size: contain;
+        background-position-y: center;
+        background-repeat: no-repeat;
+      }
+        
+        .row {
+            width: 100%;  
+            margin-top: 50px;
+            display: flex;
+        }
+        
+      .search {
+        width: 90%;  
+        // background-color: #efff00;
+        //border:1px solid whitesmoke;
+        background-image: url('https://assets.storiesmatter.cn/searchbar-bg.png');
+        background-size: contain;
+        background-position-y: center;
+        background-repeat: no-repeat;
+        background-size: 90% 60px;
+        height: 60px;
+        line-height: 60px;
+      }
+
+      .search1 {
+        width: 70%; 
+      }
+
+      .get-code {
+        width: 70%; 
+        // background: #ef0000;
+      }
+        /* 搜索框提示文字样式 */
+      *:focus {
+        outline: none;
+      }
+  
+      .search-input
+      {
+          width: 88%;  
+        border: 0px solid green;
+        background: transparent;
+       // background-color:pink;
+        font-size:27px;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+       // padding-left:30px;
+        margin-left:5px;
+        padding-right: 0;
+      }
+    }
+  } 
+  
+  .login-sure {
+    margin: 50px auto;
+	height: 125px;
+	line-height: 80px;
+
+   .login-sure-btn {
+    // background: #ef00ef;
+    //    width:90%;
+      margin: 0 44px;
+	  font-size: 28px;
+	  display: flex;
+	  justify-content: center;
+
+        background-image: url('https://assets.storiesmatter.cn/pay-green-bg.png');
+        background-size: 90%;
+        background-position-y: center;
+        background-position-x: center;
+        background-repeat: no-repeat;
+    
+  }
+}
+  
+  .longline {
+    padding-left: 40px;
+    padding-right: 40px; 
+  
+    > img {
+      width: 90%;
+    }
+  }

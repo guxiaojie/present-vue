@@ -13,6 +13,8 @@ page, .container{
     display: inline-block;
     vertical-align: top;
 
+
+ 
     > text {
       color: #e7713a;
     }
@@ -120,20 +122,24 @@ page, .container{
   .top-btns {
     padding-left: 40px;
     padding-right: 40px;
-    padding-top: 20px;
+    padding-top: 15px;
+    // background: red;
     
-    > .column {
-      height: 98px;
-      line-height: 98px;
+    > .column1 {
+      padding-left: 40px;
+      padding-right: 40px;
+      height: 80px;
+      line-height: 80px;
       //border-bottom: 1px solid #efefef;
       font-size: 32px;
-      background: white;
+      // background: green;
       display: flex;
       justify-content: space-between;
-      > .btn {
+      > .btns {
+        //background: red;
         height: 80px;
         line-height: 80px;
-        padding:0px 22px;
+        padding:0px 42px;
         background-image: url('https://assets.storiesmatter.cn/btn.png');
         background-size: contain;
         background-position-y: center;
@@ -146,7 +152,8 @@ page, .container{
           height: 36px;
         }
         > text {
-          padding-left: 10px;
+          padding-left: 15px;
+          padding-right: 15px;
           // background: white;
         }
       }
@@ -172,7 +179,7 @@ page, .container{
   .searchbar {
     padding:0px 42px;
    //background: #ef00ef;
-   margin-top:10px;
+    margin-top:10px;
     align-items: center; 
     display: flex;
     flex-direction: row;
@@ -191,11 +198,13 @@ page, .container{
 
     .search {
       width: 90%;  
+      // background-color: #efff00;
       //border:1px solid whitesmoke;
       background-image: url('https://assets.storiesmatter.cn/searchbar-bg.png');
       background-size: contain;
       background-position-y: center;
       background-repeat: no-repeat;
+      background-size: 90% 60px;
       height: 60px;
       line-height: 60px;
     }
@@ -206,10 +215,10 @@ page, .container{
 
     .search-input
     {
-      // width: 90%;  
+        width: 88%;  
       border: 0px solid green;
-      // background-color:pink;
       background: transparent;
+     // background-color:pink;
       font-size:27px;
       font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
      // padding-left:30px;
@@ -281,9 +290,10 @@ page, .container{
 
 .longline {
   padding-left: 40px;
-  padding-right: 40px;
+  padding-right: 40px; 
+
   > img {
-    width: 100%;
+    width: 90%;
   }
 }
 
@@ -317,9 +327,9 @@ page, .container{
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 1%;
-    width: 48%;
-    height: 80px;
+    margin: 1% 0.1%;
+    width: 49.8%;
+    height: 90px;
     // background: #efffef;
     background-image:url("https://assets.storiesmatter.cn/frag-bg-new.png");
     background-size: contain;

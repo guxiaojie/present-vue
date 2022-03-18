@@ -1,3 +1,139 @@
+
+<template>
+  <view class="container">
+      <a-spin :spinning="spinning" >
+
+    <view v-if=" !isAuthorised ">
+       <text :title.sync="emptyTitle"></text>
+    </view>
+
+    <view class="systemprompt"  @click='copy'> 
+        <text> <span>&nbsp;&nbsp;&nbsp; </span> 客服微信请添加15711067100</text>       
+        <text class="copy" >一键复制账号  <span>&nbsp;&nbsp;&nbsp; </span> </text>
+    </view>
+
+    <a-modal title="" :visible=" isUnlocakModalVisible " @ok="handleUnlockOk" @cancel="handleUnlockCancel" show-cancel="{{ true }}" okText="立即解锁" cancelText="继续调查">
+     <view style="margin-left: 40rpx; margin-right: 40rpx; text-align: left">
+       <view>该记忆碎片尚未解锁，要消耗{{unlockCredit}}次搜索机会解锁吗？</view>
+      </view>
+    </a-modal>
+
+    <a-modal title="" :visible=" gotoTopupVisible " @ok="handleGotoTopup" @cancel="handleCancelTopup" show-cancel="{{ true }}" okText="立即充值" cancelText="继续调查">
+     <view style="margin-left: 40rpx; margin-right: 40rpx; text-align: left">
+       <view>搜索次数不足，无法解锁记忆碎片</view>
+      </view>
+    </a-modal>
+
+    <a-modal title="" :visible=" gotoTopupVisible2 " @ok="handleGotoTopup" @cancel="handleCancelTopup" show-cancel="{{ true }}" okText="立即充值" cancelText="继续调查">
+     <view style="margin-left: 40rpx; margin-right: 40rpx; text-align: left">
+       <view>搜索次数已经用完，请先充值！</view>
+      </view>
+    </a-modal>
+
+    <view class="header">
+      <view class="level-1">
+           <text>{{ book }} </text>
+      </view>
+      
+       <view class="top-btns" v-if=" dataLoaded ">
+        <view class="column1" > 
+          <view class="btns"  @click="handleHelp(0)">
+             <!-- <img :src="imgs.help"> -->
+             <text class="btn1" >{{ top_links[0].title }}</text>
+          </view>
+          <view class="btns" @click="handleHelp(1)">
+             <!-- <img :src="imgs.eye"> -->
+             <text class="btn1" >{{ top_links[1].title }}</text>
+          </view>
+          <view class="btns" @click="handleHelp(2)">
+             <!-- <img :src="imgs.tick"> -->
+             <text class="btn1" >{{ top_links[2].title }}</text>
+          </view>
+        </view>  
+      </view>
+
+      <view class="dotline" v-if=" dataLoaded ">
+            <img :src="imgs.dot" > 
+      </view>
+
+      <view class="userinfo"  v-if=" dataLoaded ">
+            <view class="icon">
+              <img :src=" my_role.avatar ">
+            </view>
+            <view class="st-title">
+                <view class="first-line">探员：{{ my_role.name }}</view>
+                <view class="time">组员：{{ my_role.crew }} </view>
+            </view>
+      </view>
+        
+      <view class="dotline" v-if=" dataLoaded ">
+            <img :src="imgs.dot" > 
+      </view>
+    </view>
+
+    <view class="searchcell" id="searchit" v-if=" dataLoaded ">
+        <view class="recordcell" >
+           <view  >
+            <text class="btn1">调查记录</text>
+          </view>
+        </view>
+
+        <view class='searchbar'>
+          <view class='search'>
+             <form class="search-block" action="javascript:void 0">
+            <!-- <input type='text' placeholder='输入你想要的内容' confirm-type='search' value="{{inputValue}}"
+             bindfocus="focusSearch" bindinput='inputBind' bindconfirm='query'  ></input> -->
+             <input class='search-input' type="text" placeholder='输入你想要的内容' v-model="inputValue"  @keyup.13="requestSearch"  />
+	          </form> 
+          </view>  
+          <view class='search-btn'>
+            <img  :src='imgs.search' @click='requestSearch()'>
+          </view>  
+        </view>  
+
+        <view class="paycell" > 
+          <view class="paycell-title">
+            <text class="btn1">搜索剩余次数：{{ remain_credit }}</text>
+          </view>
+          <view class="topup" @click="handleTopup">
+            <img :src="imgs.pay"> 
+            <text class="btn1">{{payTitle}}</text>
+          </view>
+        </view>  
+
+      <view class="longline">
+            <img :src="imgs.line" mode="widthFix"> 
+      </view>
+    </view> 
+
+
+    <view  class="fragment-content" v-for="item in role_stats" id="fragmentContent"  wx:key="index" >
+      <view class="fragment-title">
+         <text> {{ item.role }}</text>
+      </view>
+      <view class="container-box">
+        <view v-for="item in item.fragments"  v-bind:class = "(item.has_discovered)?'item-box discovered':'item-box'"
+           v-bind:id="item.id" >
+          <view v-if="item.has_discovered==true ">
+            <text animation="{{animate[item.id]}}"  @click="handlePieceTap(item.id)"  data-cid="item.id">{{ item.display_label }}</text>  
+           </view>
+          <view v-else>
+            <text @click="handleUnlockedPieceTap(item.id, item.credit_to_unlock)" >{{ item.display_label }}</text>
+            </view>
+        </view>
+      </view> 
+        <view class="longline">
+            <img :src="imgs.line" mode="widthFix"> 
+      </view>
+    </view>
+   <view style="height:60px"></view>
+   
+
+     </a-spin>
+  </view>
+   
+</template>
+
 <script setup>
 import {
   RouterLink,
@@ -9,6 +145,8 @@ import {
 } from '../utils/rem.js'
 import _ from 'lodash'
 import Tip from '@/utils/tip'
+import { message } from 'ant-design-vue';
+import Session from '@/utils/session';
 
 </script>
 
@@ -16,11 +154,13 @@ import Tip from '@/utils/tip'
 export default {
   data() {
         return {
-            message: '客服微信请添加15711067100',
             book: '故意事务所探员系统',
             payTitle: '购买次数',
             emptyTitle: '',
             role_stats: [ ],
+            top_links: [ {id:1, link_order: 1, link_url: "https://www.storiesmatter.cn/test", title: "TEST1" },
+            {id:2, link_order: 1, link_url: "https://www.storiesmatter.cn/test", title: "TEST1" },
+            {id:3, link_order: 1, link_url: "https://www.storiesmatter.cn/test", title: "TEST1" },],
             my_role: {
                 id: '4',
                 name: '',
@@ -60,13 +200,16 @@ export default {
             searching: false,
             visible1: false,
             isUnlocakModalVisible: false,
+            gotoTopupVisible: false,
+            gotoTopupVisible2: false,
             isIntroVisible: false,
             unlockCredit: 0,
             unlockFragmentId: 0,
             animate: [],
             windowHeight: 750,
             discoveredList: [],
-            onboard: false,
+            onboard: false, //if onboard, user can use wechat
+            inWechatBrowser: false,
             imageSize: {},
             px2rpx: 2,
             windowWidth: 375,
@@ -83,7 +226,10 @@ export default {
                 pay: "https://assets.storiesmatter.cn/icon-pay.png",
                 line: "https://assets.storiesmatter.cn/longline.png",
                 intromodal: 'https://assets.storiesmatter.cn/intromodal.png'
-            }, 
+            },
+            api: null,
+            spinning: false,
+
         }
     },
 
@@ -93,31 +239,47 @@ export default {
             return this.$route.params.username
         },
     },
-
   async mounted() {
- 
-        const r = new Store({}) 
-        const data = await r.home()
-        if (!_.isEmpty(data)) {
-                  this.updateUI(data);
+    this.api = new Store({}) 
+    const data = await this.api.home()
 
-            this.discoveredList = [];
-            for (var i = 0; i < data.role_stats.length; i++) {
-                let role = data.role_stats[i];
-                for (var j = 0; j < role.fragments.length; j++) {
-                let aFragment = role.fragments[j];
-                if (aFragment.has_discovered == true) {
-                    this.discoveredList.push(aFragment.id);
-                }
-                }
+    if ( (data instanceof Error) ) {
+      const code =  _.get(data.response.data, 'code')
+      if ( code == 'e110') {
+        
+      }
+    }
+    else if(  !_.isEmpty( data )){
+           this.updateUI(data);
+
+        this.discoveredList = [];
+        for (var i = 0; i < data.role_stats.length; i++) {
+            let role = data.role_stats[i];
+            for (var j = 0; j < role.fragments.length; j++) {
+            let aFragment = role.fragments[j];
+            if (aFragment.has_discovered == true) {
+                this.discoveredList.push(aFragment.id);
+            }
             }
         }
+    }
 
-     // await storeProd.login()
-    },
+        //window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
+        var ua = window.navigator.userAgent.toLowerCase();
+        //通过正则表达式匹配ua中是否含有MicroMessenger字符串
+        if(ua.match(/MicroMessenger/i) == 'micromessenger'){
+          this.inWechatBrowser = true;
+        } else{
+          this.inWechatBrowser = false;
+        }
+          this.inWechatBrowser = true;
+
+    const content = 'width=device-width, initial-scale=1.0, user-scalable=no'
+    document.querySelector('meta[name="viewport"]').content = content
+
+  },
   methods: {
       handlePieceTap: function(fragmentId) {
-          console.log('---item', fragmentId)
           let currentPieceIndex = this.discoveredList.indexOf(fragmentId);
           if (currentPieceIndex != undefined) {
               console.log('--- this.discoveredList', this.discoveredList)
@@ -131,23 +293,12 @@ export default {
               })
           }
       },
-      handleUnlockedPieceTap: function(fragmentId, credit) {
-          console.log('---fragmentId', fragmentId, credit)
-          //   let credit = e.currentTarget.dataset.credit;
-          //   this.unlockFragmentId = e.currentTarget.dataset.cid;
+      handleUnlockedPieceTap: function(fragmentId, creditNeeded) {
+          console.log('---fragmentId', fragmentId, creditNeeded)
+            
+            this.unlockFragmentId = fragmentId;
           this.isUnlocakModalVisible = true;
-          this.unlockCredit = credit;
-
-          this.$toast.open({
-                  message: `该记忆碎片尚未解锁，要消耗${this.unlockCredit}次搜索机会解锁吗？`,
-                  type: 'warning',
-                  duration: 0,
-                  dismissible: true,
-                  queue: false,
-                  onClick: this.onClick,
-                 onDismiss: this.onDismiss
-              })
-          
+          this.unlockCredit = creditNeeded;
 
       },
       onClick: function() {
@@ -156,46 +307,59 @@ export default {
       onDismiss: function() {
         this.$toast.clear();
       },
-        async requestUnlockedPiece() {
-          
-        },
+      creditZero: function () {
+        if (this.inWechatBrowser) {
+          this.gotoTopupVisible2 = true;
+        } else {
+          message.warning('搜索次数已用完，请先联系客服哦！')
+        }
+      },
+      async requestUnlockedPiece() {
+        this.spinning = true;
+        const data = await this.api.unlock(this.unlockFragmentId)
+        this.spinning = false;
+        if (data != undefined) {
+          if (data.code == 'e190' || data.code == 'e120') {
+            if (this.inWechatBrowser) {
+             this.gotoTopupVisible = true;
+            } else {
+              this.copy();
+            }
+          } else if (data.code == undefined) {
+            this.justFound = data.id;
+            //重新request home data - to update credit
+            this.getChanllengeList();
+          }
+        } else {
+          message.error('解锁记忆碎片失败');
+        }
+      },
+      handleGotoTopup: function () {
+        this.gotoTopupVisible = false;
+        this.$router.push({path: '/topup'})
+      },
+      handleCancelTopup: function () {
+        this.gotoTopupVisible = false;
+        this.gotoTopupVisible2 = false;
+      },
       async requestSearch() {
-          console.log('---requestSearch')
-
+          console.log('---requestSearch',this.inputValue, this.remain_credit)
           if (this.remain_credit <= 0) {
               this.creditZero();
               return;
           }
           if (this.inputValue.length == 0) {
-              this.$toast.open({
-                  message: '请输入关键词',
-                  type: 'info',
-                  duration: 1000,
-                  dismissible: true,
-                  queue: false
-              })
-              // wx.showToast({
-              //   title: '请输入关键词',
-              //   icon: 'none',
-              //   duration: 2000
-              // });
-              // this.showKeyboard();
+               message.warning('请输入关键词');
               return;
           }
           if (this.inputValue.length > 7) {
-              this.$toast.open({
-                  message: '关键词最长不超过7个字',
-                  duration: 2000
-              });
-              // this.showKeyboard();
+               message.warning('关键词最长不超过7个字');
               return;
           }
           var reg = new RegExp('[\u4E00-\u9FA5A-Za-z0-9]+$', 'g');
           if (!reg.test(this.inputValue)) {
-              this.$toast.open({
-                  message: '关键词都不含标点哦',
-                  duration: 2000
-              });
+               message.warning('关键词都不含标点哦');
+               
               // this.showKeyboard();
               return;
           }
@@ -204,46 +368,30 @@ export default {
               return;
           }
           this.searching = true;
-          Tip.loading('正在搜索...');
-          const parameter = {
-              q: this.inputValue
-          };
-          //e130 statuscode=200
-          //e100 statuscode=401
-          var me = this;
-          const data = await wxRequest.GetBasic(
-              'topics/1/fragments/',
-              parameter,
-              {},
-              function e(data) {
-                  Tip.loaded();
-                  let msg = null;
-                  if (data.code == 'e120') {
-                      me.creditZero();
-                      me.focusSearchInput = false;
-                      me.$apply();
-                  } else if ((data.code = 'e110')) {
-                      msg = '订单不存在';
-                  } else if ((data.code = 'e100')) {
-                      msg = '游戏主题不存在';
-                  }
-                  if (msg) {
-                      wx.showToast({ title: msg, icon: 'none', duration: 3000 });
-                  }
-              }
-          );
+        this.spinning = true;
+        const data = {code:'e130'}// await this.api.search(this.inputValue)
+        this.spinning = false;
+          this.searching = false; 
 
-          this.searching = false;
-          Tip.loaded();
-          if (data != undefined) {
-              if (data.code != undefined) {
+          //e130 statuscode=200
+          //e100 statuscode=401         
+          if (!_.isEmpty(data)) {
+              if (!_.isEmpty(data.code)) {
                   //没有搜到 弹出键盘
                   this.focusSearchInput = true;
                   // //this.$apply();
                   this.focusSearchInput = false;
 
-                  let msg;
-                  if (data.code == 'e130') {
+                    let msg = null;
+                  if (data.code == 'e120') {
+                      this.creditZero();
+                      this.focusSearchInput = false;
+                       
+                  } else if (data.code == 'e110') {
+                      msg = '订单不存在';
+                  } else if (data.code == 'e100') {
+                      msg = '游戏主题不存在';
+                  }else if (data.code == 'e130') {
                       msg = '沒找到相关碎片，请重新搜索';
                       let searchedCount = Session.get('searchedCount');
                       if (searchedCount == undefined) {
@@ -258,7 +406,7 @@ export default {
                       }
                   }
                   if (msg) {
-                      wx.showToast({ title: msg, icon: 'none', duration: 3000 });
+                      message.warning(msg);
                   }
                   //搜索失败了，credit为0，数字不变
                   if (this.remain_credit == 0) {
@@ -293,53 +441,17 @@ export default {
           this.dataLoaded = true;
 
           this.isAuthorised = true;
-
-          //this.$apply();
-
-          //搜索成功，重新获取首页
+          
           if (this.justFound > 0) {
-              wx.showToast({ title: '成功找到碎片', icon: 'success', duration: 3000 });
-              var id = '#item' + this.justFound;
-              var query = wx.createSelectorQuery(); //创建节点查询器 query
-              query.select(id).boundingClientRect(); //这段代码的意思是选择Id=the-id的节点，获取节点位置信息的查询请求
-              query.selectViewport().scrollOffset(); //这段代码的意思是获取页面滑动位置的查询请求
-              query.exec(function (res) {
-                  // res[0].top // #the-id节点的上边界坐标
-                  // res[1].scrollTop // 显示区域的竖直滚动位置
-                  var me = this;
-                  let a = res[0].top + res[1].scrollTop - 200; // - me.windowHeight/4
-                  wx.pageScrollTo({
-                      scrollTop: a,
-                      duration: 50
-                  });
-              });
-
-              var animation = wx.createAnimation({
-                  duration: 200,
-                  timingFunction: 'ease',
-                  delay: 300
-              });
-              animation
-                  .opacity(0.8)
-                  .scale(1.15)
-                  .step()
-                  .opacity(1)
-                  .scale(1)
-                  .step();
-              this.animate[this.justFound] = animation.export();
-              //this.$apply();
-
-              this.animate[this.justFound] = '';
-              //this.$apply();
-
+              message.warning('成功找到碎片');
               this.justFound = -1;
           }
       },
-
       handleHelp: function (index) {
       },
 
       handleTopup: function (index) {
+        this.$router.push({path: '/topup'})
       },
 
       copy: function (index) {
@@ -351,147 +463,43 @@ export default {
               console.log(e)
           })
       },
+
+      handleOk: function () {
+        this.visible1 = false;
+      },
+      handleCancel: function () {
+        this.visible1 = true;
+      },
+    handleUnlockOk() {
+
+      this.isUnlocakModalVisible = false;
+      this.requestUnlockedPiece();
+    },
+    handleUnlockCancel() {
+      this.isUnlocakModalVisible = false;
+    },
+     async getChanllengeList() {
+       const data = await this.api.home()
+       console.log('home data: ' , data instanceof Error)
+
+      //  e110
+       if(  !(data instanceof Error)  && !_.isEmpty( data )){
+         this.updateUI(data)
+         this.discoveredList = [];
+          for (var i = 0; i < data.role_stats.length; i++) {
+            let role = data.role_stats[i];
+            for (var j = 0; j < role.fragments.length; j++) {
+              let aFragment = role.fragments[j];
+              if (aFragment.has_discovered == true) {
+                this.discoveredList.push(aFragment.id);
+              }
+            }
+          }
+       }
+     }
   }
-
-
 }
 </script>
-
-<template>
-  <view class="container">
-    <view v-if=" !isAuthorised ">
-       <empty :title.sync="emptyTitle"></empty>
-    </view>
-
-    <view class="systemprompt"  @click='copy'> 
-        <text decode="{{message}}" >{{ message }}</text>
-        <span>&nbsp;&nbsp;&nbsp; </span> 
-        <text class="copy" >一键复制账号</text>
-    </view>
-<!-- 
-    <i-modal title="玩前必读" visible="{{ visible1 }}" bind:ok="handleClose1"  show-cancel="{{ false }}" >
-     <view style="margin-left: 40rpx; margin-right: 40rpx; text-align: left">
-       <view>1. 请先阅读【组员情况】，【委托信息】，【医院地图】再开始搜索，避免浪费搜索次数哦~</view>
-       <view>2. 关键词说明，请点击【玩法与规则】。</view>
-      </view>
-    </i-modal>
-
-    <i-modal title="" visible="{{ isIntroVisible }}" bind:ok="handleIntroOk"  show-cancel="{{false}}">
-     <view style=" ">
-       <view class="wrap" style=" ">
-       <img :src="imgs.intromodal"  style="width:{{imageSize[index].width}}rpx; height:{{imageSize[index].height}}rpx;  " 
-      data-index="{{index}}"  mode="scaleToFill"  bindload="imageLoad"> 
-     </view> 
-      </view>
-    </i-modal> 
-
-    <i-modal title="" visible="{{ isUnlocakModalVisible }}" bind:ok="handleUnlockOk" bind:cancel="handleUnlockCancel" show-cancel="{{ true }}" okText="立即解锁" cancelText="继续调查">
-     <view style="margin-left: 40rpx; margin-right: 40rpx; text-align: left">
-       <view>该记忆碎片尚未解锁，要消耗{{unlockCredit}}次搜索机会解锁吗？</view>
-      </view>
-    </i-modal>-->
-
-    <view class="header">
-      <view class="level-1">
-           <text>{{ book }} </text>
-      </view>
-      
-       <view class="top-btns" v-if=" dataLoaded ">
-        <view class="column" > 
-          <view class="btn crew"  @click="handleHelp(0)">
-             <img :src="imgs.help">
-             <text class="btn1" >{{ buttons[0].title }}</text>
-          </view>
-          <view class="btn hospital" @click="handleHelp(1)">
-             <img :src="imgs.eye">
-             <text class="btn1" >{{ buttons[1].title }}</text>
-          </view>
-          <view class="btn delegate" @click="handleHelp(2)">
-             <img :src="imgs.tick">
-             <text class="btn1" >{{ buttons[2].title }}</text>
-          </view>
-        </view>  
-      </view>
-
-      <view class="dotline" v-if=" dataLoaded ">
-            <img :src="imgs.dot" > 
-      </view>
-
-      <view class="userinfo"  v-if=" dataLoaded ">
-            <view class="icon">
-              <img :src=" my_role.avatar ">
-            </view>
-            <view class="st-title">
-                <view class="first-line">探员：{{ my_role.name }}</view>
-                <view class="time">组员：{{ my_role.crew }} </view>
-            </view>
-      </view>
-        
-      <view class="dotline" v-if=" dataLoaded ">
-            <img :src="imgs.dot" > 
-      </view>
-    </view>
-
-    <view class="searchcell" id="searchit" v-if=" dataLoaded ">
-        <view class="recordcell" >
-           <view class="title1">
-            <text class="btn1">调查记录</text>
-          </view>
-        </view>
-
-        <view class='searchbar'>
-          <view class='search'>
-            <!-- <input type='text' placeholder='输入你想要的内容' confirm-type='search' value="{{inputValue}}"
-             bindfocus="focusSearch" bindinput='inputBind' bindconfirm='query'  ></input> -->
-             <input class='search-input' type="text" placeholder='输入你想要的内容' v-model="inputValue"/>
-          </view>  
-          <view class='search-btn'>
-            <img  :src='imgs.search' @click='requestSearch()'>
-          </view>  
-        </view>  
-
-        <view class="paycell" > 
-          <view class="paycell-title">
-            <text class="btn1">搜索剩余次数：{{ remain_credit }}</text>
-          </view>
-          <view class="topup" @click="handleTopup">
-            <img :src="imgs.pay"> 
-            <text class="btn1">{{payTitle}}</text>
-          </view>
-        </view>  
-
-      <view class="longline">
-            <img :src="imgs.line" mode="widthFix"> 
-      </view>
-    </view> 
-
-
-    <view  class="fragment-content" v-for="item in role_stats" id="fragmentContent"  wx:key="index" >
-      <view class="fragment-title">
-         <text> {{ item.role }}</text>
-      </view>
-      <view class="container-box">
-        <view v-for="item in item.fragments"  v-bind:class = "(item.has_discovered)?'item-box discovered':'item-box'"
-           id="item{{item.id}}" >
-          <block v-if="item.has_discovered==true ">
-            <text animation="{{animate[item.id]}}"  @click="handlePieceTap(item.id)"  data-cid="item.id">{{ item.display_label }}</text>  
-           </block>
-          <block v-else>
-            <text @click="handleUnlockedPieceTap(item.id, item.credit_to_unlock)"  data-cid="{{item.id}}" data-credit="{{item.credit_to_unlock}}" >{{ item.display_label }}</text>
-            </block>
-        </view>
-      </view> 
-        <view class="longline">
-            <img :src="imgs.line" mode="widthFix"> 
-      </view>
-    </view>
-   <view style="height:60px"></view>
-   
-
-    
-  </view>
-   
-</template>
 
 <style lang="scss">
 @import '@/public/styles/index.scss';

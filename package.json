@@ -8,6 +8,7 @@
     "preview": "vite preview --port 5050"
   },
   "dependencies": {
+    "ant-design-vue": "^2.2.8",
     "axios": "^0.26.0",
     "lodash": "^4.17.21",
     "postcss-loader": "^6.2.1",

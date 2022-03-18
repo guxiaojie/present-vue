@@ -1,14 +1,14 @@
 <template>
   <view class="container">
-    <view style="height:20px;"> </view>
+    <view style="height:40px;"> </view>
    
     <view class="choose_character">
       <view class="column">
-        <img style="width:40px; height:20px;" :src="imgs.eye">
-        <view style="width:20px;"> </view>
-        <text >{{search_text}}</text>
+        <img style="width:30px; height:15px; margin-top:7px" :src="imgs.eye">
+        <view style="width:10px;"> </view>
+        <text style=" font-size: 18px;">{{search_text}}</text>
       </view>
-      <view class="aimg">
+     <view class="img-top-shortline">
         <img :src="imgs.shortLine" mode="widthFix">
       </view>
     </view> 
@@ -28,7 +28,7 @@
     </view>
 
     <view v-if=" content_type==2 " class="fragment-img"  @click="gotoMap">
-     <view class="wrap" >
+     <view  >
        <!-- <img :src="pictures[0]"  v-bind:style="`width: ${imgWidth}`"  mode="scaleToFill"  > -->
       <img  :src="pictures[0]"  :style="{'width': imgWidth + 'px' }"  mode="scaleToFill">
      </view> 
@@ -52,29 +52,33 @@
     </view> 
   
   <text v-if=" content_type==1 " class="message">{{ text }}</text>
+   
     <view style="height:100px"></view>
-    <view class="bottom">
-      <view class="column" > 
-      <block v-if=" currentPieceIndex == 0 ">
-        <view class="btn btn1"  @click="previous">
-          <text decode="{{true}}"> 上一条可用碎片 </text>
-        </view>
-      </block>
-      <block v-else>
-        <view class="btn" @click="previous">
+  
+    <view class="bottom1">
+      <view class="column1" > 
+      <view v-if=" currentPieceIndex == 0 ">
+        <!-- <view class="btn1"  @click="previous">
+          <text decode="{{true}}">1 上一条可用碎片 </text>
+        </view> -->
+      </view>
+      <view v-else>
+        <view class="btn1" @click="previous">
           <text decode="{{true}}">上一条可用碎片</text>
         </view>
-      </block>
-      <block v-if=" last==true ">
-        <view class="btn btn1" @click="next">
-              <text decode="{{true}}">下一条可用碎片</text>
-        </view>
-      </block>
-      <block v-else>
-        <view class="btn" @click="next">
+      </view>
+
+      <view v-if=" last==true ">
+        <!-- <view class="btn1 btn2" @click="next">
+              <text decode="{{true}}">1下一条可用碎片</text>
+        </view> -->
+      </view>
+      <view v-else>
+        <view class="btn1" @click="next">
           <text decode="{{true}}">下一条可用碎片</text>
         </view>
-      </block>
+      </view>
+
       </view> 
     </view>
    </view>
@@ -135,6 +139,13 @@ export default {
           this.currentPieceIndex = this.$route.query.index;
       }
       this.gotoPiece();
+
+    //   const width = document.body.clientWidth || window.innerWidth
+    // const scale = width / 750
+    // const content = 'width=750, initial-scale=' + scale + ', minimum-scale=' + scale + ', maximum-scale=' + scale + ', viewport-fit=cover'
+    //     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    const content = 'width=device-width, initial-scale=1.0, user-scalable=yes'
+    document.querySelector('meta[name="viewport"]').content = content
   },
 
   methods: {
