@@ -47,7 +47,6 @@ import Character from "@/components/Character.vue";
 
 
 <script>
-import wxRequest from "@/utils/wxRequest";
 import Session from "@/utils/session";
 import Store from "../utils/request.js";
 import _ from "lodash";
@@ -88,7 +87,7 @@ export default {
           message.success("发现卷宗，继续调查");
         } else {
           // save storyId:roleId
-           Session.setRoles(this.roleId)
+          Session.setRoles(this.roleId);
         }
 
         this.$router.push("/home");

@@ -177,8 +177,8 @@ page, .container{
     }
   }
   .searchbar {
-    padding:0px 42px;
-   //background: #ef00ef;
+    // padding:0px 0px 0px 42px;
+  //  background: #ef00ef;
     margin-top:10px;
     align-items: center; 
     display: flex;
@@ -187,28 +187,33 @@ page, .container{
     justify-content: space-between;
    
     .search-btn {  
-      // background-image: url('https://assets.storiesmatter.cn/btn.png');
-      // background-size: contain;
-      // background-position-y: center;
-      // background-repeat: no-repeat;
+      background-image: url('https://assets.storiesmatter.cn/btn.png');
+      background-size: contain;
+      background-position-y: center;
+      background-repeat: no-repeat;
       margin-top: 10px;
-      //background: #ef0000;
-      /* 搜索框小图标 */
-      > img { 
-        width: 60px;
-        height: 60px;
+      margin-right: 40px;
+      height: 80px;
+      line-height: 80px;
+      padding:0px 42px;
+      width: 20%;  
+      > text {
+        padding-left: 15px;
+        padding-right: 15px;
+        // background: white;
       }
     }
 
     .search {
-      width: 90%;  
+      width: 70%;  
+      // padding:0px 0px 0px 42px;
+      margin-left: 40px;
       // background-color: #efff00;
-      //border:1px solid whitesmoke;
       background-image: url('https://assets.storiesmatter.cn/searchbar-bg.png');
       background-size: contain;
       background-position-y: center;
       background-repeat: no-repeat;
-      background-size: 90% 60px;
+      // background-size: 90% 60px;
       height: 60px;
       line-height: 60px;
     }
@@ -220,30 +225,20 @@ page, .container{
   }
   
   > .paycell {
-    //padding:0px 40px;
     background: transparent;
     height: 120px;
     line-height: 120px;
-    //border-bottom: 1px solid #efefef;
-    font-size: 32px;
-  
+    font-size: 32px;  
     display: inline;
     vertical-align: top; 
-    // justify-content: space-between;
     zoom: 1;
-
     .paycell-title {
-      // background-color:pink;
-      // width: 200px;
       float: left;
       display: inline;
-      vertical-align: top; 
-      // display: flex;
-      // align-items: center;
+      vertical-align: top;
       margin-left: 40px;
       > text { 
         margin-top: 5px;
-        // background-color:red;
         float: left;
       }
       > img {
@@ -280,10 +275,20 @@ page, .container{
 } 
 
 
+
+.search-longline {
+  padding-left: 40px;
+  padding-right: 40px; 
+  margin-right: 40px;
+  // background: #0000ef;
+  > img {
+    width: 92%;    
+  }
+}
+
 .longline {
   padding-left: 40px;
   padding-right: 40px; 
-
   > img {
     width: 90%;
   }

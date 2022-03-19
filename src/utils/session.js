@@ -2,16 +2,16 @@ import _ from "lodash";
 
 export default {
   get: function (key) {
-    console.log('---set get',key,  localStorage.getItem(key))
+    console.log('---set get', key, localStorage.getItem(key))
     return localStorage.getItem(key) || null;
   },
   set: function (key, value) {
     localStorage.setItem(key, value);
   },
   gotoHomeOrRole: function (that) {
-    const cats = JSON.parse(localStorage.getItem("storyCharacters"));    
+    const cats = JSON.parse(localStorage.getItem("storyCharacters"));
     console.log('---gotoHomeOrRole', cats, cats[localStorage.storyId]);
-    if (  _.isEmpty(cats) || _.isEmpty(cats[localStorage.storyId]) || cats[localStorage.storyId] == 0) {
+    if (_.isEmpty(cats) || _.isEmpty(cats[localStorage.storyId]) || cats[localStorage.storyId] == 0) {
       that.$router.push("/character");
     } else {
       that.$router.push("/home");

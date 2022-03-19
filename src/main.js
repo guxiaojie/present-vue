@@ -10,13 +10,13 @@ import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';
 
 const store = createStore({
-  state () {
+  state() {
     return {
       count: 0
     }
   },
   mutations: {
-    increment (state) {
+    increment(state) {
       state.count++
     }
   },
@@ -30,7 +30,7 @@ const store = createStore({
 })
 
 const app = createApp(App)
- 
+
 app.use(router)
 app.use(store)
 app.use(VueToast, {

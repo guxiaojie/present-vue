@@ -1,9 +1,8 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import Store from "./utils/request.js";
-import { setRem } from "./utils/rem.js";
 import _ from "lodash";
-import Session from './utils/session.js'
+import Session from "./utils/session.js";
 </script>
 
 <script>
@@ -19,8 +18,8 @@ export default {
     if (!_.isEmpty(storyId)) {
       localStorage.storyId = storyId;
     }
-    if ( _.isEmpty(localStorage.storyId) ) {
-      localStorage.storyId = 1
+    if (_.isEmpty(localStorage.storyId)) {
+      localStorage.storyId = 1;
     }
 
     this.goToDashboard();
@@ -28,8 +27,7 @@ export default {
   methods: {
     goToDashboard: async function() {
       if (!_.isEmpty(localStorage.token)) {
-        
-        Session.gotoHomeOrRole(this)
+        Session.gotoHomeOrRole(this);
 
         // verify token anyways
         const api = new Store({});

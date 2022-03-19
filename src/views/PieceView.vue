@@ -116,7 +116,7 @@ export default {
 
   async mounted() {
     this.imgWidth =
-      (document.documentElement.clientWidth || document.body.clientWidth);
+      document.documentElement.clientWidth || document.body.clientWidth;
     if (!_.isEmpty(this.$route.query)) {
       this.discoveredList = this.$route.query.discoveredList;
       this.currentPieceIndex = this.$route.query.index;

@@ -20,18 +20,16 @@
           </text>-->
         </view>
       </view>
- 
+
       <view class="login-bar">
         <view class="login-search">
-
           <form class="search-block" action="javascript:void 0">
             <input
               class="search-input"
               type="text"
               placeholder="输入你的手机号"
-              
-        :value='inputValue'
-        @input='evt=>inputValue=evt.target.value'
+              :value="inputValue"
+              @input="evt=>inputValue=evt.target.value"
             />
           </form>
         </view>
@@ -43,9 +41,8 @@
                 class="search-input"
                 type="text"
                 placeholder="输入手机验证码"
-                
-        :value='inputCode'
-        @input='evt=>inputCode=evt.target.value'
+                :value="inputCode"
+                @input="evt=>inputCode=evt.target.value"
               />
             </form>
           </view>
@@ -83,7 +80,7 @@ export default {
   },
   methods: {
     compositionUpdate: function(event) {
-        this.phoneNumber = event.data;
+      this.phoneNumber = event.data;
     },
     getCode: async function() {
       if (this.inputValue.length == 0) {
@@ -110,20 +107,20 @@ export default {
       if (!_.isEmpty(data)) {
         if (_.get(data, "status") == "ok") {
           message.success("登录成功");
-          
-          this.gotoHomePage()
+
+          this.gotoHomePage();
         } else {
           message.error(data.message);
         }
       }
     },
     gotoHomePage: function() {
-       const cats = JSON.parse(localStorage.getItem("storyCharacters"));        
-        if ( _.isEmpty(cats) || cats[localStorage.storyId]== 0) {
-          this.$router.push("/character");
-        } else {
-          this.$router.push("/home");
-        }
+      const cats = JSON.parse(localStorage.getItem("storyCharacters"));
+      if (_.isEmpty(cats) || cats[localStorage.storyId] == 0) {
+        this.$router.push("/character");
+      } else {
+        this.$router.push("/home");
+      }
     }
   }
 };

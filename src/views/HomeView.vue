@@ -1,190 +1,186 @@
 
 <template>
   <view class="container">
-    
     <div class="spin">
       <a-spin :spinning="spinning"></a-spin>
     </div>
 
-      <view v-if=" !isAuthorised ">
-        <text :title.sync="emptyTitle"></text>
+    <view v-if=" !isAuthorised ">
+      <text :title.sync="emptyTitle"></text>
+    </view>
+
+    <view class="systemprompt" @click="copy">
+      <text>
+        <span>&nbsp;&nbsp;&nbsp;</span> 客服微信请添加15711067100
+      </text>
+      <text class="copy">
+        一键复制账号
+        <span>&nbsp;&nbsp;&nbsp;</span>
+      </text>
+    </view>
+
+    <a-modal
+      title
+      :visible=" isUnlocakModalVisible "
+      @ok="handleUnlockOk"
+      @cancel="handleUnlockCancel"
+      show-cancel="{{ true }}"
+      okText="立即解锁"
+      cancelText="继续调查"
+    >
+      <view style="margin-left: 40rpx; margin-right: 40rpx; text-align: left">
+        <view>该记忆碎片尚未解锁，要消耗{{unlockCredit}}次搜索机会解锁吗？</view>
+      </view>
+    </a-modal>
+
+    <a-modal
+      title
+      :visible=" gotoTopupVisible "
+      @ok="handleGotoTopup"
+      @cancel="handleCancelTopup"
+      show-cancel="{{ true }}"
+      okText="立即充值"
+      cancelText="继续调查"
+    >
+      <view style="margin-left: 40rpx; margin-right: 40rpx; text-align: left">
+        <view>搜索次数不足，无法解锁记忆碎片</view>
+      </view>
+    </a-modal>
+
+    <a-modal
+      title
+      :visible=" gotoTopupVisible2 "
+      @ok="handleGotoTopup"
+      @cancel="handleCancelTopup"
+      show-cancel="{{ true }}"
+      okText="立即充值"
+      cancelText="继续调查"
+    >
+      <view style="margin-left: 40rpx; margin-right: 40rpx; text-align: left">
+        <view>搜索次数已经用完，请先充值！</view>
+      </view>
+    </a-modal>
+
+    <view class="header">
+      <view class="level-1">
+        <text>{{ book }}</text>
       </view>
 
-      <view class="systemprompt" @click="copy">
-        <text>
-          <span>&nbsp;&nbsp;&nbsp;</span> 客服微信请添加15711067100
-        </text>
-        <text class="copy">
-          一键复制账号
-          <span>&nbsp;&nbsp;&nbsp;</span>
-        </text>
-      </view>
-
-      <a-modal
-        title
-        :visible=" isUnlocakModalVisible "
-        @ok="handleUnlockOk"
-        @cancel="handleUnlockCancel"
-        show-cancel="{{ true }}"
-        okText="立即解锁"
-        cancelText="继续调查"
-      >
-        <view style="margin-left: 40rpx; margin-right: 40rpx; text-align: left">
-          <view>该记忆碎片尚未解锁，要消耗{{unlockCredit}}次搜索机会解锁吗？</view>
-        </view>
-      </a-modal>
-
-      <a-modal
-        title
-        :visible=" gotoTopupVisible "
-        @ok="handleGotoTopup"
-        @cancel="handleCancelTopup"
-        show-cancel="{{ true }}"
-        okText="立即充值"
-        cancelText="继续调查"
-      >
-        <view style="margin-left: 40rpx; margin-right: 40rpx; text-align: left">
-          <view>搜索次数不足，无法解锁记忆碎片</view>
-        </view>
-      </a-modal>
-
-      <a-modal
-        title
-        :visible=" gotoTopupVisible2 "
-        @ok="handleGotoTopup"
-        @cancel="handleCancelTopup"
-        show-cancel="{{ true }}"
-        okText="立即充值"
-        cancelText="继续调查"
-      >
-        <view style="margin-left: 40rpx; margin-right: 40rpx; text-align: left">
-          <view>搜索次数已经用完，请先充值！</view>
-        </view>
-      </a-modal>
-
-      <view class="header">
-        <view class="level-1">
-          <text>{{ book }}</text>
-        </view>
-
-        <view class="top-btns" v-if=" dataLoaded ">
-          <view class="column1">
-            <view class="btns" @click="handleHelp(0)">
-              <!-- <img :src="imgs.help"> -->
-              <text class="btn1">{{ topic_links[0].title }}</text>
-            </view>
-            <view class="btns" @click="handleHelp(1)">
-              <!-- <img :src="imgs.eye"> -->
-              <text class="btn1">{{ topic_links[1].title }}</text>
-            </view>
-            <view class="btns" @click="handleHelp(2)">
-              <!-- <img :src="imgs.tick"> -->
-              <text class="btn1">{{ topic_links[2].title }}</text>
-            </view>
+      <view class="top-btns" v-if=" dataLoaded ">
+        <view class="column1">
+          <view class="btns" @click="handleHelp(0)">
+            <!-- <img :src="imgs.help"> -->
+            <text class="btn1">{{ topic_links[0].title }}</text>
           </view>
-        </view>
-
-        <view class="dotline" v-if=" dataLoaded ">
-          <img :src="imgs.dot" />
-        </view>
-
-        <view class="userinfo" v-if=" dataLoaded ">
-          <view class="icon">
-            <img :src=" my_role.avatar " />
+          <view class="btns" @click="handleHelp(1)">
+            <!-- <img :src="imgs.eye"> -->
+            <text class="btn1">{{ topic_links[1].title }}</text>
           </view>
-          <view class="st-title">
-            <view class="first-line">探员：{{ my_role.name }}</view>
-            <view class="time">组员：{{ my_role.crew }}</view>
+          <view class="btns" @click="handleHelp(2)">
+            <!-- <img :src="imgs.tick"> -->
+            <text class="btn1">{{ topic_links[2].title }}</text>
           </view>
-        </view>
-
-        <view class="dotline" v-if=" dataLoaded ">
-          <img :src="imgs.dot" />
         </view>
       </view>
 
-      <view class="searchcell" id="searchit" v-if=" dataLoaded ">
-        <view class="recordcell">
-          <view>
-            <text class="btn1">调查记录</text>
-          </view>
-        </view>
-
-        <view class="searchbar">
-          <view class="search">
-            <form class="search-block" action="javascript:void 0">
-              <!-- <input type='text' placeholder='输入你想要的内容' confirm-type='search' value="{{inputValue}}"
-              bindfocus="focusSearch" bindinput='inputBind' bindconfirm='query'  ></input>-->
-              <input
-                class="search-input"
-                type="text"
-                placeholder="输入你想要的内容"
-                 :value='inputValue'
-                @input='evt=>inputValue=evt.target.value'
-                @keyup.13="requestSearch"
-              />
-            </form>
-          </view>
-           
-          <view class="search-btn">
-            <!-- <text> 搜索 </text> -->
-            <img :src="imgs.search" @click="requestSearch()" />
-          </view>
-        </view>
-
-        <view class="paycell">
-          <view class="paycell-title">
-            <text class="btn1">搜索剩余次数：{{ remain_credit }}</text>
-          </view>
-          <view class="topup" @click="handleTopup">
-            <img :src="imgs.pay" />
-            <text class="btn1">{{payTitle}}</text>
-          </view>
-        </view>
-
-        <div class="longline"  ref = "rrr">
-          <img :src="imgs.line" mode="widthFix" />
-        </div>
+      <view class="dotline" v-if=" dataLoaded ">
+        <img :src="imgs.dot" />
       </view>
 
-      <view class="fragment-content" v-for="item in role_stats" id="fragmentContent" wx:key="index">
-        <view class="fragment-title">
-          <text>{{ item.role }}</text>
+      <view class="userinfo" v-if=" dataLoaded ">
+        <view class="icon">
+          <img :src=" my_role.avatar " />
         </view>
-        <view class="container-box" >
-          <view
-            v-for="item in item.fragments"
-            v-bind:class="(item.has_discovered)?'item-box discovered':'item-box'"
-            v-bind:id = "`cv${item.id}`"
-             ref = "bbb"
-          >
-            <view v-if="item.has_discovered==true ">
-              <text
-                animation="{{animate[item.id]}}"
-                @click="handlePieceTap(item.id)"
-                data-cid="item.id"
-              >{{ item.display_label }}</text>
-            </view>
-            <view v-else>
-              <text
-                @click="handleUnlockedPieceTap(item.id, item.credit_to_unlock)"
-              >{{ item.display_label }}</text>
-            </view>
-          </view>
-        </view>
-        <view class="longline">
-          <img :src="imgs.line" mode="widthFix" />
+        <view class="st-title">
+          <view class="first-line">探员：{{ my_role.name }}</view>
+          <view class="time">组员：{{ my_role.crew }}</view>
         </view>
       </view>
-      <view style="height:60px"></view>
 
+      <view class="dotline" v-if=" dataLoaded ">
+        <img :src="imgs.dot" />
+      </view>
+    </view>
+
+    <view class="searchcell" id="searchit" v-if=" dataLoaded ">
+      <view class="recordcell">
+        <view>
+          <text class="btn1">调查记录</text>
+        </view>
+      </view>
+
+      <view class="searchbar">
+        <view class="search">
+          <form class="search-block" action="javascript:void 0">
+            <!-- <input type='text' placeholder='输入你想要的内容' confirm-type='search' value="{{inputValue}}"
+            bindfocus="focusSearch" bindinput='inputBind' bindconfirm='query'  ></input>-->
+            <input
+              class="search-input"
+              type="text"
+              placeholder="输入你想要的内容"
+              :value="inputValue"
+              @input="evt=>inputValue=evt.target.value"
+              @keyup.13="requestSearch"
+            />
+          </form>
+        </view>
+
+        <view class="search-btn" @click="requestSearch()">
+          <text>搜索</text>
+          <!-- <img :src="imgs.search"/> -->
+        </view>
+      </view>
+
+      <view class="paycell">
+        <view class="paycell-title">
+          <text class="btn1">搜索剩余次数：{{ remain_credit }}</text>
+        </view>
+        <view class="topup" @click="handleTopup">
+          <img :src="imgs.pay" />
+          <text class="btn1">{{payTitle}}</text>
+        </view>
+      </view>
+
+      <view class="search-longline">
+        <img :src="imgs.line" mode="widthFix" />
+      </view>
+    </view>
+
+    <view class="fragment-content" v-for="item in role_stats" id="fragmentContent" wx:key="index">
+      <view class="fragment-title">
+        <text>{{ item.role }}</text>
+      </view>
+      <view class="container-box">
+        <view
+          v-for="item in item.fragments"
+          v-bind:class="(item.has_discovered)?'item-box discovered':'item-box'"
+          v-bind:id="`cv${item.id}`"
+        >
+          <view v-if="item.has_discovered==true ">
+            <text
+              animation="{{animate[item.id]}}"
+              @click="handlePieceTap(item.id)"
+              data-cid="item.id"
+            >{{ item.display_label }}</text>
+          </view>
+          <view v-else>
+            <text
+              @click="handleUnlockedPieceTap(item.id, item.credit_to_unlock)"
+            >{{ item.display_label }}</text>
+          </view>
+        </view>
+      </view>
+      <view class="longline">
+        <img :src="imgs.line" mode="widthFix" />
+      </view>
+    </view>
+    <view style="height:60px"></view>
   </view>
 </template>
 
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import Store from "../utils/request.js";
-import { setRem } from "../utils/rem.js";
 import _ from "lodash";
 import { message } from "ant-design-vue";
 import Session from "@/utils/session";
@@ -297,7 +293,6 @@ export default {
 
     const content = "width=device-width, initial-scale=1.0, user-scalable=no";
     document.querySelector('meta[name="viewport"]').content = content;
- 
   },
   methods: {
     handlePieceTap: function(fragmentId) {
@@ -389,7 +384,7 @@ export default {
       }
       this.searching = true;
       this.spinning = true;
-      const data = await this.api.search(this.inputValue)
+      const data = await this.api.search(this.inputValue);
       //to test, set data = { code: "e130" }; //
       this.spinning = false;
       this.searching = false;
@@ -413,12 +408,12 @@ export default {
             msg = "游戏主题不存在";
           } else if (data.code == "e130") {
             msg = "沒找到相关碎片，请重新搜索";
-            let searchedCount = Session.get('searchedCount');
+            let searchedCount = Session.get("searchedCount");
             if (searchedCount == undefined) {
               searchedCount = 0;
             }
             searchedCount++;
-            Session.set('searchedCount', searchedCount);
+            Session.set("searchedCount", searchedCount);
 
             if (searchedCount >= 5) {
               msg = "卡住了？联系客服要个提示吧！";
@@ -469,7 +464,7 @@ export default {
       this.isAuthorised = true;
 
       if (this.justFound > 0) {
-        document.getElementById(`cv${this.justFound}`).scrollIntoView()
+        document.getElementById(`cv${this.justFound}`).scrollIntoView();
         message.warning("成功找到碎片");
         this.justFound = -1;
       }

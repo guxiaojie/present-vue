@@ -2,9 +2,11 @@
 # abort on errors
 set -e
 # build
-npm run build
+# npm run build
 # navigate into the build output directory
 cd dist
+
+cp ../MP_verify_y0wXuH9N5IYHPWmA.txt .
 # if you are deploying to a custom domain
 # echo 'www.example.com' > CNAME
 git checkout gh-pages
