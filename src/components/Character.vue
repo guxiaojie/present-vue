@@ -6,7 +6,7 @@
 
       </view>
       <view class="st-title">
-        <view class="title">{{ statement.id }}:{{ statement.name }}</view>
+        <view class="title"> {{ statement.name }}</view> <span>&nbsp;&nbsp;&nbsp; </span> 
         <view class="time">{{   statement.brief_text }} </view>
       </view>
     </view>

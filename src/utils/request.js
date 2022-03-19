@@ -20,7 +20,6 @@ class Store {
     console.log('localStorage.storyId', localStorage.storyId)
     if (!_.isEmpty(localStorage.storyId) && localStorage.storyId !== 'null') {
       this.storyId = localStorage.storyId
-      console.log('localStorage.storyId', localStorage.storyId)
     }
     this.config = config
     this.config.baseURL = host + '/api',
@@ -30,8 +29,8 @@ class Store {
   token () {
     // const token = generateToken(this.config.issuer, this.config.bid, this.config.kid, this.config.privateKey);
     var token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ5MDc0MTEzLCJqdGkiOiJkZjI0MWY3NGUzMDA0NWQ5ODEyZTViZWQzYTk5NWIwYiIsInVzZXJfaWQiOjF9.BMA9VKU8ewI6V9Sr9DRTkZ3s3eJHQvSG72GvqhL-brA'
-    token = 'Bearer '
-    token += localStorage.token
+    token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwMTkzNDcxLCJqdGkiOiJlZmIzNzJkMjNlNjc0ZmUwOTY3MjEwZTEzZTFlM2VhMyIsInVzZXJfaWQiOjMwNTA3fQ.MPdrp4OxvtLjMu6mNss0ZPObHE3F-Eic1N5u6oStAF0'
+    // token += localStorage.token
 
     this.axios = axios.create({ baseURL: this.config.baseURL })
     this.axios.defaults.headers.common.Authorization = token
@@ -39,7 +38,7 @@ class Store {
 
   async roles () {
     const response = await this.axios.get(`topics/${this.storyId}/roles/`)
-    console.log('response', response)
+    console.log('roles response', response)
     return response.data
   }
 
@@ -95,6 +94,21 @@ class Store {
     const response = await this.axios.get(`topics/${this.storyId}/pricing/`)
     console.log('response', response)
     return response.data
+  }
+
+  async orders(pricing_id) {
+    // try {
+      const response = await this.axios.post(`topics/${this.storyId}/orders/`, { pricing_id })
+      console.log('response data', response)
+      return response
+    // } catch (error) {
+    //   console.log('response mserrorerrorg', error)
+    //   if (axios.isAxiosError(error)) {
+    //     this.handleAxiosError(error)
+    //   } else {
+    //     this.handleUnexpectedError(error)
+    //   }
+    // }
   }
 
 //   這个接獲取驗證碼
@@ -215,37 +229,6 @@ class Store {
     console.log('------options', options)
     const response = await axios(options)
     return response.data
-  }
-
-  handleAxiosError (error) {
-    console.log('response err', error)
-    console.log('response err', error.msg)
-  }
-
-  handleUnexpectedError (error) {
-    this.handleAxiosError(error)
-  }
-
-  async orders (pricing_id) {
-    try {
-      const { data, statusCode, msg } = await this.axios.post(`topics/${this.storyId}/orders/`, { pricing_id })
-      console.log('response data', data)
-      // var success = false
-      // if (statusCode === 200 || statusCode === 201 || statusCode === 204) {
-      //   success = true
-      // }
-      // if (!success) {
-      //     console.log('response msg', msg)
-      // }
-      return data
-    } catch (error) {
-      console.log('response mserrorerrorg', error)
-      if (axios.isAxiosError(error)) {
-        this.handleAxiosError(error)
-      } else {
-        this.handleUnexpectedError(error)
-      }
-    }
   }
 }
 

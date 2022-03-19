@@ -4,7 +4,7 @@ page, .container{
     height: 100%;
 }
 
-.searchcell {
+.login {
     border-bottom: 0px solid #efefef;
     > .recordcell {
       display: flex;
@@ -19,7 +19,7 @@ page, .container{
         right: 40px;
       }
     }
-    .searchbar {
+    .login-bar {
       padding:0px  100px;
     //  background: #ef00ef;
       margin-top:10px;
@@ -28,61 +28,39 @@ page, .container{
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: space-between;
-     
-      .search-btn { 
-        margin-top: 10px;
-       
-        
-        background-image: url('https://assets.storiesmatter.cn/pay-green-bg.png');
-        background-size: contain;
-        background-position-y: center;
-        background-repeat: no-repeat;
-      }
-        
-        .row {
+      
+      .login-row {
             width: 100%;  
             margin-top: 50px;
             display: flex;
         }
         
-      .search {
-        width: 90%;  
-        // background-color: #efff00;
-        //border:1px solid whitesmoke;
+      .login-search {
+        width: 99%;
         background-image: url('https://assets.storiesmatter.cn/searchbar-bg.png');
         background-size: contain;
         background-position-y: center;
         background-repeat: no-repeat;
-        background-size: 90% 60px;
-        height: 60px;
-        line-height: 60px;
+        background-size: 99% $loginHeight;
+        height: $loginHeight;
+        line-height: $loginHeight;
       }
 
-      .search1 {
-        width: 70%; 
+      .login-search1 {
+        width: 100%; 
       }
 
-      .get-code {
-        width: 70%; 
+      .get-code-text {
+          height: $loginHeight;
+        width: 40%; 
+        margin-top: 15px;
         // background: #ef0000;
       }
         /* 搜索框提示文字样式 */
       *:focus {
         outline: none;
       }
-  
-      .search-input
-      {
-          width: 88%;  
-        border: 0px solid green;
-        background: transparent;
-       // background-color:pink;
-        font-size:27px;
-        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-       // padding-left:30px;
-        margin-left:5px;
-        padding-right: 0;
-      }
+   
     }
   } 
   

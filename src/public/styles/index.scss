@@ -186,7 +186,11 @@ page, .container{
     flex-wrap: wrap;
     justify-content: space-between;
    
-    .search-btn { 
+    .search-btn {  
+      // background-image: url('https://assets.storiesmatter.cn/btn.png');
+      // background-size: contain;
+      // background-position-y: center;
+      // background-repeat: no-repeat;
       margin-top: 10px;
       //background: #ef0000;
       /* 搜索框小图标 */
@@ -213,18 +217,6 @@ page, .container{
       outline: none;
     }
 
-    .search-input
-    {
-        width: 88%;  
-      border: 0px solid green;
-      background: transparent;
-     // background-color:pink;
-      font-size:27px;
-      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-     // padding-left:30px;
-      margin-left:5px;
-      padding-right: 0;
-    }
   }
   
   > .paycell {

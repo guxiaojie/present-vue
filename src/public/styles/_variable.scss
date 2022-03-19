@@ -33,6 +33,8 @@ $iconGrey: #bcbcbc;
 
 $linkColor: #537c8d;
 
+$loginHeight: 88px;
+
 @function toRpx($number) {
   @return $number * 2;
 }
@@ -53,19 +55,40 @@ $linkColor: #537c8d;
 		line-height: 60px;
 	  }
 	  > .title2 {
-		font-size: 34px;
+		font-size: 38px;
 	  }
 	} 
  
 
 	 .img-top-shortline {
-		width: 100%;
-		//border: 1px solid black;
-		// background-color:transparent;
-		margin: 30px;
+		// background-color: red;
+		margin: 20px;
 		display:flex;                    //flex布局
 		justify-content: center;         //水平轴线居中
 	   
 	  }
   }
 
+.spin { 
+	width:80px;
+	height:80px;
+	position: fixed;
+	// background-color: red;
+	top: 50%;
+	left: 50%;
+	margin-top: -40px;
+	margin-left: -40px;
+}
+
+.search-input
+{
+	width: 88%;  
+  border: 0px solid green;
+  background: transparent;
+ // background-color:pink;
+  font-size:27px;
+//   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+ // padding-left:30px;
+  margin-left:5px;
+  padding-right: 0;
+}
