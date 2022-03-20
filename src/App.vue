@@ -26,6 +26,9 @@ export default {
   },
   methods: {
     goToDashboard: async function() {
+
+        this.$router.push("/topup");
+        return;
       if (!_.isEmpty(localStorage.token)) {
         Session.gotoHomeOrRole(this);
 

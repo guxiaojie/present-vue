@@ -178,7 +178,7 @@ page, .container{
   }
   .searchbar {
     // padding:0px 0px 0px 42px;
-  //  background: #ef00ef;
+  
     margin-top:10px;
     align-items: center; 
     display: flex;
@@ -187,11 +187,11 @@ page, .container{
     justify-content: space-between;
    
     .search-btn {  
+      // background: #ef00ef;
       background-image: url('https://assets.storiesmatter.cn/btn.png');
       background-size: contain;
       background-position-y: center;
       background-repeat: no-repeat;
-      margin-top: 10px;
       margin-right: 40px;
       height: 80px;
       line-height: 80px;
@@ -205,6 +205,7 @@ page, .container{
     }
 
     .search {
+      //  background: #ef00ef;
       width: 70%;  
       // padding:0px 0px 0px 42px;
       margin-left: 40px;
@@ -272,9 +273,7 @@ page, .container{
       }
     }
   }
-} 
-
-
+}
 
 .search-longline {
   padding-left: 40px;

@@ -111,7 +111,9 @@ class Store {
     // }
   }
   async openid(code) {
-     const url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx4ca91a098674cef4&secret=d5446cbe1c3518f445405de758170f97&grant_type=authorization_code"+
+    const appId = 'wx4ca91a098674cef4'
+    const sec = 'd5446cbe1c3518f445405de758170f97'
+     const url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appId}&secret=${sec}&grant_type=authorization_code` +
     "&code=" + code;
     const response = await this.axios.get(url)
     console.log('openid response', response)

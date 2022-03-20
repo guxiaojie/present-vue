@@ -55,7 +55,7 @@ export default {
       inWechatBrowser: false,
       api: null,
       spinning: false,
-       appId: 'wx4ca91a098674cef4', // 'wx1f692d7b9b57066d',
+      appId: 'wx4ca91a098674cef4', 
     };
   },
 
@@ -122,10 +122,12 @@ export default {
     },
     async handlePay2() {
        if (!this.GetQueryString('code')) {
-        alert("跳转");
+        // alert("跳转");
         // this.$vux.toast.text('微信授权中……', 'default')
         let currentUrl = encodeURIComponent(window.location.href)
-        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx1f692d7b9b57066d&redirect_uri='+currentUrl+'&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect'
+                console.log('a', window.location.href)
+        const a = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${this.appId}&redirect_uri=`+currentUrl+'&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect'
+window.location.href = a
         console.log('currenturl', currentUrl)
     } else {
         let code = this.GetQueryString('code')
