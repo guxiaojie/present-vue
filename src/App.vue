@@ -27,10 +27,12 @@ export default {
   methods: {
     goToDashboard: async function() {
 
-        this.$router.push("/topup");
-        return;
+        // this.$router.push("/");
+        // return;
       if (!_.isEmpty(localStorage.token)) {
-        Session.gotoHomeOrRole(this);
+
+        // router to home or role list
+        // Session.gotoHomeOrRole(this);
 
         // verify token anyways
         const api = new Store({});
@@ -40,6 +42,7 @@ export default {
         if (!res) {
           this.$router.push("/login");
         }
+        console.log("------app")
       } else {
         this.$router.push("/login");
       }

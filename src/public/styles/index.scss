@@ -187,7 +187,6 @@ page, .container{
     justify-content: space-between;
    
     .search-btn {  
-      // background: #ef00ef;
       background-image: url('https://assets.storiesmatter.cn/btn.png');
       background-size: contain;
       background-position-y: center;
@@ -197,9 +196,16 @@ page, .container{
       line-height: 80px;
       padding:0px 42px;
       width: 20%;  
-      > text {
+      > text { 
+        // background: #ef00ef;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // font-size:9px;
         padding-left: 15px;
         padding-right: 15px;
+        white-space: nowrap;
+
         // background: white;
       }
     }

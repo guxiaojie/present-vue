@@ -404,6 +404,9 @@ export default {
             this.focusSearchInput = false;
           } else if (data.code == "e110") {
             msg = "订单不存在";
+
+            // jump to choose roles now
+            
           } else if (data.code == "e100") {
             msg = "游戏主题不存在";
           } else if (data.code == "e130") {

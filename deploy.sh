@@ -1,23 +1,30 @@
-#!/usr/bin/env sh
-# abort on errors
+ 
+
 set -e
-# build
 npm run build
-# navigate into the build output directory
+
 cd dist
 
+#reset git
+ssh-add -l
+ssh-add -D 
+ssh-add ~/.ssh/id_rsa_gujievivi
+
+git config --global user.name "guxiaojie"
+git config --global user.email gujievivi@gmail.com
+
+# 
 cp ../MP_verify_y0wXuH9N5IYHPWmA.txt .
-cp ../CNAME .
 # if you are deploying to a custom domain
-# echo 'www.example.com' > CNAME
-git checkout gh-pages
+cp ../CNAME .
+
+
+git checkout gh-pages 
+
 git add -A
-git commit -m 'deploy'
+now=$(date +"%T")
+git commit -m $now --allow-empty
 
-
-git push o gh-pages
-
-# if you are deploying to https://<USERNAME>.github.io/<REPO>
-# git push -f git@github.com:<USERNAME>/<REPO>.git main:gh-pages
-# git push -f git@git-gujievivi:guxiaojie/present-vue.git master:gh-pages
-# git remote add o git@git-gujievivi:guxiaojie/guxiaojie.github.io.git
+git pull o gh-pages
+git push o gh-pages -f
+ 

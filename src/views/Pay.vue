@@ -8,7 +8,8 @@
 
     <view class="choose_character">
       <view class="column">
-        <text class="title2">购买搜索次数</text>
+        <text class="title2">
+    {{ wcode }}购买搜索次数</text>
       </view>
       <view class="img-top-shortline">
         <img :src="imgs.shortLine" mode="widthFix" />
@@ -24,8 +25,10 @@
         </view>
       </view>
     </view>
+    <p></p>
+      {{ uri }} 
+    <view class="pay" v-on:click="handlePayGetCode">
 
-    <view class="pay" v-on:click="handlePay1">
       <text class="svg-demo-text">微信支付</text>
     </view>
   </view>
@@ -55,7 +58,10 @@ export default {
       inWechatBrowser: false,
       api: null,
       spinning: false,
-      appId: 'wx4ca91a098674cef4', 
+      appId: 'wx4cbaf7126c634959',// 'wx4ca91a098674cef4', 
+      uri:'',
+      wcode: '1212code',
+      openid: 'openid',
     };
   },
 
@@ -63,7 +69,7 @@ export default {
     if (options.type != undefined) this.type = options.type;
   },
 
-  mounted() {
+  async mounted() {
     //window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
     var ua = window.navigator.userAgent.toLowerCase();
     //通过正则表达式匹配ua中是否含有MicroMessenger字符串
@@ -75,6 +81,15 @@ export default {
     // this.inWechatBrowser = true;
 
     this.greet();
+
+    let currentUrl = encodeURIComponent(window.location.href)
+    this.uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${this.appId}&redirect_uri=` + currentUrl + '&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect'
+ 
+    const code = new URL(location.href).searchParams.get("code");
+    if (!_.isEmpty(code)) {
+        this.wcode  = code;
+
+    }
   },
 
   computed: {},
@@ -93,59 +108,32 @@ export default {
         Session.set("pricing", data.results);
       }
     },
-
-    redirect_url(id) {
-      wx.navigateTo({
-        url: `/pages/categories/child?id=${id}&type=${this.type}`
-      });
-    },
-    handleFruitChange({ detail = {} }) {
-      this.current = detail.value;
-    },
     handleRadio(index, itemId) {
       console.log("index", index, itemId);
       this.currentId = itemId;
       this.pickedId = index + 1;
     },
-    radioChange({ detail = {} }) {
-      this.currentId = detail.value;
-    },
     GetQueryString (name) {
         let url = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
         let newUrl = window.location.search.substr(1).match(url)
             console.log('newUrl', newUrl)
-    if (newUrl != null) {
+            
+      if (newUrl != null) {
             return unescape(newUrl[2])
         } else {
             return false
         }
     },
-    async handlePay2() {
-       if (!this.GetQueryString('code')) {
-        // alert("跳转");
-        // this.$vux.toast.text('微信授权中……', 'default')
-        let currentUrl = encodeURIComponent(window.location.href)
-                console.log('a', window.location.href)
-        const a = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${this.appId}&redirect_uri=`+currentUrl+'&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect'
-window.location.href = a
-        console.log('currenturl', currentUrl)
-    } else {
-        let code = this.GetQueryString('code')
-        // 此处调用后端方法，通过 code 换取 openid
-         console.log('code', code)
-this.api.openid(code);
-    }
-
-      // window.open('weixin://wxpay/bizpayurl?pr=IzX8nS', '_blank');
-
+    async handlePayGetCode() {
+        window.location.href = this.uri
     },
-    async handlePay1() {
-      await this.handlePay2();
-      return
-      console.log("handlePay1", this.currentId);
+    async handlePay() {
+      // await this.handlePay2();
+      // return
+      // console.log("handlePay1", this.currentId);
 
-      await this.api.orders(this.currentId);
-      return;
+      // await this.api.orders(this.currentId);
+      // return;
       if (!this.inWechatBrowser) {
         message.warning("请在微信里打开充值页面，或联系客服哦！");
         // return;
@@ -212,7 +200,7 @@ this.api.openid(code);
       )
       */
 
-      this.api.orders(this.currentId).then(data => {
+      this.api.orders(this.currentId, this.wcode).then(data => {
         if (!_.isEmpty(data)) {
           if (data.status === "ok") {
             const {

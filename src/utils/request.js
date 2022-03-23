@@ -96,9 +96,9 @@ class Store {
     return response.data
   }
 
-  async orders(pricing_id) {
+  async orders(pricing_id, js_code) {
     // try {
-    const response = await this.axios.post(`topics/${this.storyId}/orders/`, { pricing_id })
+    const response = await this.axios.post(`topics/${this.storyId}/orders/`, { pricing_id, js_code })
     console.log('response data', response)
     return response
     // } catch (error) {
@@ -111,11 +111,12 @@ class Store {
     // }
   }
   async openid(code) {
-    const appId = 'wx4ca91a098674cef4'
-    const sec = 'd5446cbe1c3518f445405de758170f97'
+    const appId = 'wx4cbaf7126c634959'
+    const sec = '3b3ebbacadec7e93cf7c3ea9fe466201'
      const url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appId}&secret=${sec}&grant_type=authorization_code` +
-    "&code=" + code;
+    "&code=" + localStorage.code;
     const response = await this.axios.get(url)
+    localStorage.openid = JSON.stringify( response );
     console.log('openid response', response)
   }
 

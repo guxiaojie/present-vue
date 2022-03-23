@@ -4,6 +4,7 @@ import HomeView from '../views/HomeView.vue'
 import Login from '../views/LoginView.vue'
 import Piece from '@/views/PieceView.vue'
 import Pay from '@/views/Pay.vue'
+import PathNotFound from '@/views/NotFoundView.vue'
 import App from '@/App.vue'
 
 const router = createRouter({
@@ -30,12 +31,20 @@ const router = createRouter({
     {
       path: '/topup',
       component: Pay
-    },
+    }, 
     {
       path: '/',
       component: App
-    },
+    }, 
+    { path: '/:pathMatch(.*)*', component: PathNotFound },
   ]
+})
+
+router.beforeEach(async (to, from) => {
+  // canUserAccess() 返回 `true` 或 `false`
+  console.log("------router", to)
+
+  return true; //await canUserAccess(to)
 })
 
 export default router
