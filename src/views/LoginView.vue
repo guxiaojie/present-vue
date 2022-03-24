@@ -57,6 +57,9 @@
     <view class="login-sure" @click="phonenoLogin">
       <text class="login-sure-btn">确定</text>
     </view>
+    <div class="login-version" >
+       <text>v2.0</text>
+     </div>
   </view>
 </template>
 

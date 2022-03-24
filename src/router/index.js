@@ -34,17 +34,17 @@ const router = createRouter({
     }, 
     {
       path: '/',
-      component: App
+      component: HomeView
     }, 
     { path: '/:pathMatch(.*)*', component: PathNotFound },
   ]
 })
 
-router.beforeEach(async (to, from) => {
-  // canUserAccess() 返回 `true` 或 `false`
-  console.log("------router", to)
+// router.beforeEach(async (to, from) => {
+//   // canUserAccess() 返回 `true` 或 `false`
+//   console.log("------router", to)
 
-  return true; //await canUserAccess(to)
-})
+//   return true; //await canUserAccess(to)
+// })
 
 export default router
