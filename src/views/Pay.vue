@@ -88,7 +88,7 @@ export default {
     const code = new URL(location.href).searchParams.get("code");
     if (!_.isEmpty(code)) {
         this.wcode  = code;
-
+        this.handlePay()
     }
   },
 
