@@ -82,13 +82,13 @@ export default {
 
     this.greet();
 
-    let currentUrl = encodeURIComponent(window.location.href)
-    this.uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${this.appId}&redirect_uri=` + currentUrl + '&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect'
- 
     const code = new URL(location.href).searchParams.get("code");
     if (!_.isEmpty(code)) {
-        this.wcode  = code;
+        this.wcode = code;
         this.handlePay()
+    } else {
+          let currentUrl = encodeURIComponent(window.location.href)
+          this.uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${this.appId}&redirect_uri=` + currentUrl + '&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect'
     }
   },
 

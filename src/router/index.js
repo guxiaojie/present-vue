@@ -3,7 +3,7 @@ import CharacterView from '../views/CharacterView.vue'
 import HomeView from '../views/HomeView.vue'
 import Login from '../views/LoginView.vue'
 import Piece from '@/views/PieceView.vue'
-import Pay from '@/views/Pay.vue'
+import Pay from '@/views/PayView.vue'
 import PathNotFound from '@/views/NotFoundView.vue'
 import App from '@/App.vue'
 
