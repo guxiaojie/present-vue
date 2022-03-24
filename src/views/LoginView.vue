@@ -1,5 +1,8 @@
 <template>
   <view class="container">
+    <div class="spin">
+      <a-spin :spinning="spinning"></a-spin>
+    </div>
     <view style="height:40px;"></view>
 
     <view class="choose_character">
@@ -78,7 +81,8 @@ export default {
       phoneNumber: "",
       imgs: {
         shortLine: "https://assets.storiesmatter.cn/shortline.png"
-      }
+      },
+      spinning: false,
     };
   },
   methods: {
@@ -91,8 +95,10 @@ export default {
         return;
       }
 
+    this.spinning = true;
       const api = new Store({});
       const data = await api.getCode(this.inputValue);
+    this.spinning = false;
       if (!_.isEmpty(data)) {
         if (_.get(data, "status") == "ok") {
           message.success("发送成功");
@@ -105,8 +111,10 @@ export default {
         return;
       }
 
+    this.spinning = true;
       const api = new Store({});
       const data = await api.phonenoLogin(this.inputValue, this.inputCode);
+    this.spinning = false;
       if (!_.isEmpty(data)) {
         if (_.get(data, "status") == "ok") {
           message.success("登录成功");

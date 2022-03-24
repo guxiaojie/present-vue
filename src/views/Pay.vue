@@ -60,7 +60,7 @@ export default {
       spinning: false,
       appId: 'wx4cbaf7126c634959',// 'wx4ca91a098674cef4', 
       uri:'',
-      wcode: '1212code',
+      wcode: '',
       openid: 'openid',
     };
   },
