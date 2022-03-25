@@ -87,14 +87,16 @@ class Store {
       return response.data
     } catch (error) {
       const res = _.get(error.response.data, 'msg')
+     // another type of error
+      // {"errcode":"40029","errmsg":"invalid code, rid: 623d8350-5aaf78a5-21548a6c"}
+      const errmsg = _.get(error.response.data, 'errmsg')
       if (!_.isEmpty(res)) {
         error.message = res
       }
-      // another type of error
-      // {"errcode":"40029","errmsg":"invalid code, rid: 623d8350-5aaf78a5-21548a6c"}
-      const errmsg = _.get(error.response.data, 'errmsg')
-      if (!_.isEmpty(errmsg)) {
+      else if (!_.isEmpty(errmsg)) {
         error.message = errmsg
+      } else {
+        error.message = "请先关注公众号【故意事务所】"
       }
       return error
     }
