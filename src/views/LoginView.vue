@@ -105,11 +105,14 @@ export default {
       const api = new Store({});
       const data = await api.getCode(this.inputValue);
       this.spinning = false;
-      if (!_.isEmpty(data)) {
+      if (data instanceof Error) { 
+        message.error(data.message)
+      }
+      else if (!_.isEmpty(data)) {
         if (_.get(data, "status") == "ok") {
           message.success("发送成功");
         }
-      }
+      } 
     },
     phonenoLogin: async function() {
       if (this.inputCode.length == 0) {
@@ -117,10 +120,10 @@ export default {
         return;
       }
 
-    this.spinning = true;
+      this.spinning = true;
       const api = new Store({});
       const data = await api.phonenoLogin(this.inputValue, this.inputCode);
-    this.spinning = false;
+      this.spinning = false;
       if (!_.isEmpty(data)) {
         if (_.get(data, "status") == "ok") {
           message.success("登录成功");
@@ -132,12 +135,12 @@ export default {
       }
     },
     gotoHomePage: function() {
-      const cats = JSON.parse(localStorage.getItem("storyCharacters"));
-      if (_.isEmpty(cats) || cats[localStorage.storyId] == 0) {
-        this.$router.push("/character");
-      } else {
+      // const cats = JSON.parse(localStorage.getItem("storyCharacters"));
+      // if (_.isEmpty(cats) || cats[localStorage.storyId] == 0) {
+      //   this.$router.push("/character");
+      // } else {
         this.$router.push("/home");
-      }
+      // }
     }
   }
 };

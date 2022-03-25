@@ -265,7 +265,14 @@ export default {
 
     if (data instanceof Error) {
       const code = _.get(data.response.data, "code");
+      //'訂單不存在'
       if (code == "e110") {
+
+        // jump to choose roles now
+        this.$router.push("/character");
+
+      } else if (code == "token_not_valid") {
+        this.$router.push({ path: "/login" });
       }
     } else if (!_.isEmpty(data)) {
 
@@ -345,8 +352,9 @@ export default {
           }
         } else if (data.code == undefined) {
           this.justFound = data.id;
-          //重新request home data - to update credit
-          this.getChanllengeList();
+        
+        //重新request home data - to update credit
+          this.requestHomeAfter();
         }
       } else {
         message.error("解锁记忆碎片失败");
@@ -387,8 +395,8 @@ export default {
       }
       this.searching = true;
       this.spinning = true;
-      const data = await this.api.search(this.inputValue);
-      //to test, set data = { code: "e130" }; //
+      let data = await this.api.search(this.inputValue);
+      //to test, set data = { code: "e130" }; 
       this.spinning = false;
       this.searching = false;
 
@@ -409,6 +417,7 @@ export default {
             msg = "订单不存在";
 
             // jump to choose roles now
+            this.$router.push("/character");
             
           } else if (data.code == "e100") {
             msg = "游戏主题不存在";
@@ -440,7 +449,7 @@ export default {
 
           this.justFound = data.id;
           //重新request home data - to update credit
-          this.getChanllengeList();
+          this.requestHomeAfter();
         }
       }
 
@@ -507,11 +516,9 @@ export default {
     handleUnlockCancel() {
       this.isUnlocakModalVisible = false;
     },
-    async getChanllengeList() {
+    async requestHomeAfter() {
       const data = await this.api.home();
-      console.log("home data: ", data instanceof Error);
-
-      //  e110
+      //  e110 error is already covered when mounted
       if (!(data instanceof Error) && !_.isEmpty(data)) {
         this.updateUI(data);
         this.discoveredList = [];

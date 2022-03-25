@@ -28,9 +28,9 @@ class Store {
 
   token() {
     // const token = generateToken(this.config.issuer, this.config.bid, this.config.kid, this.config.privateKey);
-    var token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ5MDc0MTEzLCJqdGkiOiJkZjI0MWY3NGUzMDA0NWQ5ODEyZTViZWQzYTk5NWIwYiIsInVzZXJfaWQiOjF9.BMA9VKU8ewI6V9Sr9DRTkZ3s3eJHQvSG72GvqhL-brA'
-    token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwMTkzNDcxLCJqdGkiOiJlZmIzNzJkMjNlNjc0ZmUwOTY3MjEwZTEzZTFlM2VhMyIsInVzZXJfaWQiOjMwNTA3fQ.MPdrp4OxvtLjMu6mNss0ZPObHE3F-Eic1N5u6oStAF0'
-    // token += localStorage.token
+    // var token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQ5MDc0MTEzLCJqdGkiOiJkZjI0MWY3NGUzMDA0NWQ5ODEyZTViZWQzYTk5NWIwYiIsInVzZXJfaWQiOjF9.BMA9VKU8ewI6V9Sr9DRTkZ3s3eJHQvSG72GvqhL-brA'
+    // token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwMTkzNDcxLCJqdGkiOiJlZmIzNzJkMjNlNjc0ZmUwOTY3MjEwZTEzZTFlM2VhMyIsInVzZXJfaWQiOjMwNTA3fQ.MPdrp4OxvtLjMu6mNss0ZPObHE3F-Eic1N5u6oStAF0'
+    var token = 'Bearer ' + localStorage.token
 
     this.axios = axios.create({ baseURL: this.config.baseURL })
     this.axios.defaults.headers.common.Authorization = token
@@ -45,12 +45,11 @@ class Store {
   async home() {
     try {
       const response = await this.axios.get(`topics/${this.storyId}/home/`)
-      console.log('response', response)
+      console.log('home response', response)
       return response.data
     } catch (error) {
-      console.log('home error: ' + error + error.response.data)
-      console.log(error.response.data);
-      console.log('home error: ', error instanceof Error)
+      console.log('home error: ', error.response.data);
+
       return error
     }
   }
@@ -106,15 +105,6 @@ class Store {
       
     }
   }
-  async openid(code) {
-    const appId = 'wx4cbaf7126c634959'
-    const sec = '3b3ebbacadec7e93cf7c3ea9fe466201'
-     const url = `https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appId}&secret=${sec}&grant_type=authorization_code` +
-    "&code=" + localStorage.code;
-    const response = await this.axios.get(url)
-    localStorage.openid = JSON.stringify( response );
-    console.log('openid response', response)
-  }
 
   //   這个接獲取驗證碼
   async getCode(phone_no) {
@@ -124,7 +114,12 @@ class Store {
       return response.data
     } catch (error) {
       console.log('response mserrorerrorg', error)
-      return null
+      console.log(error.response.data);
+      const res = _.get(error.response.data, 'phone_no')
+      if (!_.isEmpty(res)) {
+        error.message = res[0]
+        return error
+      }
     }
   }
   // 這一个接口用來登錄/注冊

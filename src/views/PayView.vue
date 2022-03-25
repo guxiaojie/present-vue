@@ -8,8 +8,7 @@
 
     <view class="choose_character">
       <view class="column">
-        <text class="title2">
-    {{ wcode }}购买搜索次数</text>
+        <text class="title2">购买搜索次数</text>
       </view>
       <view class="img-top-shortline">
         <img :src="imgs.shortLine" mode="widthFix" />
@@ -26,7 +25,6 @@
       </view>
     </view>
     <p></p>
-      {{ uri }} 
     <view class="pay" v-on:click="handlePayGetCode">
       <text class="svg-demo-text">微信支付</text>
     </view>
@@ -116,17 +114,6 @@ export default {
       localStorage.pricingId = itemId;
       this.pickedId = index + 1;
     },
-    GetQueryString (name) {
-        let url = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
-        let newUrl = window.location.search.substr(1).match(url)
-            console.log('newUrl', newUrl)
-            
-      if (newUrl != null) {
-            return unescape(newUrl[2])
-        } else {
-            return false
-        }
-    },
     async handlePayGetCode() {
         window.location.href = this.uri
     },
@@ -135,6 +122,7 @@ export default {
         message.warning("请在微信里打开充值页面，或联系客服哦！");
         // return;
       }
+     this.spinning = true;
       const that = this;
       if (typeof WeixinJSBridge === "undefined") {
         console.log("WeixinJSBridge undefined");
@@ -154,8 +142,6 @@ export default {
         console.log("WeixinJSBridge is defined");
         this.onBridgeReady();
       }
-
-      // this.onBridgeReady();
     },
 
     onBridgeReady() {
@@ -201,6 +187,9 @@ export default {
        localStorage.pricingId = 1
      }
       this.api.orders(localStorage.pricingId, this.wcode).then(data => {
+
+        this.spinning = false;
+        
         if (!_.isEmpty(data)) {
           if (data.status === "ok") {
             const {
