@@ -9,6 +9,6 @@ export default {
     localStorage.setItem(key, value);
   },
   getVersion: function () {
-    return "v2.0.7"
+    return "v2.0.8"
   }
 }
