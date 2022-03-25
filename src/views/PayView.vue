@@ -31,7 +31,7 @@
       <text class="svg-demo-text">微信支付</text>
     </view>
     <div class="login-version" >
-       <text>v2.0.1</text>
+       <text>v2.0.2</text>
      </div>
   </view>
 </template>

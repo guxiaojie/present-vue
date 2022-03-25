@@ -100,7 +100,7 @@ class Store {
     try {
       const response = await this.axios.post(`topics/${this.storyId}/orders/`, { pricing_id, js_code })
       console.log('response orders', response)
-      return response
+      return response.data
     } catch (error) {
       console.log('response orders err', error.response.data)
       
