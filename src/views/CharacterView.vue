@@ -87,7 +87,7 @@ export default {
           message.success("发现卷宗，继续调查");
         } else {
           // save storyId:roleId
-          Session.setRoles(this.roleId);
+          Session.setRole(this.roleId);
         }
 
         this.$router.push("/home");

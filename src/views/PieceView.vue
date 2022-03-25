@@ -35,7 +35,7 @@
     </view>
 
     <view v-if=" content_type==3 " class="sliderCont">
-      <audio :src="playurl" controls="controls" class="aaudio"></audio>
+      <audio :src="playurl"  controls controlsList="nodownload" class="aaudio"></audio>
     </view>
 
     <text v-if=" content_type==1 " class="message">{{ text }}</text>
