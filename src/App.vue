@@ -3,6 +3,7 @@ import { RouterLink, RouterView } from "vue-router";
 import Store from "./utils/request.js";
 import _ from "lodash";
 import Session from "./utils/session.js";
+import { message } from "ant-design-vue";
 </script>
 
 <script>
@@ -27,8 +28,11 @@ export default {
   methods: {
     goToDashboard: async function() {
 
-        // this.$router.push("/");
-        // return;
+      if(!navigator.onLine){
+        message.error("请检查网络")
+        return
+      }
+   
       if (!_.isEmpty(localStorage.token)) {
 
         // router to home or role list
@@ -37,12 +41,11 @@ export default {
         // verify token anyways
         const api = new Store({});
         const res = await api.tokenVerify();
-        console.log("tokenVerify", res);
 
         if (!res) {
           this.$router.push("/login");
         }
-        console.log("------app")
+        console.log("Load App")
       } else {
         this.$router.push("/login");
       }

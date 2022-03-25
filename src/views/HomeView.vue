@@ -220,7 +220,6 @@ export default {
       isUnlocakModalVisible: false,
       gotoTopupVisible: false,
       gotoTopupVisible2: false,
-      isIntroVisible: false,
       unlockCredit: 0,
       unlockFragmentId: 0,
       animate: [],
@@ -257,6 +256,10 @@ export default {
     }
   },
   async mounted() {
+    const temp = Session.get("home");
+     if (!_.isEmpty(temp)) {
+       this.updateUI(JSON.parse(temp));
+     }
 
     this.spinning = true;
     this.api = new Store({});
@@ -264,6 +267,12 @@ export default {
     this.spinning = false;
 
     if (data instanceof Error) {
+      
+      if (_.get(data, 'message') && _.get(data, 'message') == "Network Error") {
+        // no network, do nothing
+        return
+      }
+
       const code = _.get(data.response.data, "code");
       //'訂單不存在'
       if (code == "e110") {
@@ -275,20 +284,10 @@ export default {
         this.$router.push({ path: "/login" });
       }
     } else if (!_.isEmpty(data)) {
+      console.log( '-----2', data.message)
 
       Session.set("home", JSON.stringify(data));
       this.updateUI(data);
-
-      this.discoveredList = [];
-      for (var i = 0; i < data.role_stats.length; i++) {
-        let role = data.role_stats[i];
-        for (var j = 0; j < role.fragments.length; j++) {
-          let aFragment = role.fragments[j];
-          if (aFragment.has_discovered == true) {
-            this.discoveredList.push(aFragment.id);
-          }
-        }
-      }
     }
 
     //window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
@@ -483,6 +482,19 @@ export default {
         message.warning("成功找到碎片");
         this.justFound = -1;
       }
+      this.updateDiscoveredList(res)
+    },
+    updateDiscoveredList(data) {
+       this.discoveredList = [];
+        for (var i = 0; i < data.role_stats.length; i++) {
+          let role = data.role_stats[i];
+          for (var j = 0; j < role.fragments.length; j++) {
+            let aFragment = role.fragments[j];
+            if (aFragment.has_discovered == true) {
+              this.discoveredList.push(aFragment.id);
+            }
+          }
+        }
     },
     handleHelp: function(index) {
       window.location.href = this.topic_links[index].link_url;
@@ -494,11 +506,9 @@ export default {
       this.$copyText("15711067100").then(
         function(e) {
           alert("Copied");
-          console.log(e);
         },
         function(e) {
           alert("Can not copy");
-          console.log(e);
         }
       );
     },
@@ -521,16 +531,6 @@ export default {
       //  e110 error is already covered when mounted
       if (!(data instanceof Error) && !_.isEmpty(data)) {
         this.updateUI(data);
-        this.discoveredList = [];
-        for (var i = 0; i < data.role_stats.length; i++) {
-          let role = data.role_stats[i];
-          for (var j = 0; j < role.fragments.length; j++) {
-            let aFragment = role.fragments[j];
-            if (aFragment.has_discovered == true) {
-              this.discoveredList.push(aFragment.id);
-            }
-          }
-        }
       }
     }
   }

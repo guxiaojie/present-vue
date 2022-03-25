@@ -207,8 +207,6 @@ export default {
             const signType = "MD5";
             const packageStr = data.package;
 
-            console.log("nonceStr", nonceStr);
-
             WeixinJSBridge.invoke(
               "getBrandWCPayRequest",
               {
@@ -228,7 +226,7 @@ export default {
                 } else {
                   message.error("支付失败，请重新支付");
                 }
-                this.$router.push({ path: "/topup" });
+                this.$router.push({ path: "/home" });
               }
             );
           }

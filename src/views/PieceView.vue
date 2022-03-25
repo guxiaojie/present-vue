@@ -166,8 +166,6 @@ export default {
       } else {
         this.last = false;
       }
-
-      console.log("this.currentFragmentId", this.currentFragmentId);
       if (this.currentFragmentId != undefined) {
         this.pictures = [];
         this.imageSize = [];
@@ -191,15 +189,7 @@ export default {
     },
     onUnloadAudio() {
       clearInterval(this.timer);
-      // wx.pauseBackgroundAudio();
-      // this.playurl = '';
-
-      // const back = wx.getBackgroundAudioManager();
-      // back.onPause(() => {
-      // // console.log('onUnload---音乐onPause');
-      // });
     },
-
     onUnload() {
       this.onUnloadAudio();
     }

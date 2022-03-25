@@ -94,7 +94,6 @@ export default {
       }
     },
     handleRadio(index, itemId) {
-      console.log("index", index, itemId);
       this.roleId = itemId;
       this.pickedId = index + 1;
     }

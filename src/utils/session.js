@@ -3,7 +3,6 @@ import fs from "fs";
 
 export default {
   get: function (key) {
-    console.log('---set get', key, localStorage.getItem(key))
     return localStorage.getItem(key) || null;
   },
   set: function (key, value) {
@@ -26,6 +25,6 @@ export default {
     localStorage.setItem(storyCharacter, JSON.stringify(character));
   },
   getVersion: function () {
-    return "v2.0.6"
+    return "v2.0.7"
   }
 }

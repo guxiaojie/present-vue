@@ -16,8 +16,6 @@ if (env === 0) {
 class Store {
   constructor(config) {
     this.storyId = 1
-
-    console.log('localStorage.storyId', localStorage.storyId)
     if (!_.isEmpty(localStorage.storyId) && localStorage.storyId !== 'null') {
       this.storyId = localStorage.storyId
     }
@@ -38,18 +36,16 @@ class Store {
 
   async roles() {
     const response = await this.axios.get(`topics/${this.storyId}/roles/`)
-    console.log('roles response', response)
     return response.data
   }
 
   async home() {
     try {
       const response = await this.axios.get(`topics/${this.storyId}/home/`)
-      console.log('home response', response)
       return response.data
     } catch (error) {
       console.log('home error: ', error.response.data);
-
+      console.log('home error: ', error.message);
       return error
     }
   }
@@ -57,52 +53,41 @@ class Store {
   async initGame(role_id) {
     try {
       const response = await this.axios.post(`topics/${this.storyId}/init-game/`, { role_id })
-      console.log('initGame response', response)
       return response.data
     } catch (error) {
-      console.log('initGame error: ', error)
-      console.log('initGame error: ', error.response.data);
       return error
     }
   }
 
   async fragments(f) {
     const response = await this.axios.get(`fragments/${f}/`)
-    console.log('response', response)
     return response.data
   }
 
   async search(q) {
     try {
       const response = await this.axios.get(`topics/${this.storyId}/fragments/?q=${q}`)
-      console.log('response', response)
       return response.data
     } catch (error) {
-      console.log('response mserrorerrorg', error)
       return null
     }
   }
 
   async unlock(unlockFragmentId) {
     const response = await this.axios.post(`topics/${this.storyId}/fragments/${unlockFragmentId}/unlock/`)
-    console.log('response', response)
     return response.data
   }
 
   async pricing() {
     const response = await this.axios.get(`topics/${this.storyId}/pricing/`)
-    console.log('response', response)
     return response.data
   }
 
   async orders(pricing_id, js_code) {
     try {
       const response = await this.axios.post(`topics/${this.storyId}/orders/`, { pricing_id, js_code })
-      console.log('response orders', response)
       return response.data
-    } catch (error) {
-      console.log('response orders err', error.response.data)
-      
+    } catch (error) {      
     }
   }
 
@@ -110,11 +95,8 @@ class Store {
   async getCode(phone_no) {
     try {
       const response = await this.axios.post(`phoneno-get-code/`, { phone_no })
-      console.log('response', response)
       return response.data
     } catch (error) {
-      console.log('response mserrorerrorg', error)
-      console.log(error.response.data);
       const res = _.get(error.response.data, 'phone_no')
       if (!_.isEmpty(res)) {
         error.message = res[0]
@@ -126,14 +108,11 @@ class Store {
   async phonenoLogin(phone_no, user_input_code) {
     try {
       const response = await this.axios.post(`phoneno-login/`, { phone_no, user_input_code })
-      console.log('response', response)
       //save token here  
       localStorage.token = _.get(response.data, 'access')
       localStorage.refresh = _.get(response.data, 'refresh')
       return response.data
     } catch (error) {
-      console.log('response mserrorerrorg', error)
-      console.log(error.response.data);
       const res = _.get(error.response.data, 'non_field_errors')
       const res2 = _.get(error.response.data, 'user_input_code')
       if (!_.isEmpty(res)) {
@@ -150,11 +129,8 @@ class Store {
   async tokenVerify() {
     try {
       const response = await this.axios.post(`token/verify/`, { token: localStorage.token })
-      console.log('verify token response', response)
       return true
     } catch (error) {
-      console.log('response mserrorerrorg', error)
-
       // local refresh is null, login again to get token and refresh token
       if (_.isEmpty(localStorage.refresh)) {
         return false
@@ -163,7 +139,6 @@ class Store {
         // keep login
         const api = new Store({})
         const res = await api.tokenRefresh()
-        console.log('tokenRefresh', res)
         return res
       }
     }
@@ -173,8 +148,6 @@ class Store {
     try {
       //用refresh换取新的access
       const response = await this.axios.post(`token/refresh/`, { refresh: localStorage.refresh })
-      console.log('refresh response', response)
-
       if (!_.isEmpty(response.data)) {
         localStorage.token = _.get(response.data, 'access')
         // get new token
@@ -217,7 +190,6 @@ class Store {
       },
       data: mokeuser
     }
-    console.log('------options', options)
     const response = await axios(options)
     return response.data
   }

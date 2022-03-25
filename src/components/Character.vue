@@ -21,7 +21,6 @@ export default {
 
   methods: {
     statementEvent: function (key, id) {
-      console.log('----------', key, id)
       this.$emit('submit', key, id)
     }
   }
