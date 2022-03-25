@@ -1,5 +1,4 @@
 import _ from "lodash";
-import fs from "fs";
 
 export default {
   get: function (key) {
