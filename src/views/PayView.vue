@@ -87,16 +87,18 @@ export default {
      if (_.isEmpty(localStorage.pricingId)) {
        localStorage.pricingId = 1
      }
-     this.pickedId = localStorage.pricingId
+      if (_.isEmpty(localStorage.pricingPickedId)) {
+       localStorage.pricingPickedId = 1
+     }
+     this.pickedId = localStorage.pricingPickedId
      
-    const code = new URL(location.href).searchParams.get("code");
-    if (!_.isEmpty(code)) {
+     let currentUrl  = new URL(location.href).origin + '/topup'
+     const code = new URL(location.href).searchParams.get("code");
+     if (!_.isEmpty(code)) {
         this.wcode = code;
         this.handlePay()
-    } else {
-          let currentUrl = encodeURIComponent(window.location.href)
-          this.uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${this.appId}&redirect_uri=` + currentUrl + '&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect'
-    }
+     }  
+     this.uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${this.appId}&redirect_uri=` + currentUrl + '&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect'
   },
 
   computed: {},
@@ -117,6 +119,8 @@ export default {
     handleRadio(index, itemId) {
       console.log("pricingId is", itemId);
       localStorage.pricingId = itemId;
+
+      localStorage.pricingPickedId = index + 1;
       this.pickedId = index + 1;
     },
     async handlePayGetCode() {
