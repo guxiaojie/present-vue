@@ -85,9 +85,6 @@ export default {
         if (res.code == "e160") {
           //遊戲已經創建
           message.success("发现卷宗，继续调查");
-        } else {
-          // save storyId:roleId
-          Session.setRole(this.roleId);
         }
 
         this.$router.push("/home");

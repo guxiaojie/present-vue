@@ -212,7 +212,6 @@ export default {
       showAuthorise: false,
       isAuthorised: false,
       characterId: 0,
-      focusSearchInput: false,
       justFound: -1,
       searchScrollTop: 286,
       searching: false,
@@ -282,9 +281,12 @@ export default {
 
       } else if (code == "token_not_valid") {
         this.$router.push({ path: "/login" });
+      } else  if (code == "e100") {
+        //e100 statuscode=404  - 遊戲主題不存在
+        message.error('游戏主题不存在')
       }
+
     } else if (!_.isEmpty(data)) {
-      console.log( '-----2', data.message)
 
       Session.set("home", JSON.stringify(data));
       this.updateUI(data);
@@ -319,8 +321,6 @@ export default {
       }
     },
     handleUnlockedPieceTap: function(fragmentId, creditNeeded) {
-      console.log("---fragmentId", fragmentId, creditNeeded);
-
       this.unlockFragmentId = fragmentId;
       this.isUnlocakModalVisible = true;
       this.unlockCredit = creditNeeded;
@@ -368,7 +368,6 @@ export default {
       this.gotoTopupVisible2 = false;
     },
     async requestSearch() {
-      console.log("---requestSearch", this.inputValue, this.remain_credit);
       if (this.remain_credit <= 0) {
         this.creditZero();
         return;
@@ -400,18 +399,14 @@ export default {
       this.searching = false;
 
       //e130 statuscode=200
-      //e100 statuscode=401
+      //e100 statuscode=401  - 遊戲主題不存在
       if (!_.isEmpty(data)) {
         if (!_.isEmpty(data.code)) {
-          //没有搜到 弹出键盘
-          this.focusSearchInput = true;
-          // //this.$apply();
-          this.focusSearchInput = false;
-
           let msg = null;
           if (data.code == "e120") {
+            
             this.creditZero();
-            this.focusSearchInput = false;
+            
           } else if (data.code == "e110") {
             msg = "订单不存在";
 
@@ -471,7 +466,6 @@ export default {
         this.topic_links.push({ title: "", link_url: "" });
         this.topic_links.push({ title: "", link_url: "" });
       }
-      Session.setRole(this.my_role.id);
 
       this.dataLoaded = true;
 
