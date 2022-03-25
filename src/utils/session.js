@@ -26,6 +26,6 @@ export default {
     localStorage.setItem(storyCharacter, JSON.stringify(character));
   },
   getVersion: function () {
-    return "v2.0.5"
+    return "v2.0.6"
   }
 }

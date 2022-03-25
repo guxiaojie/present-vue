@@ -84,6 +84,11 @@ export default {
 
     this.greet();
 
+     if (_.isEmpty(localStorage.pricingId)) {
+       localStorage.pricingId = 1
+     }
+     this.pickedId = localStorage.pricingId
+     
     const code = new URL(location.href).searchParams.get("code");
     if (!_.isEmpty(code)) {
         this.wcode = code;
@@ -183,13 +188,10 @@ export default {
       )
       */
      console.log('------onBridgeReady this.wcode', this.wcode)
-     if (_.isEmpty(localStorage.pricingId)) {
-       localStorage.pricingId = 1
-     }
       this.api.orders(localStorage.pricingId, this.wcode).then(data => {
 
         this.spinning = false;
-        
+
         if (!_.isEmpty(data)) {
           if (data.status === "ok") {
             const {
@@ -218,10 +220,11 @@ export default {
                 if (res.err_msg == "get_brand_wcpay_request:ok") {
                   // 使用以上方式判断前端返回,微信团队郑重提示：
                   // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-                  console.log("支付成功");
+                  message.success("支付成功");
                 } else {
-                  console.log("支付失败，请重新支付");
+                  message.error("支付失败，请重新支付");
                 }
+                this.$router.push({ path: "/topup" });
               }
             );
           }
