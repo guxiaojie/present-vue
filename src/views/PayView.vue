@@ -100,7 +100,7 @@ export default {
      }  
      this.uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${this.appId}&redirect_uri=` + currentUrl + '&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect'
     
-    this.onBridgeReady();
+    // this.onBridgeReady();
   },
 
   computed: {},
@@ -193,7 +193,7 @@ export default {
         }
       )
       */
-     this.wcode = '001a9e000IrCxN1bRj300wAPMD0a9e09'
+    //  this.wcode = '001a9e000IrCxN1bRj300wAPMD0a9e09'
      console.log('------onBridgeReady this.wcode', this.wcode)
      message.info('正在启动微信支付')
       this.api.orders(localStorage.pricingId, this.wcode).then(data => {
