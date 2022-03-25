@@ -257,6 +257,7 @@ export default {
     }
   },
   async mounted() {
+
     this.spinning = true;
     this.api = new Store({});
     const data = await this.api.home();
@@ -267,6 +268,8 @@ export default {
       if (code == "e110") {
       }
     } else if (!_.isEmpty(data)) {
+
+      Session.set("home", JSON.stringify(data));
       this.updateUI(data);
 
       this.discoveredList = [];

@@ -1,6 +1,6 @@
 {
   "name": "present-vue",
-  "version": "0.0.0",
+  "version": "v2.0.3",
   "scripts": {
     "build": "vite build",
     "lint": "vue-cli-service lint",

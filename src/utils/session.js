@@ -1,4 +1,5 @@
 import _ from "lodash";
+import fs from "fs";
 
 export default {
   get: function (key) {
@@ -23,5 +24,8 @@ export default {
       JSON.parse(localStorage.getItem(storyCharacter)) || {};
     character[localStorage.storyId] = roleId;
     localStorage.setItem(storyCharacter, JSON.stringify(character));
+  },
+  getVersion: function () {
+    return "v2.0.4"
   }
 }

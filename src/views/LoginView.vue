@@ -61,13 +61,14 @@
       <text class="login-sure-btn">确定</text>
     </view>
     <div class="login-version" >
-       <text>v2.0.1</text>
+       <text> {{version}} </text>
      </div>
   </view>
 </template>
 
 <script setup>
 import Store from "../utils/request.js";
+import Session from "../utils/session.js";
 import { message } from "ant-design-vue";
 import _ from "lodash";
 </script>
@@ -83,7 +84,12 @@ export default {
         shortLine: "https://assets.storiesmatter.cn/shortline.png"
       },
       spinning: false,
+      version: "v1.0.0",
     };
+  },
+
+  async mounted() {
+    this.version = Session.getVersion()
   },
   methods: {
     compositionUpdate: function(event) {
@@ -95,10 +101,10 @@ export default {
         return;
       }
 
-    this.spinning = true;
+      this.spinning = true;
       const api = new Store({});
       const data = await api.getCode(this.inputValue);
-    this.spinning = false;
+      this.spinning = false;
       if (!_.isEmpty(data)) {
         if (_.get(data, "status") == "ok") {
           message.success("发送成功");

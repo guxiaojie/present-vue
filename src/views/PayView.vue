@@ -31,7 +31,7 @@
       <text class="svg-demo-text">微信支付</text>
     </view>
     <div class="login-version" >
-       <text>v2.0.2</text>
+       <text> {{version}} </text>
      </div>
   </view>
 </template>
@@ -49,7 +49,6 @@ export default {
     return {
       pickedId: 1,
       list: [],
-      currentId: "1",
       position: "left",
       disabled: false,
       imgs: { shortLine: "https://assets.storiesmatter.cn/shortline.png" },
@@ -64,6 +63,7 @@ export default {
       uri:'',
       wcode: '',
       openid: 'openid',
+      version: "v1.0.0",
     };
   },
 
@@ -72,6 +72,8 @@ export default {
   },
 
   async mounted() {
+    this.version = Session.getVersion()
+
     //window.navigator.userAgent属性包含了浏览器类型、版本、操作系统类型、浏览器引擎类型等信息，这个属性可以用来判断浏览器类型
     var ua = window.navigator.userAgent.toLowerCase();
     //通过正则表达式匹配ua中是否含有MicroMessenger字符串
@@ -107,12 +109,11 @@ export default {
       if (data == undefined) {
       } else {
         this.list = data.results;
-        Session.set("pricing", data.results);
       }
     },
     handleRadio(index, itemId) {
-      console.log("index", index, itemId);
-      this.currentId = itemId;
+      console.log("pricingId is", itemId);
+      localStorage.pricingId = itemId;
       this.pickedId = index + 1;
     },
     GetQueryString (name) {
@@ -130,12 +131,6 @@ export default {
         window.location.href = this.uri
     },
     async handlePay() {
-      // await this.handlePay2();
-      // return
-      // console.log("handlePay1", this.currentId);
-
-      // await this.api.orders(this.currentId);
-      // return;
       if (!this.inWechatBrowser) {
         message.warning("请在微信里打开充值页面，或联系客服哦！");
         // return;
@@ -202,7 +197,10 @@ export default {
       )
       */
      console.log('------onBridgeReady this.wcode', this.wcode)
-      this.api.orders(this.currentId, this.wcode).then(data => {
+     if (_.isEmpty(localStorage.pricingId)) {
+       localStorage.pricingId = 1
+     }
+      this.api.orders(localStorage.pricingId, this.wcode).then(data => {
         if (!_.isEmpty(data)) {
           if (data.status === "ok") {
             const {
