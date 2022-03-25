@@ -28,7 +28,6 @@
     <p></p>
       {{ uri }} 
     <view class="pay" v-on:click="handlePayGetCode">
-
       <text class="svg-demo-text">微信支付</text>
     </view>
   </view>
@@ -158,7 +157,7 @@ export default {
         this.onBridgeReady();
       }
 
-      this.onBridgeReady();
+      // this.onBridgeReady();
     },
 
     onBridgeReady() {
@@ -199,7 +198,7 @@ export default {
         }
       )
       */
-
+     console.log('------onBridgeReady this.wcode', this.wcode)
       this.api.orders(this.currentId, this.wcode).then(data => {
         if (!_.isEmpty(data)) {
           if (data.status === "ok") {

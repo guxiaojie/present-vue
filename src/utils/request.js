@@ -97,18 +97,14 @@ class Store {
   }
 
   async orders(pricing_id, js_code) {
-    // try {
-    const response = await this.axios.post(`topics/${this.storyId}/orders/`, { pricing_id, js_code })
-    console.log('response data', response)
-    return response
-    // } catch (error) {
-    //   console.log('response mserrorerrorg', error)
-    //   if (axios.isAxiosError(error)) {
-    //     this.handleAxiosError(error)
-    //   } else {
-    //     this.handleUnexpectedError(error)
-    //   }
-    // }
+    try {
+      const response = await this.axios.post(`topics/${this.storyId}/orders/`, { pricing_id, js_code })
+      console.log('response orders', response)
+      return response
+    } catch (error) {
+      console.log('response orders err', error.response.data)
+      
+    }
   }
   async openid(code) {
     const appId = 'wx4cbaf7126c634959'
