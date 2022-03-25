@@ -95,8 +95,6 @@ class Store {
       }
       else if (!_.isEmpty(errmsg)) {
         error.message = errmsg
-      } else {
-        error.message = "请先关注公众号【故意事务所】"
       }
       return error
     }

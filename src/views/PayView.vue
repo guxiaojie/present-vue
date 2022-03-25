@@ -200,8 +200,15 @@ export default {
 
         this.spinning = false;
         if (data instanceof Error) {
-           message.error(data.message)
-                this.$router.push({ path: "/topup" });
+           
+           if(data.message == 'Request failed with status code 500') {
+             message.error("请先关注公众号【故意事务所】")
+           } else {
+              message.error(data.message)
+           }
+           
+           this.$router.push({ path: "/topup" });
+
         } else if (!_.isEmpty(data)) {
           if (data.status === "ok") {
             const {
