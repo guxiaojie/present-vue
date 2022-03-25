@@ -30,7 +30,7 @@ class Store {
     // token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwMTkzNDcxLCJqdGkiOiJlZmIzNzJkMjNlNjc0ZmUwOTY3MjEwZTEzZTFlM2VhMyIsInVzZXJfaWQiOjMwNTA3fQ.MPdrp4OxvtLjMu6mNss0ZPObHE3F-Eic1N5u6oStAF0'
     var token = 'Bearer ' + localStorage.token
 
-    this.axios = axios.create({ baseURL: this.config.baseURL })
+    this.axios = axios.create({ baseURL: this.config.baseURL,  timeout: 1000 })
     this.axios.defaults.headers.common.Authorization = token
   }
 
@@ -44,8 +44,6 @@ class Store {
       const response = await this.axios.get(`topics/${this.storyId}/home/`)
       return response.data
     } catch (error) {
-      console.log('home error: ', error.response.data);
-      console.log('home error: ', error.message);
       return error
     }
   }
