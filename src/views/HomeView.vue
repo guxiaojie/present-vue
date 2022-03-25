@@ -91,7 +91,7 @@
         <view class="icon">
           <img :src=" my_role.avatar " />
         </view>
-        <view class="st-title">
+        <view class="home-st-title">
           <view class="first-line">探员：{{ my_role.name }}</view>
           <view class="time">组员：{{ my_role.crew }}</view>
         </view>
@@ -462,12 +462,12 @@ export default {
       this.role_stats = res.role_stats;
       this.remain_credit = res.remain_credit;
       this.topic_links = res.topic_links;
-      if (this.topic_links instanceof Array && this.topic_links.length < 3) {
+      
+      if (res.topic_links instanceof Array && res.topic_links.length < 3) {
         this.topic_links.push({ title: "", link_url: "" });
         this.topic_links.push({ title: "", link_url: "" });
-      } else {
-         this.topic_links = [{ title: "", link_url: "" }, { title: "", link_url: "" }, { title: "", link_url: "" }];
-      }
+        this.topic_links.push({ title: "", link_url: "" });
+      } 
 
       this.dataLoaded = true;
       this.isAuthorised = true;

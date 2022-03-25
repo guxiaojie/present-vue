@@ -30,7 +30,7 @@ class Store {
     // token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwMTkzNDcxLCJqdGkiOiJlZmIzNzJkMjNlNjc0ZmUwOTY3MjEwZTEzZTFlM2VhMyIsInVzZXJfaWQiOjMwNTA3fQ.MPdrp4OxvtLjMu6mNss0ZPObHE3F-Eic1N5u6oStAF0'
     var token = 'Bearer ' + localStorage.token
 
-    this.axios = axios.create({ baseURL: this.config.baseURL,  timeout: 1000 })
+    this.axios = axios.create({ baseURL: this.config.baseURL,  timeout: 5000 })
     this.axios.defaults.headers.common.Authorization = token
   }
 
@@ -85,7 +85,18 @@ class Store {
     try {
       const response = await this.axios.post(`topics/${this.storyId}/orders/`, { pricing_id, js_code })
       return response.data
-    } catch (error) {      
+    } catch (error) {
+      const res = _.get(error.response.data, 'msg')
+      if (!_.isEmpty(res)) {
+        error.message = res
+      }
+      // another type of error
+      // {"errcode":"40029","errmsg":"invalid code, rid: 623d8350-5aaf78a5-21548a6c"}
+      const errmsg = _.get(error.response.data, 'errmsg')
+      if (!_.isEmpty(errmsg)) {
+        error.message = errmsg
+      }
+      return error
     }
   }
 

@@ -99,6 +99,7 @@ export default {
         this.handlePay()
      }  
      this.uri = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${this.appId}&redirect_uri=` + currentUrl + '&response_type=code&scope=snsapi_base&state=STATE&connect_redirect=1#wechat_redirect'
+  // this.onBridgeReady();
   },
 
   computed: {},
@@ -192,11 +193,14 @@ export default {
       )
       */
      console.log('------onBridgeReady this.wcode', this.wcode)
+     message.info('正在启动微信支付')
       this.api.orders(localStorage.pricingId, this.wcode).then(data => {
 
         this.spinning = false;
-
-        if (!_.isEmpty(data)) {
+        if (data instanceof Error) {
+           message.error(data.message)
+                this.$router.push({ path: "/topup" });
+        } else if (!_.isEmpty(data)) {
           if (data.status === "ok") {
             const {
               appId = this.appId,
@@ -229,6 +233,8 @@ export default {
                 this.$router.push({ path: "/home" });
               }
             );
+          } else {
+           message.error("订单返回错误")
           }
         }
       });
