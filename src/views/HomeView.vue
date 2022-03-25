@@ -470,9 +470,7 @@ export default {
       }
 
       this.dataLoaded = true;
-
       this.isAuthorised = true;
-
       if (this.justFound > 0) {
         document.getElementById(`cv${this.justFound}`).scrollIntoView();
         message.warning("成功找到碎片");
