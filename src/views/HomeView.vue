@@ -195,7 +195,7 @@ export default {
       payTitle: "购买次数",
       emptyTitle: "",
       role_stats: [],
-      topic_links: [],
+      topic_links: '',
       my_role: {
         id: "4",
         name: "",
@@ -462,9 +462,11 @@ export default {
       this.role_stats = res.role_stats;
       this.remain_credit = res.remain_credit;
       this.topic_links = res.topic_links;
-      if (this.topic_links.length < 3) {
+      if (this.topic_links instanceof Array && this.topic_links.length < 3) {
         this.topic_links.push({ title: "", link_url: "" });
         this.topic_links.push({ title: "", link_url: "" });
+      } else {
+         this.topic_links = [{ title: "", link_url: "" }, { title: "", link_url: "" }, { title: "", link_url: "" }];
       }
 
       this.dataLoaded = true;

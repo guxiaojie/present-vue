@@ -59,7 +59,7 @@ export default {
     return {
       spinning: false,
       pickedId: 1,
-      roleId: 1,
+      roleId: 0,
       imgs: { shortline: "https://assets.storiesmatter.cn/shortline.png" },
       list: []
     };
@@ -78,6 +78,9 @@ export default {
     handleInquiry: async function() {
       this.spinning = true;
 
+      if(this.roleId == 0) {
+        message.info('请确定探员身份')
+      }
       const storeProd = new Store({});
       const res = await storeProd.initGame(this.roleId);
       this.spinning = false;
