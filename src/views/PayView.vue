@@ -4,6 +4,8 @@
       <a-spin :spinning="spinning"></a-spin>
     </div>
 
+    <Copy/>
+
     <view style="height:40px;"></view>
 
     <view class="choose_character">
@@ -34,12 +36,15 @@
   </view>
 </template>
 
-<script>
+<script setup>
+import Copy from "@/components/Copy.vue";
 import Session from "@/utils/session";
 import Store from "../utils/request.js";
 import _ from "lodash";
 import { message } from "ant-design-vue";
+</script>
 
+<script>
 export default {
   components: {},
 
@@ -251,8 +256,6 @@ export default {
   }
 };
 </script>
-<!-- <style lang="scss" src="@/public/styles/components/pay.scss"></style> -->
-
 <style lang="scss">
-@import "@/public/styles/components/pay.scss";
+@import "@/public/styles/pay.scss";
 </style>

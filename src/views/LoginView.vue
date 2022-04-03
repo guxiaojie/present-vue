@@ -50,7 +50,9 @@
             </form>
           </view>
 
-          <view class="get-code-text" @click="getCode">
+          <view  
+           v-bind:class="(spinning) ? 'get-code-text sending' : 'get-code-text' " 
+           @click="getCode">
             <text>获取验证码</text>
           </view>
         </view>
@@ -100,7 +102,10 @@ export default {
         message.warning("请输入手机号");
         return;
       }
-
+      if (this.spinning) {
+        message.warning("正在收取验证码，请稍等");
+        return;
+      }
       this.spinning = true;
       const api = new Store({});
       const data = await api.getCode(this.inputValue);

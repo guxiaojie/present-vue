@@ -8,16 +8,8 @@
     <view v-if=" !isAuthorised ">
       <text :title.sync="emptyTitle"></text>
     </view>
-
-    <view class="systemprompt" @click="copy">
-      <text>
-        <span>&nbsp;&nbsp;&nbsp;</span> 客服微信请添加15711067100
-      </text>
-      <text class="copy">
-        一键复制账号
-        <span>&nbsp;&nbsp;&nbsp;</span>
-      </text>
-    </view>
+    
+    <Copy/>
 
     <a-modal
       title
@@ -185,6 +177,7 @@ import _ from "lodash";
 import { message } from "ant-design-vue";
 import Session from "@/utils/session";
 import KEY from "@/utils/session";
+import Copy from "@/components/Copy.vue";
 </script>
 
 <script>
@@ -347,7 +340,7 @@ export default {
           if (this.inWechatBrowser) {
             this.gotoTopupVisible = true;
           } else {
-            this.copy();
+            message.error("请添加客服微信");
           }
         } else if (data.code == undefined) {
           this.justFound = data.id;
@@ -496,17 +489,6 @@ export default {
     handleTopup: function(index) {
       this.$router.push({ path: "/topup" });
     },
-    copy: function(index) {
-      this.$copyText("15711067100").then(
-        function(e) {
-          alert("Copied");
-        },
-        function(e) {
-          alert("Can not copy");
-        }
-      );
-    },
-
     handleOk: function() {
       this.visible1 = false;
     },

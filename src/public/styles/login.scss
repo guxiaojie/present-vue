@@ -49,13 +49,17 @@ page, .container{
       }
 
       .get-code-text {
-          height: $loginHeight;
+        height: $loginHeight;
         width: 40%; 
         margin-top: 22px;
         margin-left: 20px;
         font-size: 35px;
-        // background: #ef0000;
+        // background: #ef0000;      
       }
+      .sending {
+        color: $iconGrey;
+      }
+
         /* 搜索框提示文字样式 */
       *:focus {
         outline: none;

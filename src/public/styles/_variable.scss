@@ -92,3 +92,30 @@ $loginHeight: 88px;
   margin-left:5px;
   padding-right: 0;
 }
+
+
+page, .container{
+	height: 100%;
+  
+	.systemprompt {
+	  width: 100%; 
+	  background: #fefced;
+	  font-size: 30px;
+	  height: 80px;
+	  line-height: 80px;
+	  font-weight: lighter;
+	 
+	  display: inline-block;
+	  vertical-align: top;
+  
+  
+   
+	  > text {
+		color: #e7713a;
+	  }
+	  .copy {
+		font-weight: bold; 
+		float: right;
+	  }
+	}
+  }

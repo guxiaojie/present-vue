@@ -1,23 +1,13 @@
 <template>
   <view class="container">
-    
-      <text class="svg-demo-text"> not found </text>
- 
+      <text class="svg-demo-text">Page not found</text>
   </view>
 </template>
 
 <script>
-import Session from "@/utils/session";
-import Store from "../utils/request.js";
-import _ from "lodash";
-import { message } from "ant-design-vue";
-
 export default {
-   
 };
 </script>
-<!-- <style lang="scss" src="@/public/styles/components/pay.scss"></style> -->
-
 <style lang="scss">
-@import "@/public/styles/components/pay.scss";
+@import "@/public/styles/pay.scss";
 </style>

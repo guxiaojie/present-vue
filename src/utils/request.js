@@ -106,9 +106,13 @@ class Store {
       const response = await this.axios.post(`phoneno-get-code/`, { phone_no })
       return response.data
     } catch (error) {
-      const res = _.get(error.response.data, 'phone_no')
+      const res = _.get(error.response.data, 'non_field_errors')
+      const res2 = _.get(error.response.data, 'phone_no')
       if (!_.isEmpty(res)) {
         error.message = res[0]
+        return error
+      } else if (!_.isEmpty(res2)) {
+        error.message = res2[0]
         return error
       }
     }
