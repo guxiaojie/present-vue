@@ -9,7 +9,7 @@
       <text :title.sync="emptyTitle"></text>
     </view>
     
-    <Copy/>
+    <Copy :homePage.sync="true" />
 
     <a-modal
       title
@@ -166,6 +166,9 @@
         <img :src="imgs.line" mode="widthFix" />
       </view>
     </view>
+    <div class="home-version" >
+       <p> {{ICP}} </p>
+    </div>
     <view style="height:60px"></view>
   </view>
 </template>
@@ -176,6 +179,7 @@ import Store from "../utils/request.js";
 import _ from "lodash";
 import { message } from "ant-design-vue";
 import Session from "@/utils/session";
+import { ICP } from "@/utils/session";
 import KEY from "@/utils/session";
 import Copy from "@/components/Copy.vue";
 </script>

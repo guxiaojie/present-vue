@@ -351,4 +351,13 @@ page, .container{
   }
 }
 
-
+.home-version{
+  left: 50%;
+  bottom: 20px;
+  margin: 0 auto;
+  > p {
+    color: #000;
+	  font-size: 20px;
+    text-align: center;
+  }
+}

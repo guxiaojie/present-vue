@@ -69,28 +69,23 @@ page, .container{
   } 
   
 .login-sure {
-    margin: 50px auto;
+  margin: 50px auto;
 	height: 125px;
 	line-height: 80px;
-
-   .login-sure-btn {
-    // background: #ef00ef;
-    //    width:90%;
+  .login-sure-btn {
     height: 120px;
     line-height: 120px;
-      margin: 0 84px;
+    margin: 0 84px;
 	  font-size: 38px;
 	  display: flex;
 	  justify-content: center;
-        color: #fff;
-        background-image: url('https://assets.storiesmatter.cn/pay-green-bg.png');
-        background-size: 100% 120px;
-        background-position-y: center;
-        background-position-x: center;
-        background-repeat: no-repeat;
-    
+    color: #fff;
+    background-image: url('https://assets.storiesmatter.cn/pay-green-bg.png');
+    background-size: 100% 120px;
+    background-position-y: center;
+    background-position-x: center;
+    background-repeat: no-repeat;
   }
-
 }
 
 .login-version{
@@ -99,8 +94,10 @@ page, .container{
   bottom: 20px;
   transform: translate(-50%, -50%);
   margin: 0 auto;
-  > text {
+  > p {
     color: #000;
 	  font-size: 20px;
+    // background-color: #ff1;
+    text-align: center;
   }
 }

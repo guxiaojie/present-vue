@@ -4,7 +4,7 @@
       <a-spin :spinning="spinning"></a-spin>
     </div>
 
-    <Copy/>
+    <Copy :homePage.sync="false" />
 
     <view style="height:40px;"></view>
 
@@ -31,14 +31,16 @@
       <text class="svg-demo-text">微信支付</text>
     </view>
     <div class="login-version" >
-       <text> {{version}} </text>
-     </div>
+       <p> {{version}} </p>
+       <p> {{ICP}} </p>
+    </div>
   </view>
 </template>
 
 <script setup>
 import Copy from "@/components/Copy.vue";
 import Session from "@/utils/session";
+import { ICP } from "@/utils/session";
 import Store from "../utils/request.js";
 import _ from "lodash";
 import { message } from "ant-design-vue";
@@ -244,7 +246,7 @@ export default {
                 } else {
                   message.error("支付失败，请重新支付");
                 }
-                this.$router.push({ path: "/home" });
+                this.$router.push("/home");
               }
             );
           } else {

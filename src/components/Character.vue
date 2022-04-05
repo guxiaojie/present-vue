@@ -2,8 +2,7 @@
   <view class="charactercell" @click="statementEvent(statement.id )">
     <view class="information">
       <view class="icon">
-               <img class="icon-img" :src=" statement.avatar ">
-
+       <img class="icon-img" :src=" statement.avatar ">
       </view>
       <view class="st-title">
         <view class="title"> {{ statement.name }}</view> <span>&nbsp;&nbsp;&nbsp; </span> 

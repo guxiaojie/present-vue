@@ -3,7 +3,7 @@
   <view class="container">
     <view class="systemprompt" @click="copy">
       <text>
-        <span>&nbsp;&nbsp;&nbsp;</span> 客服微信请添加15711067100
+        <span>&nbsp;&nbsp;&nbsp;</span>{{title}}
       </text>
       <text class="copy">
         一键复制账号
@@ -19,7 +19,21 @@ import { message } from "ant-design-vue";
 
 <script>
 export default {
-
+  data() {
+    return {
+      title: "客服微信请添加15711067100"
+    }
+  },
+  props: {
+    homePage: Object
+  },
+  async mounted() {
+    if (this.homePage) {
+      this.title = "客服微信请添加15711067100"
+    } else {
+      this.title = "获取免费次数请添加客服微信15711067100"
+    }
+  },
   methods: {
     copy: function(index) {
       this.$copyText("15711067100").then(
